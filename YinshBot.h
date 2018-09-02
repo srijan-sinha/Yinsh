@@ -61,4 +61,12 @@ class YinshBot {
 		 * @return true when the game ends.
 		 */
 		bool checkGameEnd();
+
+
+		/**
+		 * Calculates the evaluation of any configuration of the board.
+		 * @param board contains the configuration of the Board.
+		 * @return a double which has the likability of the current board configuration.
+		 */
+		double evalFunction(Board board);
 }

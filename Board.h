@@ -59,7 +59,7 @@ class Board {
 		/**
 		 * @return number of opponent bot's discs on board.
 		 */
-		int getNumDiscs();
+		int getNumOppDiscs();
 
 
 		/**
