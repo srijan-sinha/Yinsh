@@ -17,6 +17,16 @@ class Board {
 		int numDiscs;
 		int numOppDiscs;
 
+
+		/**
+		 * Checks if the location is within the bounnds and on the border of the playing board.
+		 * @param hexagonNum is the hexagon number on which the location is located.
+		 * @param position is the position of the location on the hexagon.
+		 * @param bound is the clockwise first vertex number of the hexagon after which the location should be located within 2 sides of the hexagon.
+		 * @return truth value of the location located between the bounds on the outermost hexagon.
+		 */
+		bool checkBorder(int hexagonNum, int position, int bound);
+
 	public:
 
 		/**
@@ -106,4 +116,93 @@ class Board {
 		 */
 		void removeRing(int hexagonNum, int position);
 
+
+		/**
+		 * @param hexagonNum is the hexagon number on which the location is located.
+		 * @param position is the position of the location on the hexagon.
+		 * @return truth value of neighbour exists.
+		 */
+		bool hasNextUp(int hexagonNum, int position);
+
+
+		/**
+		 * @param hexagonNum is the hexagon number on which the location is located.
+		 * @param position is the position of the location on the hexagon.
+		 * @return truth value of neighbour exists.
+		 */
+		bool hasNextDown(int hexagonNum, int position);
+
+
+		/**
+		 * @param hexagonNum is the hexagon number on which the location is located.
+		 * @param position is the position of the location on the hexagon.
+		 * @return truth value of neighbour exists.
+		 */
+		bool hasNextUpRight(int hexagonNum, int position);
+
+
+		/**
+		 * @param hexagonNum is the hexagon number on which the location is located.
+		 * @param position is the position of the location on the hexagon.
+		 * @return truth value of neighbour exists.
+		 */
+		bool hasNextUpLeft(int hexagonNum, int position);
+
+
+		/**
+		 * @param hexagonNum is the hexagon number on which the location is located.
+		 * @param position is the position of the location on the hexagon.
+		 * @return truth value of neighbour exists.
+		 */
+		bool hasNextDownRight(int hexagonNum, int position);
+
+
+		/**
+		 * @param hexagonNum is the hexagon number on which the location is located.
+		 * @param position is the position of the location on the hexagon.
+		 * @return truth value of neighbour exists.
+		 */
+		bool hasNextDownLeft(int hexagonNum, int position);
+
+
+		/**
+		 * @param hexagonNum is the hexagon number on which the location is located.
+		 * @param position is the position of the location on the hexagon.
+		 */
+		void nextUp(int hexagonNum, int position);
+
+
+		/**
+		 * @param hexagonNum is the hexagon number on which the location is located.
+		 * @param position is the position of the location on the hexagon.
+		 */
+		void nextDown(int hexagonNum, int position);
+
+
+		/**
+		 * @param hexagonNum is the hexagon number on which the location is located.
+		 * @param position is the position of the location on the hexagon.
+		 */
+		void nextUpRight(int hexagonNum, int position);
+
+
+		/**
+		 * @param hexagonNum is the hexagon number on which the location is located.
+		 * @param position is the position of the location on the hexagon.
+		 */
+		void nextUpLeft(int hexagonNum, int position);
+
+
+		/**
+		 * @param hexagonNum is the hexagon number on which the location is located.
+		 * @param position is the position of the location on the hexagon.
+		 */
+		void nextDownRight(int hexagonNum, int position);
+
+
+		/**
+		 * @param hexagonNum is the hexagon number on which the location is located.
+		 * @param position is the position of the location on the hexagon.
+		 */
+		void nextDownLeft(int hexagonNum, int position);
 }
