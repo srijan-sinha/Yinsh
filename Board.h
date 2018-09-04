@@ -10,7 +10,7 @@ class Board {
 	
 	private:
 		
-		int ** board;
+		int ** board;		//	0 -> Not Occupied	1 -> Our Ring 	-1 -> Opponent's Ring 	2 -> Our Disc 	-2 -> Opponent's Disc 
 		int boardSize;
 		int numRings;
 		int numOppRings;
@@ -30,6 +30,13 @@ class Board {
 		 * @param size is the size of the board, i.e. number of hexagons.
 		 */
 		Board(int size);
+
+
+		/**
+		 * Initializes the 2-D board array.
+		 * @param size is the number of hexagons on the board.
+		 */
+		void initBoard(int size);
 
 
 		/**

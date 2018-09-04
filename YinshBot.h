@@ -18,7 +18,7 @@ using namespace std;
 class YinshBot {
 	private:
 
-		Board board;
+		Board * board;
 		int boardSize;
 		int totalRings;
 		int winningMarkers;

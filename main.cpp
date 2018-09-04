@@ -1,6 +1,6 @@
 #include <cstdlib>
 
-#include "SessionOrganizer.h"
+#include "YinshBot.h"
 
 using namespace std;
 
