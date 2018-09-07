@@ -137,11 +137,87 @@ void Board::moveRing (int hexagon1, int position1, int hexagon2, int position2)
 	convertTo(hexagon2, position2, v2, l2, r2);
 	if(board[v2][l2][r2] == 0) 
 	{
+		//change the ring and add the initial marker
 		board[v2][l2][r2] = board[v1][l1][r1];
 		if (board[v1][l1][r1] == 1)
 			board[v1][l1][r1] = 2;
 		else
 			board[v1][l1][r1] = -2;
+		//flip all the markers
+		if (v1 == v2)
+		{
+			int v = v1;
+			bool correct = true;
+			//check if valid row is being removed
+			int l_start = min(l1,l2) ,l_end = max(l1,l2);
+			for(int i=l_start+1; i<l_end; i++)
+			{
+				if (board[v][i][-v-i] == 1 || board[v][i][-v-i] == -1)
+				{
+					cout<<"Error! there is a ring between the given 2 points"<<endl;
+					cout<< "Above error printed in Board.cpp: moveRing." << endl;
+					correct = false;	
+					break;
+				}
+			}
+			if (correct)
+			{
+				//flip the row
+				for(int i=l_start+1; i<l_end; i++)
+					board[v][i][-v-i] = -board[v][i][-v-i];
+			}
+		}
+		else if (l1 == l2)
+		{
+			int l = l1;
+			bool correct = true;
+			//check if valid row is being removed
+			int v_start = min(v1,v2) ,v_end = max(v1,v2);
+			for(int i=v_start+1; i<v_end; i++)
+			{
+				if (board[i][l][-l-i] == 1 || board[i][l][-l-i] != 1)
+				{
+					cout<<"Error! there is a ring between the given 2 points"<<endl;
+					cout<< "Above error printed in Board.cpp: moveRing." << endl;
+					correct = false;	
+					break;
+				}
+			}
+			if (correct)
+			{
+				//remove the row
+				for(int i=v_start+1; i<v_end; i++)
+					board[i][l][-l-i] = -board[i][l][-l-i];
+			}
+		}
+		else if (r1 == r2)
+		{
+			int r = r1;
+			bool correct = true;
+			//check if valid row is being removed
+			int l_start = min(l1,l2) ,l_end = max(l1,l2);
+			for(int i=l_start+1; i<l_end; i++)
+			{
+				if (board[-r-i][i][r] == 1 || board[-r-i][i][r] == -1)
+				{
+					cout<<"Error! there is a ring between the given 2 points"<<endl;
+					cout<< "Above error printed in Board.cpp: moveRing." << endl;
+					correct = false;	
+					break;
+				}
+			}
+			if (correct)
+			{
+				//remove the row
+				for(int i=l_start+1; i<l_end; i++)
+					board[-r-i][i][v] = -board[-r-i][i][v];
+			}
+		}
+		else
+		{
+			cout << "Error! Given points (" <<  hexagon1 << "," << position1 << ") and (" <<  hexagon2 << "," << position2 << ") are not on same line" << endl;
+			cout << "Above error printed in Board.cpp: moveRing." << endl;
+		}
 	}
 	else
 	{

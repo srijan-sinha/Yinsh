@@ -104,7 +104,7 @@ class Board {
 
 		/**
 		 * Moves the ring from the initial location to the final location and adds 
-		 * a disc in its place.
+		 * a disc in its place. also flips the disc in its path
 		 * @param hexagon1 is the initial hexagon number of the ring.
 		 * @param position1 is the initial position of the ring.
 		 * @param hexagon2 is the final hexagon number of the ring.
