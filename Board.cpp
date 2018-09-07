@@ -109,8 +109,16 @@ void Board::convertBack(int v, int l, int r, int hexagonNum, int position) {
 
 void Board::addRing (int colour, int hexagonNum, int position) {
 	
-	if(board[hexagonNum][position] == 0)
-		board[hexagonNum][position] = colour;
+	int v, l, r = 0;
+	convertTo(hexagonNum, position, v, l, r);
+
+	if(board[v][l][r] == 0) {
+		board[v][l][r] = colour;
+		if(colour == 1)
+			numRings++;
+		else
+			numOppRings++;
+	}
 	else{
 		cout << "Error! Location already filled! Hexagon number: " <<  hexagonNum << " Point number: " << position << endl;
 		cout << "Above error printed in Board.cpp: addRing." << endl;
@@ -119,6 +127,10 @@ void Board::addRing (int colour, int hexagonNum, int position) {
 
 void Board::moveRing (int hexagon1, int position1, int hexagon2, int position2) {
 	
+	int v1, l1, r1, v2, l2, r2 = 0;
+	convertTo(hexagon1, position1, v1, l1, r1);
+	convertTo(hexagon2, position2, v2, l2, r2);
+
 }
 
 void Board::removeRow (int hexagon1, int position1, int hexagon2, int position2) {
@@ -127,8 +139,16 @@ void Board::removeRow (int hexagon1, int position1, int hexagon2, int position2)
 
 void Board::removeRing (int hexagonNum, int position) {
 	
-	if(board[hexagonNum][position] == 1 || board[hexgaonNum][position] == -1)
-		board[hexagonNum][position] == 0;
+	int v, l, r = 0;
+	convertTo(hexagonNum, position, v, l, r);
+
+	if(board[v][l][r] == 1 || board[v][l][r] == -1) {
+		if(board[v][l][r] == 1)
+			numRings--;
+		else
+			numOppRings--;
+		board[v][l][r] == 0;
+	}
 	else
 		cout << "Error! Ring not found for deletion! Hexagon number: " <<  hexagonNum << " Point number: " << position << endl;
 		cout << "Above error printed in Board.cpp: removeRing." << endl;
