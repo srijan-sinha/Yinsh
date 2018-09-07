@@ -12,19 +12,24 @@ Board::Board (int size) {
 
 void Board::initBoard (int size) {
 	
-	int ** tempBoard = new int*[size+1];
+	int *** tempBoard = new int**[2*size+1];
 
-	tempBoard[0] = new int[1];
 	
-	for (int i = 1; i < size + 1; i++) {
-		tempBoard[i] = new int[6*i];
+	for (int i = 0; i < 2*size + 1; i++) {
+		tempBoard[i] = new int*[2*size + 1];
 	}
 
-	tempBoard[0][0] = 0;
+	for (int i = 0; i < 2*size + 1; i++) {
+		for (int j = 0; j < 2*size + 1; j++) {
+			tempBoard[i][j] = new int[2*size + 1];
+		}
+	}
 
-	for (int i = 1; i < size + 1; i++) {
-		for (int j = 0; j < 6*i; j++) {
-			tempBoard[i][j] = 0;
+	for(int i = 0; i < 2*size + 1; i++) {
+		for(int j = 0; j < 2*size + 1; j++) {
+			for(int k = 0; k < 2*size + 1; k++) {
+				tempBoard[i][j][k] = 0;
+			}
 		}
 	}
 
@@ -49,6 +54,57 @@ int Board::getNumDiscs () {
 
 int Board::getNumOppDiscs () {
 	return numOppDiscs;
+}
+
+void Board::convertTo(int hexagonNum, int position, int v, int l, int r) {
+	
+	int segment = 0;
+
+	if(hexagonNum == 0) { v = 0; l = 0; r = 0; }
+	else {
+		segment = position / hexagonNum;
+		// if(position % hexagonNum == 0) {
+		// 	if(segment == 0) { v = 0; l = hexagonNum; r = -1 * hexagonNum; }
+		// 	else if(segment == 1) { v = hexagonNum; l = 0; r = -1 * hexagonNum; }
+		// 	else if(segment == 2) { v = hexagonNum; l = -1 * hexagonNum; r = 0; }
+		// 	else if(segment == 3) { v = 0; l = -1 * hexagonNum; r = hexagonNum; }
+		// 	else if(segment == 4) { v = -1 * hexagonNum; l = 0; r = hexagonNum; }
+		// 	else if(segment == 5) { v = -1 * hexagonNum; l = hexagonNum; r = 0; }
+		// }
+		
+		if(segment == 0) { v = position % hexagonNum; l = hexagonNum - (position % hexagonNum); r = -1 * hexagonNum; }
+		else if(segment == 1) { v = hexagonNum; l = -1 * (position % hexagonNum); r = -1 * (hexagonNum - (position % hexagonNum)); }
+		else if(segment == 2) { v = hexagonNum - (position % hexagonNum); l = -1 * hexagonNum; r = position % hexagonNum; }
+		else if(segment == 3) { v = -1 * (position % hexagonNum); l = -1 * (hexagonNum - (position % hexagonNum)); r = hexagonNum; }
+		else if(segment == 4) { v = -1 * hexagonNum; l = position % hexagonNum; r = hexagonNum - (position % hexagonNum); }
+		else if(segment == 5) { v = -1 * (hexagonNum - (position % hexagonNum)); l = hexagonNum; r = -1 * (position % hexagonNum); }
+	}
+}
+
+void Board::convertBack(int v, int l, int r, int hexagonNum, int position) {
+	hexagonNum = max(max(abs(v), abs(l)), ans(r));
+	if(v == 0 && l == 0 && r == 0)
+		position = 0;
+	else {
+		if(max == abs(v)) {
+			if(v > 0)
+				position = 2*hexagonNum + r; 
+			else
+				position = 4*hexagonNum + l;
+		}
+		else if(max == abs(r)) {
+			if(r > 0)
+				position = 3*hexagonNum - v;
+			else
+				position = v;
+		}
+		else {
+			if(l > 0)
+				position = 5*hexagonNum - r;
+			else
+				position = 3*hexgaonNum - v; 
+		}
+	}
 }
 
 void Board::addRing (int colour, int hexagonNum, int position) {
@@ -79,52 +135,69 @@ void Board::removeRing (int hexagonNum, int position) {
 	}
 }
 
-bool Board::checkBorder(int hexagonNum, int position, int bound) {
-	if(hexagonNum != boardSize)
+
+bool Board::hasNextUp(int v, int l , int r) {
+	if(abs(l + 1) > boardSize || abs(r - 1) > boardSize)
 		return false;
-	int low = boardSize * bound;
-	int high = boardSize * (bound + 2);
-	if(bound != 5) {
-		if((position >= low) && (position <= high))
-			return true;
+	return true;
+}
 
-		if((bound == 4) && (position == 0))
-			return true;
+bool Board::hasNextDown(int v, int l, int r) {
+	if(abs(l - 1) > boardSize || abs(r + 1) > boardSize)
 		return false;
-	}
-	else {
-		if(position >= low)
-			return true;
-		
-		high = boardSize * 1;
-		
-		if((position >= 0) && (positon <= high))
-			return true;
+	return true;
+}
+
+bool Board::hasNextUpRight(int v, int l , int r) {
+	if(abs(v + 1) > boardSize || abs(r - 1) > boardSize)
 		return false;
-	}
+	return true;
 }
 
-bool Board::hasNextUp(int hexagonNum, int position) {
-	return checkBorder(hexagonNum, position, 5);
+bool Board::hasNextUpLeft(int v, int l , int r) {
+	if(abs(v - 1) > boardSize || abs(l + 1) > boardSize)
+		return false;
+	return true;
 }
 
-bool Board::hasNextDown(int hexagonNum, int position) {
-	return checkBorder(hexagonNum, position, 2);
+bool Board::hasNextDownRight(int v, int l , int r) {
+	if(abs(v + 1) > boardSize || abs(l - 1) > boardSize)
+		return false;
+	return true;
 }
 
-bool Board::hasNextUpRight(int hexagonNum, int position) {
-	return checkBorder(hexagonNum, position, 0);
+bool Board::hasNextDownLeft(int v, int l , int r) {
+	if(abs(v - 1) > boardSize || abs(r + 1) > boardSize)
+		return false;
+	return true;
 }
 
-bool Board::hasNextUpLeft(int hexagonNum, int position) {
-	return checkBorder(hexagonNum, position, 4);
+void Board::nextUp(int v, int l, int r) {
+	l = l + 1;
+	r = r - 1;
 }
 
-bool Board::hasNextDownRight(int hexagonNum, int position) {
-	return checkBorder(hexagonNum, position, 1);
+void Board::nextDown(int v, int l, int r) {
+	l = l - 1;
+	r = r + 1;
 }
 
-bool Board::hasNextDownLeft(int hexagonNum, int position) {
-	return checkBorder(hexagonNum, position, 3);
+void Board::nextUpRight(int v, int l, int r) {
+	v = v + 1;
+	r = r - 1;
 }
 
+void Board::nextUpLeft(int v, int l, int r) {
+	v = v - 1;
+	l = l + 1;
+}
+
+void Board::nextDownRight(int v, int l, int r) {
+	v = v + 1;
+	l = l - 1;
+}
+
+void Board::nextDownLeft(int v, int l, int r) {
+	v = v - 1;
+	r = r + 1;
+}

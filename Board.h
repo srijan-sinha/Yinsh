@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <cmath>
 
 using namespace std;
 
@@ -10,7 +11,7 @@ class Board {
 	
 	private:
 		
-		int ** board;		//	0 -> Not Occupied	1 -> Our Ring 	-1 -> Opponent's Ring 	2 -> Our Disc 	-2 -> Opponent's Disc 
+		int *** board;		//	0 -> Not Occupied	1 -> Our Ring 	-1 -> Opponent's Ring 	2 -> Our Disc 	-2 -> Opponent's Disc 
 		int boardSize;
 		int numRings;
 		int numOppRings;
@@ -19,13 +20,26 @@ class Board {
 
 
 		/**
-		 * Checks if the location is within the bounnds and on the border of the playing board.
-		 * @param hexagonNum is the hexagon number on which the location is located.
+		 * Convert coordinate (h, p) to (v, l, r)
+		 * @param hexagonNum is the hexagon number of the location.
 		 * @param position is the position of the location on the hexagon.
-		 * @param bound is the clockwise first vertex number of the hexagon after which the location should be located within 2 sides of the hexagon.
-		 * @return truth value of the location located between the bounds on the outermost hexagon.
+		 * @param v is the respective vertical line number on which the location is located.
+		 * @param l is the respective diagonal line (bottom left to top right) number on which the location is located.
+		 * @param r is the respective vertical line (bottom right to top left) number on which the location is located.
 		 */
-		bool checkBorder(int hexagonNum, int position, int bound);
+		void convertTo(int hexagonNum, int position, int v, int l, int r);
+
+
+		/**
+		 * Convert coordinate (v, l, r) to (h, p)
+		 * @param v is the respective vertical line number on which the location is located.
+		 * @param l is the respective diagonal line (bottom left to top right) number on which the location is located.
+		 * @param r is the respective vertical line (bottom right to top left) number on which the location is located.
+		 * @param hexagonNum is the hexagon number of the location.
+		 * @param position is the position of the location on the hexagon.
+		 */
+		void convertBack(int v, int l, int r, int hexagonNum, int position);
+
 
 	public:
 
@@ -114,95 +128,107 @@ class Board {
 		 * @param hexagonNum is the hexagon number of the ring location.
 		 * @param position is the position of the ring on the hexagon.
 		 */
-		void removeRing(int hexagonNum, int position);
+		void removeRing(int v, int l, int r);
 
 
 		/**
-		 * @param hexagonNum is the hexagon number on which the location is located.
-		 * @param position is the position of the location on the hexagon.
+		 * @param v is the vertical line number on which the location is located.
+		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
+		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
 		 * @return truth value of neighbour exists.
 		 */
-		bool hasNextUp(int hexagonNum, int position);
+		bool hasNextUp(int v, int l, int r);
 
 
 		/**
-		 * @param hexagonNum is the hexagon number on which the location is located.
-		 * @param position is the position of the location on the hexagon.
+		 * @param v is the vertical line number on which the location is located.
+		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
+		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
 		 * @return truth value of neighbour exists.
 		 */
-		bool hasNextDown(int hexagonNum, int position);
+		bool hasNextDown(int v, int l, int r);
 
 
 		/**
-		 * @param hexagonNum is the hexagon number on which the location is located.
-		 * @param position is the position of the location on the hexagon.
+		 * @param v is the vertical line number on which the location is located.
+		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
+		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
 		 * @return truth value of neighbour exists.
 		 */
-		bool hasNextUpRight(int hexagonNum, int position);
+		bool hasNextUpRight(int v, int l, int r);
 
 
 		/**
-		 * @param hexagonNum is the hexagon number on which the location is located.
-		 * @param position is the position of the location on the hexagon.
+		 * @param v is the vertical line number on which the location is located.
+		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
+		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
 		 * @return truth value of neighbour exists.
 		 */
-		bool hasNextUpLeft(int hexagonNum, int position);
+		bool hasNextUpLeft(int v, int l, int r);
 
 
 		/**
-		 * @param hexagonNum is the hexagon number on which the location is located.
-		 * @param position is the position of the location on the hexagon.
+		 * @param v is the vertical line number on which the location is located.
+		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
+		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
 		 * @return truth value of neighbour exists.
 		 */
-		bool hasNextDownRight(int hexagonNum, int position);
+		bool hasNextDownRight(int v, int l, int r);
 
 
 		/**
-		 * @param hexagonNum is the hexagon number on which the location is located.
-		 * @param position is the position of the location on the hexagon.
+		 * @param v is the vertical line number on which the location is located.
+		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
+		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
 		 * @return truth value of neighbour exists.
 		 */
-		bool hasNextDownLeft(int hexagonNum, int position);
+		bool hasNextDownLeft(int v, int l, int r);
 
 
 		/**
-		 * @param hexagonNum is the hexagon number on which the location is located.
-		 * @param position is the position of the location on the hexagon.
+		 * @param v is the vertical line number on which the location is located.
+		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
+		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
 		 */
-		void nextUp(int hexagonNum, int position);
+		void nextUp(int v, int l, int r);
 
 
 		/**
-		 * @param hexagonNum is the hexagon number on which the location is located.
-		 * @param position is the position of the location on the hexagon.
+		 * @param v is the vertical line number on which the location is located.
+		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
+		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
 		 */
-		void nextDown(int hexagonNum, int position);
+		void nextDown(int v, int l, int r);
 
 
 		/**
-		 * @param hexagonNum is the hexagon number on which the location is located.
-		 * @param position is the position of the location on the hexagon.
+		 * @param v is the vertical line number on which the location is located.
+		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
+		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
 		 */
-		void nextUpRight(int hexagonNum, int position);
+		void nextUpRight(int v, int l, int r);
 
 
 		/**
-		 * @param hexagonNum is the hexagon number on which the location is located.
-		 * @param position is the position of the location on the hexagon.
+		 * @param v is the vertical line number on which the location is located.
+		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
+		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
 		 */
 		void nextUpLeft(int hexagonNum, int position);
 
 
 		/**
-		 * @param hexagonNum is the hexagon number on which the location is located.
-		 * @param position is the position of the location on the hexagon.
+		 * @param v is the vertical line number on which the location is located.
+		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
+		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
 		 */
 		void nextDownRight(int hexagonNum, int position);
 
 
 		/**
-		 * @param hexagonNum is the hexagon number on which the location is located.
-		 * @param position is the position of the location on the hexagon.
+		 * @param v is the vertical line number on which the location is located.
+		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
+		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
 		 */
 		void nextDownLeft(int hexagonNum, int position);
 }
