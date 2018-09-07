@@ -56,7 +56,7 @@ int Board::getNumOppDiscs () {
 	return numOppDiscs;
 }
 
-void Board::convertTo(int hexagonNum, int position, int v, int l, int r) {
+void Board::convertTo(int& hexagonNum, int& position, int& v, int& l, int& r) {
 	
 	int segment = 0;
 
@@ -81,7 +81,7 @@ void Board::convertTo(int hexagonNum, int position, int v, int l, int r) {
 	}
 }
 
-void Board::convertBack(int v, int l, int r, int hexagonNum, int position) {
+void Board::convertBack(int& v, int& l, int& r, int& hexagonNum, int& position) {
 	hexagonNum = max(max(abs(v), abs(l)), ans(r));
 	if(v == 0 && l == 0 && r == 0)
 		position = 0;
@@ -107,33 +107,132 @@ void Board::convertBack(int v, int l, int r, int hexagonNum, int position) {
 	}
 }
 
-void Board::addRing (int colour, int hexagonNum, int position) {
+void Board::addRing (int colour, int hexagonNum, int position) 
+{
 	
 	int v, l, r = 0;
 	convertTo(hexagonNum, position, v, l, r);
 
-	if(board[v][l][r] == 0) {
+	if(board[v][l][r] == 0) 
+	{
 		board[v][l][r] = colour;
 		if(colour == 1)
 			numRings++;
 		else
 			numOppRings++;
 	}
-	else{
+	else
+	{
 		cout << "Error! Location already filled! Hexagon number: " <<  hexagonNum << " Point number: " << position << endl;
 		cout << "Above error printed in Board.cpp: addRing." << endl;
 	}
 }
 
-void Board::moveRing (int hexagon1, int position1, int hexagon2, int position2) {
-	
+void Board::moveRing (int hexagon1, int position1, int hexagon2, int position2) 
+{
+	//we dont check if the func is called by our player or opponent player
+	//i.e opponent cannot move our ring and vica-versa
 	int v1, l1, r1, v2, l2, r2 = 0;
 	convertTo(hexagon1, position1, v1, l1, r1);
 	convertTo(hexagon2, position2, v2, l2, r2);
+	if(board[v2][l2][r2] == 0) 
+	{
+		board[v2][l2][r2] = board[v1][l1][r1];
+		if (board[v1][l1][r1] == 1)
+			board[v1][l1][r1] = 2;
+		else
+			board[v1][l1][r1] = -2;
+	}
+	else
+	{
+		cout << "Error! Cannot move ring at Hexagon number: " <<  hexagon1 << " Point number: " << position1 << " to a point at Hexagon number: " <<  hexagon2 << " Point number: " << position2 << endl;
+		cout << "Above error printed in Board.cpp: moveRing." << endl;
+	}
 
 }
 
-void Board::removeRow (int hexagon1, int position1, int hexagon2, int position2) {
+void Board::removeRow (int hexagon1, int position1, int hexagon2, int position2) 
+{
+	int v1, l1, r1, v2, l2, r2 = 0;
+	convertTo(hexagon1, position1, v1, l1, r1);
+	convertTo(hexagon2, position2, v2, l2, r2);
+	if (v1 == v2)
+	{
+		int v = v1;
+		int a = board[v][l1+1][-v-l1-1];
+		bool correct = true;
+		//check if valid row is being removed
+		int l_start = min(l1,l2) ,l_end = max(l1,l2);
+		for(int i=l_start+2; i<l_end; i++)
+		{
+			if (board[v][i][-v-i] != a && (a == 2 || a == -2))
+			{
+				cout<<"Error! the row to delete does not have all markers or all markers of same player"<<endl;
+				cout<< "Above error printed in Board.cpp: removeRow." << endl;
+				correct = false;	
+				break;
+			}
+		}
+		if (correct)
+		{
+			//remove the row
+			for(int i=l_start+1; i<l_end; i++)
+				board[v][i][-v-i] = 0;
+		}
+	}
+	else if (l1 == l2)
+	{
+		int l = l1;
+		int a = board[v1+1][l][-v1-l-1];
+		bool correct = true;
+		//check if valid row is being removed
+		int v_start = min(v1,v2) ,v_end = max(v1,v2);
+		for(int i=v_start+2; i<v_end; i++)
+		{
+			if (board[i][l][-l-i] != a && (a == 2 || a == -2))
+			{
+				cout<<"Error! the row to delete does not have all markers or all markers of same player"<<endl;
+				cout<< "Above error printed in Board.cpp: removeRow." << endl;
+				correct = false;	
+				break;
+			}
+		}
+		if (correct)
+		{
+			//remove the row
+			for(int i=v_start+1; i<v_end; i++)
+				board[i][l][-l-i] = 0;
+		}
+	}
+	else if (r1 == r2)
+	{
+		int r = r1;
+		int a = board[-r-l1-1][l1+1][r];
+		bool correct = true;
+		//check if valid row is being removed
+		int l_start = min(l1,l2) ,l_end = max(l1,l2);
+		for(int i=l_start+2; i<l_end; i++)
+		{
+			if (board[-r-i][i][r] != a && (a == 2 || a == -2))
+			{
+				cout<<"Error! the row to delete does not have all markers or all markers of same player"<<endl;
+				cout<< "Above error printed in Board.cpp: removeRow." << endl;
+				correct = false;	
+				break;
+			}
+		}
+		if (correct)
+		{
+			//remove the row
+			for(int i=l_start+1; i<l_end; i++)
+				board[-r-i][i][v] = 0;
+		}
+	}
+	else
+	{
+		cout << "Error! Given points (" <<  hexagon1 << "," << position1 << ") and (" <<  hexagon2 << "," << position2 << ") are not on same line" << endl;
+		cout << "Above error printed in Board.cpp: removeRow." << endl;	
+	}
 
 }
 
@@ -150,6 +249,7 @@ void Board::removeRing (int hexagonNum, int position) {
 		board[v][l][r] == 0;
 	}
 	else
+	{
 		cout << "Error! Ring not found for deletion! Hexagon number: " <<  hexagonNum << " Point number: " << position << endl;
 		cout << "Above error printed in Board.cpp: removeRing." << endl;
 	}
@@ -192,32 +292,32 @@ bool Board::hasNextDownLeft(int v, int l , int r) {
 	return true;
 }
 
-void Board::nextUp(int v, int l, int r) {
+void Board::nextUp(int& v, int& l, int& r) {
 	l = l + 1;
 	r = r - 1;
 }
 
-void Board::nextDown(int v, int l, int r) {
+void Board::nextDown(int& v, int& l, int& r) {
 	l = l - 1;
 	r = r + 1;
 }
 
-void Board::nextUpRight(int v, int l, int r) {
+void Board::nextUpRight(int& v, int& l, int& r) {
 	v = v + 1;
 	r = r - 1;
 }
 
-void Board::nextUpLeft(int v, int l, int r) {
+void Board::nextUpLeft(int& v, int& l, int& r) {
 	v = v - 1;
 	l = l + 1;
 }
 
-void Board::nextDownRight(int v, int l, int r) {
+void Board::nextDownRight(int& v, int& l, int& r) {
 	v = v + 1;
 	l = l - 1;
 }
 
-void Board::nextDownLeft(int v, int l, int r) {
+void Board::nextDownLeft(int& v, int& l, int& r) {
 	v = v - 1;
 	r = r + 1;
 }
