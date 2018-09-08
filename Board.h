@@ -103,14 +103,32 @@ class Board {
 
 
 		/**
+		 * Undoes addition of a ring at the mentioned location on the board.
+		 * @param hexagonNum is the distance of the point from the centre of the board.
+		 * @param position is the point number on the circumference of the hexagon.
+		 */
+		void undoAddRing(int hexagonNum, int position);
+
+
+		/**
 		 * Moves the ring from the initial location to the final location and adds 
-		 * a disc in its place. also flips the disc in its path
+		 * a disc in its place also flips the disc in its path.
 		 * @param hexagon1 is the initial hexagon number of the ring.
 		 * @param position1 is the initial position of the ring.
 		 * @param hexagon2 is the final hexagon number of the ring.
 		 * @param position2 is the final position of the ring.
 		 */
 		void moveRing(int hexagon1, int position1, int hexagon2, int position2);
+
+
+		/**
+		 * Undoes all effects of movement of the ring from the initial location to the final location.
+		 * @param hexagon1 is the initial hexagon number of the ring.
+		 * @param position1 is the initial position of the ring.
+		 * @param hexagon2 is the final hexagon number of the ring.
+		 * @param position2 is the final position of the ring.
+		 */
+		void undoMoveRing(int hexagon1, int position1, int hexagon2, int position2);
 
 
 		/**
@@ -124,11 +142,37 @@ class Board {
 
 
 		/**
+		 * Undoes removal of the row between the start point and end point.
+		 * @param colour is the colour of the discs to be added back.
+		 * @param hexagon1 is the hexagon number of the start point.
+		 * @param position1 is the position of the start point.
+		 * @param hexagon2 is the hexagon number of the end point.
+		 * @param position2 is the position of the end point.
+		 */
+		void removeRow(int colour, int hexagon1, int position1, int hexagon2, int position2);
+
+		/**
 		 * Removes the ring at the marked location.
 		 * @param hexagonNum is the hexagon number of the ring location.
 		 * @param position is the position of the ring on the hexagon.
 		 */
-		void removeRing(int v, int l, int r);
+		void removeRing(int hexagonNum, int position);
+
+
+		/**
+		 * Undo removal of the ring at the marked location.
+		 * @param colour is the colour of the ring to be added back.
+		 * @param hexagonNum is the hexagon number of the ring location.
+		 * @param position is the position of the ring on the hexagon.
+		 */
+		void removeRing(int colour, int hexagonNum, int position);
+
+		/**
+		 * Generates all possible moves on the board for the given player.
+		 * @param perspective is 1 for our turn and -1 for opponent's turn.
+		 * @return vector<string> in which each element is a command which can be executed in the given board configuration.
+		 */
+		vector<string> generateMoveList(int perspective);
 
 
 		/**

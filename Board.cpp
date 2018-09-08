@@ -1,3 +1,56 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////
+
+
+// Major logical flaw, we need to set board[v + boardSize][l + boardSize][r + boardSize] etc.
+
+
+//////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #include "Board.h"
 
 Board::Board () {
@@ -131,7 +184,7 @@ void Board::addRing (int colour, int hexagonNum, int position)
 void Board::moveRing (int hexagon1, int position1, int hexagon2, int position2) 
 {
 	//we dont check if the func is called by our player or opponent player
-	//i.e opponent cannot move our ring and vica-versa
+	//i.e opponent cannot move our ring and vice-versa
 	int v1, l1, r1, v2, l2, r2 = 0;
 	convertTo(hexagon1, position1, v1, l1, r1);
 	convertTo(hexagon2, position2, v2, l2, r2);
