@@ -17,7 +17,9 @@ class Board {
 		int numOppRings;
 		int numDiscs;
 		int numOppDiscs;
-
+		vector<int> ringV;
+		vector<int> ringL;
+		vector<int> ringR;
 
 		/**
 		 * Convert coordinate (h, p) to (v, l, r)
@@ -149,7 +151,7 @@ class Board {
 		 * @param hexagon2 is the hexagon number of the end point.
 		 * @param position2 is the position of the end point.
 		 */
-		void removeRow(int colour, int hexagon1, int position1, int hexagon2, int position2);
+		void undoRemoveRow(int colour, int hexagon1, int position1, int hexagon2, int position2);
 
 		/**
 		 * Removes the ring at the marked location.
@@ -165,7 +167,7 @@ class Board {
 		 * @param hexagonNum is the hexagon number of the ring location.
 		 * @param position is the position of the ring on the hexagon.
 		 */
-		void removeRing(int colour, int hexagonNum, int position);
+		void undoRemoveRing(int colour, int hexagonNum, int position);
 
 		/**
 		 * Generates all possible moves on the board for the given player.
