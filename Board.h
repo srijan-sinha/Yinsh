@@ -12,14 +12,21 @@ class Board {
 	private:
 		
 		int *** board;		//	0 -> Not Occupied	1 -> Our Ring 	-1 -> Opponent's Ring 	2 -> Our Disc 	-2 -> Opponent's Disc 
+
 		int boardSize;
 		int maxRings;
-		int sequuenceLength;
+		int sequenceLength;
 		int ringsToWin;
+
 		int numRings;
 		int numOppRings;
+		
+		int ringsScored;
+		int oppRingsScored;
+		
 		int numDiscs;
 		int numOppDiscs;
+		
 		vector<int> ringV;
 		vector<int> ringL;
 		vector<int> ringR;
@@ -49,7 +56,7 @@ class Board {
 	public:
 
 		/**
-		 * An empty constructor.
+		 * Empty constructor.
 		 */
 		Board();
 
@@ -73,6 +80,22 @@ class Board {
 		 */
 		int getBoardSize();
 
+		/**
+		 * @return the total rings to be played with.
+		 */
+		int getMaxRings();
+
+
+		/**
+		 * @return the number of discs to be placed in a line.
+		 */
+		int getSequenceLength();
+
+		/**
+		 * @return the number of rings to be taken off the board for a win.
+		 */
+		int getRingsToWin();
+
 
 		/**
 		 * @return the number of our bot's rings on board.
@@ -84,6 +107,18 @@ class Board {
 		 * @return the number of opponent bot's rings on board.
 		 */
 		int getNumOppRings();
+
+
+		/**
+		 * @return the number of our bot's rings scored till now.
+		 */
+		int getRingsScored();
+
+
+		/**
+		 * @return the number of opponent bot's rings scored till now.
+		 */
+		int getOppRingsScored();
 
 
 		/**
@@ -127,7 +162,7 @@ class Board {
 
 
 		/**
-		 * Undoes all effects of movement of the ring from the initial location to the final location.
+		 * Undoes all effects of movement of the ring from the initial location(1) to the final location(2).
 		 * @param hexagon1 is the initial hexagon number of the ring.
 		 * @param position1 is the initial position of the ring.
 		 * @param hexagon2 is the final hexagon number of the ring.
@@ -147,7 +182,7 @@ class Board {
 
 
 		/**
-		 * Undoes removal of the row between the start point and end point.
+		 * Adds back discs of the input colour between the given locations(both inclusive).
 		 * @param colour is the colour of the discs to be added back.
 		 * @param hexagon1 is the hexagon number of the start point.
 		 * @param position1 is the position of the start point.
@@ -156,21 +191,24 @@ class Board {
 		 */
 		void undoRemoveRow(int colour, int hexagon1, int position1, int hexagon2, int position2);
 
+
 		/**
 		 * Removes the ring at the marked location.
+		 * @param colour is the colour of the ring to be added.
 		 * @param hexagonNum is the hexagon number of the ring location.
 		 * @param position is the position of the ring on the hexagon.
 		 */
-		void removeRing(int hexagonNum, int position);
+		void removeRing(int colour, int hexagonNum, int position);
 
 
 		/**
-		 * Undo removal of the ring at the marked location.
+		 * Adds back ring of the given colour at the marked location.
 		 * @param colour is the colour of the ring to be added back.
 		 * @param hexagonNum is the hexagon number of the ring location.
 		 * @param position is the position of the ring on the hexagon.
 		 */
 		void undoRemoveRing(int colour, int hexagonNum, int position);
+
 
 		/**
 		 * Generates all possible moves on the board for the given player.
@@ -181,57 +219,28 @@ class Board {
 
 
 		/**
-		 * @param v is the vertical line number on which the location is located.
-		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
-		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
-		 * @return truth value of neighbour exists.
+		 * Appends all possible moves for a ring addition to the current board configuration.
 		 */
-		bool hasNextUp(int v, int l, int r);
+		void addRingMoves(vector<string> moves);
 
 
 		/**
+		 * Appends all possible ring movements for the given ring at the given location .
+		 * @param moves is the vector to which the rings are to be appended.
 		 * @param v is the vertical line number on which the location is located.
 		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
 		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
-		 * @return truth value of neighbour exists.
 		 */
-		bool hasNextDown(int v, int l, int r);
+		void moveRingMoves(vector<string> moves, int v, int l, int r);
 
 
 		/**
+		 * Checks if the given coordinates are valid.
 		 * @param v is the vertical line number on which the location is located.
 		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
 		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
-		 * @return truth value of neighbour exists.
 		 */
-		bool hasNextUpRight(int v, int l, int r);
-
-
-		/**
-		 * @param v is the vertical line number on which the location is located.
-		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
-		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
-		 * @return truth value of neighbour exists.
-		 */
-		bool hasNextUpLeft(int v, int l, int r);
-
-
-		/**
-		 * @param v is the vertical line number on which the location is located.
-		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
-		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
-		 * @return truth value of neighbour exists.
-		 */
-		bool hasNextDownRight(int v, int l, int r);
-
-
-		/**
-		 * @param v is the vertical line number on which the location is located.
-		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
-		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
-		 * @return truth value of neighbour exists.
-		 */
-		bool hasNextDownLeft(int v, int l, int r);
+		bool check(int v, int l, int r);
 
 
 		/**

@@ -23,6 +23,8 @@ class YinshBot {
 		int maxRings;
 		int SequenceLength;
 		int ringsToWin;
+		int turn;	//	1 for our, -1 for opponent's
+		int numPlays;
 
 	public:
 
@@ -39,14 +41,17 @@ class YinshBot {
 		 * @param k is the number of markers in a line required to remove a ring.
 		 * @param l is the number of rings to be removed to win.
 		 */
-		YinshBot(int n, int m, int k, int l);
+		YinshBot(int n, int m, int k, int l, int startTurn);
 
 
 		/**
 		 * Reads the input string command and executes the respective command.
 		 * @param command is the input command. 
 		 */
-		void readCommand(string command);
+		void executeCommand(string command);
+
+
+		void undoCommand(string command);
 
 
 		/**
@@ -54,6 +59,12 @@ class YinshBot {
 		 * @return the command to send to the server.
 		 */
 		string findNextMove();
+
+
+		string miniMax(int depth, int perspective);
+
+
+		vector<string> moveList();
 
 
 		/**
