@@ -13,6 +13,9 @@ class Board {
 		
 		int *** board;		//	0 -> Not Occupied	1 -> Our Ring 	-1 -> Opponent's Ring 	2 -> Our Disc 	-2 -> Opponent's Disc 
 		int boardSize;
+		int maxRings;
+		int sequuenceLength;
+		int ringsToWin;
 		int numRings;
 		int numOppRings;
 		int numDiscs;
@@ -55,7 +58,7 @@ class Board {
 		 * Generates an empty board of the given size.
 		 * @param size is the size of the board, i.e. number of hexagons.
 		 */
-		Board(int size);
+		Board(int n, int m, int k, int l);
 
 
 		/**

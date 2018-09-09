@@ -57,9 +57,12 @@ Board::Board () {
 
 }
 
-Board::Board (int size) {
+Board::Board (int n, int m, int k, int l) {
 	
-	boardSize = size;
+	boardSize = n;
+	maxRings = m;
+	SequenceLength = k;
+	ringsToWin = l;
 	initBoard(boardSize);
 }
 
@@ -384,6 +387,9 @@ void Board::removeRing (int hexagonNum, int position) {
 	}
 }
 
+vector<string> Board::generateMoveList(int perspective) {
+	
+}
 
 bool Board::hasNextUp(int v, int l , int r) {
 	if(abs(l + 1) > boardSize || abs(r - 1) > boardSize)

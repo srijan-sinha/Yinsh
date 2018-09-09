@@ -20,8 +20,8 @@ class YinshBot {
 
 		Board * board;
 		int boardSize;
-		int totalRings;
-		int winningMarkers;
+		int maxRings;
+		int SequenceLength;
 		int ringsToWin;
 
 	public:

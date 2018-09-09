@@ -6,10 +6,10 @@ YinshBot::YinshBot () {
 
 YinshBot::YinshBot (int n, int m, int k, int l) {
 	boardSize = n;
-	totalRings = m;
-	winningMarkers = k;
+	maxRings = m;
+	sequenceLength = k;
 	ringsToWin = l;
-	board = new Board(n);
+	board = new Board(n, m, k, l);
 }
 
 void YinshBot::readCommand (string command) {
@@ -25,5 +25,5 @@ bool YinshBot::checkGameEnd () {
 }
 
 double YinshBot::evalFunction (Board board) {
-
+	
 }
