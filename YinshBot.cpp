@@ -1,3 +1,16 @@
+//****************************
+
+// Main functions left, parser for execute and undo Command, and eval function.
+
+//****************************
+
+//////////////////////////////
+
+// Major things left alpha beta pruning(including ordering of moves) and depth differentiation based on move likability.
+
+////////////////////////////
+
+
 #include "YinshBot.h"
 
 YinshBot::YinshBot () {

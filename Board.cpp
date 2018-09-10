@@ -7,7 +7,7 @@
 
 //////////////////////////////
 
-// Need to update numDiscs and numOppDiscs in moveRing.
+// Need to update numDiscs and numOppDiscs in moveRing and undoMoveRing.
 
 //////////////////////////////
 
@@ -43,13 +43,13 @@
 
 //////////////////////////////
 
+//****************************
 
+// Function implementations remaining in this file
+// moveRingMoves full implementation left, generateMoveList half left.
+//Major issue :- while generating moveRingMoves, how to check if one or more rows of 5 have been formed and that we need to further specify deletion of markers and ring after that. 
 
-
-
-
-
-
+//****************************
 
 
 #include "Board.h"
@@ -220,7 +220,20 @@ void Board::addRing (int colour, int hexagonNum, int position)
 }
 
 void Board::undoAddRing(int hexagonNum, int position) {
+	int v, l, r = 0;
+	convertTo(hexagonNum, position, v, l, r);
 
+	if(board[v + boardSize][l + boardSize][r + boardSize] != 1 || board[v + boardSize][l + boardSize][r + boardSize] != -1) {
+		cout << "Error! Ring not found for removal! Hexagon number: " <<  hexagonNum << " Point number: " << position << endl;
+		cout << "Above error printed in Board.cpp: undoAddRing." << endl;
+	}
+	else {
+		if(board[v + boardSize][l + boardSize][r + boardSize] == 1)
+			numRings--;
+		else
+			numOppRings--;
+		board[v + boardSize][l + boardSize][r + boardSize] == 0;
+	}
 }
 
 void Board::moveRing (int hexagon1, int position1, int hexagon2, int position2) {
@@ -325,7 +338,100 @@ void Board::moveRing (int hexagon1, int position1, int hexagon2, int position2) 
 }
 
 void Board::undoMoveRing(int hexagon1, int position1, int hexagon2, int position2) {
+	//we dont check if the func is called by our player or opponent player
+	//i.e opponent cannot move our ring and vice-versa
+	int v1, l1, r1, v2, l2, r2 = 0;
+	convertTo(hexagon1, position1, v1, l1, r1);
+	convertTo(hexagon2, position2, v2, l2, r2);
 
+	if(board[v2 + boardSize][l2 + boardSize][r2 + boardSize] == 1 || board[v2 + boardSize][l2 + boardSize][r2 + boardSize] == -1) 
+	{
+		//change the ring and add the initial marker
+		board[v1 + boardSize][l1 + boardSize][r1 + boardSize] = board[v2 + boardSize][l2 + boardSize][r2 + boardSize];
+		
+		board[v2 + boardSize][l2 + boardSize][r2 + boardSize] = 0;
+		
+		//flip all the markers
+		if (v1 == v2)
+		{
+			int v = v1;
+			bool correct = true;
+			//check if valid row is being removed
+			int l_start = min(l1,l2) ,l_end = max(l1,l2);
+			// for(int i=l_start+1; i<l_end; i++)
+			// {
+			// 	if (board[v][i][-v-i] == 1 || board[v][i][-v-i] == -1)
+			// 	{
+			// 		cout<<"Error! there is a ring between the given 2 points"<<endl;
+			// 		cout<< "Above error printed in Board.cpp: moveRing." << endl;
+			// 		correct = false;	
+			// 		break;
+			// 	}
+			// }
+			if (correct)
+			{
+				//flip the row
+				for(int i=l_start+1; i<l_end; i++)
+					board[v + boardSize][i + boardSize][-v-i + boardSize] = -board[v + boardSize][i + boardSize][-v-i + boardSize];
+			}
+		}
+		else if (l1 == l2)
+		{
+			int l = l1;
+			bool correct = true;
+			//check if valid row is being removed
+			int v_start = min(v1,v2) ,v_end = max(v1,v2);
+			// for(int i=v_start+1; i<v_end; i++)
+			// {
+			// 	if (board[i][l][-l-i] == 1 || board[i][l][-l-i] != 1)
+			// 	{
+			// 		cout<<"Error! there is a ring between the given 2 points"<<endl;
+			// 		cout<< "Above error printed in Board.cpp: moveRing." << endl;
+			// 		correct = false;	
+			// 		break;
+			// 	}
+			// }
+			if (correct)
+			{
+				//flip the row
+				for(int i=v_start+1; i<v_end; i++)
+					board[i + boardSize][l + boardSize][-l-i + boardSize] = -board[i + boardSize][l + boardSize][-l-i + boardSize];
+			}
+		}
+		else if (r1 == r2)
+		{
+			int r = r1;
+			bool correct = true;
+			//check if valid row is being removed
+			int l_start = min(l1,l2) ,l_end = max(l1,l2);
+			// for(int i=l_start+1; i<l_end; i++)
+			// {
+			// 	if (board[-r-i][i][r] == 1 || board[-r-i][i][r] == -1)
+			// 	{
+			// 		cout<<"Error! there is a ring between the given 2 points"<<endl;
+			// 		cout<< "Above error printed in Board.cpp: moveRing." << endl;
+			// 		correct = false;	
+			// 		break;
+			// 	}
+			// }
+			if (correct)
+			{
+				//flip the row
+				for(int i=l_start+1; i<l_end; i++)
+					board[-r-i + boardSize][i + boardSize][v + boardSize] = -board[-r-i + boardSize][i + boardSize][v + boardSize];
+			}
+		}
+		else
+		{
+			cout << "Error! Given points (" <<  hexagon1 << "," << position1 << ") and (" <<  hexagon2 << "," << position2 << ") are not on same line" << endl;
+			cout << "Above error printed in Board.cpp: moveRing." << endl;
+		}
+	}
+	else
+	{
+		cout << "Error! Cannot move ring at Hexagon number: " <<  hexagon1 << " Point number: " << position1 << " to a point at Hexagon number: " <<  hexagon2 << " Point number: " << position2 << endl;
+		cout << "Above error printed in Board.cpp: moveRing." << endl;
+	}
 }
 
 void Board::removeRow (int hexagon1, int position1, int hexagon2, int position2) {
@@ -426,7 +532,96 @@ void Board::removeRow (int hexagon1, int position1, int hexagon2, int position2)
 }
 
 void Board::undoRemoveRow(int colour, int hexagon1, int position1, int hexagon2, int position2) {
+	int v1, l1, r1, v2, l2, r2 = 0;
+	convertTo(hexagon1, position1, v1, l1, r1);
+	convertTo(hexagon2, position2, v2, l2, r2);
 
+	if (v1 == v2)
+	{
+		int v = v1;
+		bool correct = true;
+		//check if valid row is being removed
+		int l_start = min(l1,l2) ,l_end = max(l1,l2);
+		// for(int i=l_start+1; i<=l_end; i++)
+		// {
+		// 	if (board[v][i][-v-i] != a && (a == 2 || a == -2))
+		// 	{
+		// 		cout<<"Error! the row to delete does not have all markers or all markers of same player"<<endl;
+		// 		cout<< "Above error printed in Board.cpp: removeRow." << endl;
+		// 		correct = false;	
+		// 		break;
+		// 	}
+		// }
+		if (correct)
+		{
+			//remove the row
+			for(int i=l_start; i<=l_end; i++)
+				board[v + boardSize][i + boardSize][-v-i + boardSize] = 2 * colour;
+		}
+		if(colour == 1)
+			numDiscs = numDiscs + 5;
+		else
+			numOppDiscs = numOppDiscs + 5;
+	}
+	else if (l1 == l2)
+	{
+		int l = l1;
+		bool correct = true;
+		//check if valid row is being removed
+		int v_start = min(v1,v2) ,v_end = max(v1,v2);
+		// for(int i=v_start+1; i<=v_end; i++)
+		// {
+		// 	if (board[i][l][-l-i] != a && (a == 2 || a == -2))
+		// 	{
+		// 		cout<<"Error! the row to delete does not have all markers or all markers of same player"<<endl;
+		// 		cout<< "Above error printed in Board.cpp: removeRow." << endl;
+		// 		correct = false;	
+		// 		break;
+		// 	}
+		// }
+		if (correct)
+		{
+			//remove the row
+			for(int i=v_start; i<=v_end; i++)
+				board[i + boardSize][l + boardSize][-l-i + boardSize] = 2 * colour;
+		}
+		if(colour == 1)
+			numDiscs = numDiscs + 5;
+		else
+			numOppDiscs = numOppDiscs + 5;
+	}
+	else if (r1 == r2)
+	{
+		int r = r1;
+		bool correct = true;
+		//check if valid row is being removed
+		int l_start = min(l1,l2) ,l_end = max(l1,l2);
+		// for(int i=l_start+1; i<=l_end; i++)
+		// {
+		// 	if (board[-r-i][i][r] != a && (a == 2 || a == -2))
+		// 	{
+		// 		cout<<"Error! the row to delete does not have all markers or all markers of same player"<<endl;
+		// 		cout<< "Above error printed in Board.cpp: removeRow." << endl;
+		// 		correct = false;	
+		// 		break;
+		// 	}
+		// }
+		if (correct)
+		{
+			//remove the row
+			for(int i=l_start; i<=l_end; i++)
+				board[-r-i + boardSize][i + boardSize][v + boardSize] = 2 * colour;
+		}
+		if(colour == 1)
+			numDiscs = numDiscs + 5;
+		else
+			numOppDiscs = numOppDiscs + 5;
+	}
+	else
+	{
+		cout << "Error! Given points (" <<  hexagon1 << "," << position1 << ") and (" <<  hexagon2 << "," << position2 << ") are not on same line" << endl;
+		cout << "Above error printed in Board.cpp: removeRow." << endl;	
+	}
 }
 
 void Board::removeRing (int hexagonNum, int position) {
@@ -452,8 +647,21 @@ void Board::removeRing (int hexagonNum, int position) {
 	}
 }
 
-void Board::removeRing(int colour, int hexagonNum, int position) {
+void Board::undoRemoveRing(int colour, int hexagonNum, int position) {
+	int v, l, r = 0;
+	convertTo(hexagonNum, position, v, l, r);
 
+	if(board[v + boardSize][l + boardSize][r + boardSize] != 0) {
+		cout << "Error! Empty space not found for ring addition! Hexagon number: " <<  hexagonNum << " Point number: " << position << endl;
+		cout << "Above error printed in Board.cpp: undoRemoveRing." << endl;
+	}
+	else {
+		board[v + boardSize][l + boardSize][r + boardSize] = colour;
+		if(colour == 1)
+			numRings++;
+		else
+			numOppRings++;
+	}
 }
 
 vector<string> Board::generateMoveList(int perspective) {
