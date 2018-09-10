@@ -31,6 +31,10 @@ class Board {
 		vector<int> ringL;
 		vector<int> ringR;
 
+		vector<int> ringV_opp;
+		vector<int> ringL_opp;
+		vector<int> ringR_opp;
+
 		/**
 		 * Convert coordinate (h, p) to (v, l, r)
 		 * @param hexagonNum is the hexagon number of the location.

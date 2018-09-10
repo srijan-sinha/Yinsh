@@ -670,19 +670,62 @@ vector<string> Board::generateMoveList(int perspective) {
 	int v = 0;
 	int l = 0;
 	int r = 0;
-	if(ringsScored == 0 && numRings < maxRings) {
-		addRingMoves(moves);
-	}
-	else {
-		for(int i = 0; i < ringV.size(); i++) {
-			v = ringV.at(i);	l = ringL.at(i);	r = ringL.at(i);
-			if(board[v + boardSize][l + boardSize][r + boardSize] == perspective)
-				moveRingMoves(moves, v, l, r)
+	if (perspective == 1)
+	{
+		if (ringsScored == 0 && numRings < maxRings)
+		{
+			moves = addRingMoves(moves);
+		}
+		else if (!row_detected())
+		{
+			for(int i=0;i<ringV.size();i++)
+			{
+				v = ringV.at(i);
+				l = ringL.at(i);
+				r = ringR.at(j);
+				moves = addRingMoves(moves,v,l,r);
+			}
+			if (row_detected())
+			{
+
+			}
+		}
+		else if (row_detected())
+		{
+
 		}
 	}
+	else if (perspective == -1)
+	{
+
+	}
+	return moves;
+	// if(ringsScored == 0 && numRings < maxRings) 
+	// {
+	// 	moves = addRingMoves(moves);
+	// }
+	// else 
+	// {
+	// 	if (perspective == 1)
+	// 	{
+	// 		for(int i = 0; i < ringV.size(); i++) 
+	// 		{
+	// 			v = ringV.at(i);	
+	// 			l = ringL.at(i);	
+	// 			r = ringL.at(i);
+	// 			if(board[v + boardSize][l + boardSize][r + boardSize] == perspective)
+	// 				moveRingMoves(moves, v, l, r)
+	// 		}
+	// 	}
+	// 	else
+	// 	{
+
+	// 	}
+	// }
 }
 
-void Board::addRingMoves (vector<string> moves) {
+vector<string> Board::addRingMoves (vector<string> moves) 
+{
 
 	int r = 0;
 	int hexagonNum = 0;
@@ -693,21 +736,198 @@ void Board::addRingMoves (vector<string> moves) {
 			if(check(v, l, r)) {
 				if(board[v + boardSize][l + boardSize][r + boardSize] == 0) {
 					convertBack(v, l, r, hexagonNum, position);
-					string s = "S " + hexagonNum + " " + position;
+					string s = "P " + hexagonNum + " " + position;
 					moves.push_back(s);
 				}
 			}
 		}
 	}
+	return moves;
 }
 
-void Board::moveRingMoves (vector<string> moves, int v, int l, int r) {
+vector<string> Board::moveRingMoves (vector<string> moves, int v, int l, int r) 
+{
+	int l_temp,r_temp,v_temp;
+	//in v
+	int i = 1;
+	bool marker = false;
+	while(true)
+	{
+		//move up
+		v_temp = v;
+		l_temp = l + i;
+		r_temp = r - i;
+		i++;
+		if (!check(v_temp,l_temp,r_temp))
+			break;
+		if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
+			break;
+		if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
+		{
+			marker = true;
+			continue;
+		}
+		int hexagonNum1,hexagonNum2,position1,position2;
+		convertBack(v, l, r, hexagonNum1, position1);
+		string s = "S " + hexagonNum1 + " " + position1;
+		convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
+		s += "M" + hexagonNum2 + " " + position2;
+		moves.push_back(s);
+		if (marker)
+			break;
+	}
 
+	i = 1;
+	marker = false;
+	while(true)
+	{
+		//move down
+		v_temp = v;
+		l_temp = l - i;
+		r_temp = r + i;
+		i++;
+		if (!check(v_temp,l_temp,r_temp))
+			break;
+		if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
+			break;
+		if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
+		{
+			marker = true;
+			continue;
+		}
+		int hexagonNum1,hexagonNum2,position1,position2;
+		convertBack(v, l, r, hexagonNum1, position1);
+		string s = "S " + hexagonNum1 + " " + position1;
+		convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
+		s += "M" + hexagonNum2 + " " + position2;
+		moves.push_back(s);
+		if (marker)
+			break;
+	}
+
+	//in l
+	i = 1;
+	marker = false;
+	while(true)
+	{
+		//move up
+		v_temp = v + i;
+		l_temp = l;
+		r_temp = r - i;
+		i++;
+		if (!check(v_temp,l_temp,r_temp))
+			break;
+		if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
+			break;
+		if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
+		{
+			marker = true;
+			continue;
+		}
+		int hexagonNum1,hexagonNum2,position1,position2;
+		convertBack(v, l, r, hexagonNum1, position1);
+		string s = "S " + hexagonNum1 + " " + position1;
+		convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
+		s += "M" + hexagonNum2 + " " + position2;
+		moves.push_back(s);
+		if (marker)
+			break;
+	}
+
+	i = 1;
+	marker = false;
+	while(true)
+	{
+		//move up
+		v_temp = v - i;
+		l_temp = l;
+		r_temp = r + i;
+		i++;
+		if (!check(v_temp,l_temp,r_temp))
+			break;
+		if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
+			break;
+		if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
+		{
+			marker = true;
+			continue;
+		}
+		int hexagonNum1,hexagonNum2,position1,position2;
+		convertBack(v, l, r, hexagonNum1, position1);
+		string s = "S " + hexagonNum1 + " " + position1;
+		convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
+		s += "M" + hexagonNum2 + " " + position2;
+		moves.push_back(s);
+		if (marker)
+			break;
+	}
+
+	//in r
+	i = 1;
+	marker = false;
+	while(true)
+	{
+		//move up
+		v_temp = v - i;
+		l_temp = l + i;
+		r_temp = r;
+		i++;
+		if (!check(v_temp,l_temp,r_temp))
+			break;
+		if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
+			break;
+		if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
+		{
+			marker = true;
+			continue;
+		}
+		int hexagonNum1,hexagonNum2,position1,position2;
+		convertBack(v, l, r, hexagonNum1, position1);
+		string s = "S " + hexagonNum1 + " " + position1;
+		convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
+		s += "M" + hexagonNum2 + " " + position2;
+		moves.push_back(s);
+		if (marker)
+			break;
+	}
+
+	i = 1;
+	marker = false;
+	while(true)
+	{
+		//move up
+		v_temp = v + i;
+		l_temp = l - i;
+		r_temp = r;
+		i++;
+		if (!check(v_temp,l_temp,r_temp))
+			break;
+		if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
+			break;
+		if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
+		{
+			marker = true;
+			continue;
+		}
+		int hexagonNum1,hexagonNum2,position1,position2;
+		convertBack(v, l, r, hexagonNum1, position1);
+		string s = "S " + hexagonNum1 + " " + position1;
+		convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
+		s += "M" + hexagonNum2 + " " + position2;
+		moves.push_back(s);
+		if (marker)
+			break;
+	}
+
+	return moves;
 }
 
 bool Board::check (int v, int l, int r) {
 	if(abs(v) > boardSize || abs(l) > boardSize || abs(r) > boardSize)
 		return false;
+	if ((abs(v) == boardSize && abs(l) == boardSize) || (abs(l) == boardSize && abs(r) == boardSize) || (abs(r) == boardSize && abs(v) == boardSize))
+		return false;
+
 	return true;
 }
 
