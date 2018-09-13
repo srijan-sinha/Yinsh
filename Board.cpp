@@ -1574,31 +1574,50 @@ void Board::nextDownLeft (int& v, int& l, int& r) {
 
 void Board::print_board()
 {
+	int j = 0;
 	for(int v = -boardSize; v<0; v++)
 	{
-		for(int l = 0 - v - boardSize; l<boardSize; l++)
+		for(int i = 0; i<boardSize*2 - j; i++)
+			cout<<" ";
+		j++;
+		for(int l = 0 - v - boardSize; l<=boardSize; l++)
 		{
 			int r = -v-l;
 			if (check(v,l,r))
 			{
-				cout<<board[v+boardSize][l+boardSize][r+boardSize]<<" ";
-			}
+				if (board[v+boardSize][l+boardSize][r+boardSize] == -1)
+					cout<<"a ";
+				else if (board[v+boardSize][l+boardSize][r+boardSize] == -2)
+					cout<<"b ";
+				else
+					cout<<board[v+boardSize][l+boardSize][r+boardSize]<<" ";
 
+			}
+			else 
+				cout<<"  ";
 		}
 		cout<<endl;
 	}
-
-
-	for(int v = 0; v<boardSize; v++)
+	
+	for(int v = 0; v<=boardSize; v++)
 	{
-		for(int l = -boardSize; l<boardSize-v; l++)
+		for(int i = 0; i<boardSize*2 - j; i++)
+			cout<<" ";
+		j--;
+		for(int l = -boardSize; l<=boardSize-v; l++)
 		{
 			int r = -v-l;
 			if (check(v,l,r))
 			{
-				cout<<board[v+boardSize][l+boardSize][r+boardSize]<<" ";
+				if (board[v+boardSize][l+boardSize][r+boardSize] == -1)
+					cout<<"a ";
+				else if (board[v+boardSize][l+boardSize][r+boardSize] == -2)
+					cout<<"b ";
+				else
+					cout<<board[v+boardSize][l+boardSize][r+boardSize]<<" ";
 			}
-
+			else
+				cout<<"  ";
 		}
 		cout<<endl;
 	}
