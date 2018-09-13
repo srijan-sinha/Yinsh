@@ -293,4 +293,6 @@ class Board {
 		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
 		 */
 		void nextDownLeft(int hexagonNum, int position);
+
+		void print_board();
 }

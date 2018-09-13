@@ -28,6 +28,7 @@ YinshBot::YinshBot (int n, int m, int k, int l) {
 
 void YinshBot::executeCommand (string command) 
 {
+	cout<<"command received: "<<command<<endl;
 	int i=0;
 	while(i<command.size())
 	{
@@ -35,65 +36,85 @@ void YinshBot::executeCommand (string command)
 		{
 			int h,p;
 			i++;
+			i++;
 			int j = i,count = 0;
-			while(command.at(i) != " ")
+			while(i<command.size())
 			{
-				count++;				
+				if (command.at(i) == ' ')
+					break;
+				i++;
+				count++;
 			}
 			h = stoi(command.substr(j,count));
 			i++;
 			j = i;
 			count = 0;
-			while(command.at(i) != " ")
+			while(i<command.size())
 			{
-				count++;				
+				if (command.at(i) == ' ')
+					break;
+				i++;
+				count++;
 			}
+			cout<<"here again"<<endl;
 			p = stoi(command.substr(j,count));
 			i++;
 			//call the func to add a ring
 		}
-		else if (command.at(i) == "S")
+		else if (command.at(i) == 'S')
 		{
 			int h1,p1,h2,p2;
 			i++;
 			i++;
 			int j = i,count = 0;
-			while(command.at(i) != " ")
+			while(i<command.size())
 			{
-				count++;				
+				if (command.at(i) == ' ')
+					break;
+				i++;
+				count++;
 			}
 			h1 = stoi(command.substr(j,count));
 			i++;
 			j = i;
 			count = 0;
-			while(command.at(i) != " ")
+			while(i<command.size())
 			{
-				count++;				
+				if (command.at(i) == ' ')
+					break;
+				i++;
+				count++;
 			}
 			p1 = stoi(command.substr(j,count));
 			i++;
-			if (command.at(i) == "M")
+			if (command.at(i) == 'M')
 			{
 				i++;
 				i++;
 				j = i;
 				count = 0;
-				while(command.at(i) != " ")
+				while(i<command.size())
 				{
-					count++;				
+					if (command.at(i) == ' ')
+						break;
+					i++;
+					count++;
 				}
 				h2 = stoi(command.substr(j,count));
 				i++;
 				j = i;
 				count = 0;
-				while(command.at(i) != " ")
+				while(i<command.size())
 				{
-					count++;				
+					if (command.at(i) == ' ')
+						break;
+					i++;
+					count++;
 				}
 				p2 = stoi(command.substr(j,count));
 				i++;
 				
-				//call the func for move the ring 			
+				//call the func for move the ring 	
 			}
 			else
 			{
@@ -107,17 +128,23 @@ void YinshBot::executeCommand (string command)
 			int h1,p1,h2,p2,h3,p3;
 			i++;
 			int j = i,count = 0;
-			while(command.at(i) != " ")
+			while(i<command.size())
 			{
-				count++;				
+				if (command.at(i) == ' ')
+					break;
+				i++;
+				count++;
 			}
 			h1 = stoi(command.substr(j,count));
 			i++;
 			j = i;
 			count = 0;
-			while(command.at(i) != " ")
+			while(i<command.size())
 			{
-				count++;				
+				if (command.at(i) == ' ')
+					break;
+				i++;
+				count++;
 			}
 			p1 = stoi(command.substr(j,count));
 			i++;
@@ -128,37 +155,49 @@ void YinshBot::executeCommand (string command)
 				i++;
 				j = i;
 				count = 0;
-				while(command.at(i) != " ")
+				while(i<command.size())
 				{
-					count++;				
+					if (command.at(i) == ' ')
+						break;
+					i++;
+					count++;
 				}
 				h2 = stoi(command.substr(j,count));
 				i++;
 				j = i;
 				count = 0;
-				while(command.at(i) != " ")
+				while(i<command.size())
 				{
-					count++;				
+					if (command.at(i) == ' ')
+						break;
+					i++;
+					count++;
 				}
 				p2 = stoi(command.substr(j,count));
 				i++;
-				if (command.at(i) == "X")
+				if (command.at(i) == 'X')
 				{
 					i++;
-					i++:
+					i++;
 					j = i;
 					count = 0;
-					while(command.at(i) != " ")
+					while(i<command.size())
 					{
-						count++;				
+						if (command.at(i) == ' ')
+							break;
+						i++;
+						count++;
 					}
 					h3 = stoi(command.substr(j,count));
 					i++;
 					j = i;
 					count = 0;
-					while(command.at(i) != " ")
+					while(i<command.size())
 					{
-						count++;				
+						if (command.at(i) == ' ')
+							break;
+						i++;
+						count++;
 					}
 					p3 = stoi(command.substr(j,count));
 					i++;
