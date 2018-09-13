@@ -1,55 +1,9 @@
-//****************************
-
-// Some points to be kept in mind for modification.
-
-//****************************
-
-
-//////////////////////////////
-
-// Need to update numDiscs and numOppDiscs in moveRing and undoMoveRing.
-
-//////////////////////////////
-
-
-//****************************
-
-// Caution :- Need to update numDiscs, num Opp Discs, numRings, numOppRings, ringsScored, oppRingsScored in the undo functions as well.
-
-//****************************
-
-
 //////////////////////////////
 
 // Updation of ringV, ringL, ringR has to be done in all the functions where rings are added or moved or removed and undo functions as well.
 
 //////////////////////////////
 
-
-//****************************
-
-// no check required in moveRing, so we can remove the for loop where you check if there is a ring on the path of movement. 
-// Otherwise for a full check we also need to see if there is only one set of contiguous discs between start and end points.
-// So let's better remove the check than implement a full check. We are allowed to assume that the moves received from the opponent are correct.
-// I have commented it out.
-// Aur jo flipping ke liye board[][][] = -board[][][] likha hai woh check kar lena ki -1 * board[][][] toh nahi likhna padega.
-
-//****************************
-
-
-//////////////////////////////
-
-// Similarly for removeRow.
-
-//////////////////////////////
-
-//****************************
-
-// Function implementations remaining in this file
-// moveRingMoves full implementation left, generateMoveList half left.
-//Major issue :- while generating moveRingMoves, how to check if one or more rows of 5 have been formed and that we need to further specify deletion of markers and ring after that. 
-
-//****************************
 
 
 #include "Board.h"
@@ -237,90 +191,85 @@ void Board::undoAddRing(int hexagonNum, int position) {
 }
 
 void Board::moveRing (int hexagon1, int position1, int hexagon2, int position2) {
-	//we dont check if the func is called by our player or opponent player
-	//i.e opponent cannot move our ring and vice-versa
+
 	int v1, l1, r1, v2, l2, r2 = 0;
 	convertTo(hexagon1, position1, v1, l1, r1);
 	convertTo(hexagon2, position2, v2, l2, r2);
 
 	if(board[v2 + boardSize][l2 + boardSize][r2 + boardSize] == 0) 
 	{
-		//change the ring and add the initial marker
 		board[v2 + boardSize][l2 + boardSize][r2 + boardSize] = board[v1 + boardSize][l1 + boardSize][r1 + boardSize];
 		
-		if (board[v1 + boardSize][l1 + boardSize][r1 + boardSize] == 1)
+		if (board[v1 + boardSize][l1 + boardSize][r1 + boardSize] == 1) {
 			board[v1 + boardSize][l1 + boardSize][r1 + boardSize] = 2;
-		else
+			numDiscs++;
+		}
+		else {
 			board[v1 + boardSize][l1 + boardSize][r1 + boardSize] = -2;
-		
+			numOppDiscs++;
+		}
 		//flip all the markers
 		if (v1 == v2)
 		{
 			int v = v1;
 			bool correct = true;
-			//check if valid row is being removed
 			int l_start = min(l1,l2) ,l_end = max(l1,l2);
-			// for(int i=l_start+1; i<l_end; i++)
-			// {
-			// 	if (board[v][i][-v-i] == 1 || board[v][i][-v-i] == -1)
-			// 	{
-			// 		cout<<"Error! there is a ring between the given 2 points"<<endl;
-			// 		cout<< "Above error printed in Board.cpp: moveRing." << endl;
-			// 		correct = false;	
-			// 		break;
-			// 	}
-			// }
+			
 			if (correct)
 			{
-				//flip the row
-				for(int i=l_start+1; i<l_end; i++)
+				for(int i=l_start+1; i<l_end; i++) {
+					if(board[v + boardSize][i + boardSize][-v-i + boardSize] == 2) {
+						numDiscs--;
+						numOppDiscs++;
+					}
+					else(board[v + boardSize][i + boardSize][-v-i + boardSize] == -2) {
+						numOppDiscs--;
+						numDiscs++;
+					}
 					board[v + boardSize][i + boardSize][-v-i + boardSize] = -board[v + boardSize][i + boardSize][-v-i + boardSize];
+				}
 			}
 		}
 		else if (l1 == l2)
 		{
 			int l = l1;
 			bool correct = true;
-			//check if valid row is being removed
 			int v_start = min(v1,v2) ,v_end = max(v1,v2);
-			// for(int i=v_start+1; i<v_end; i++)
-			// {
-			// 	if (board[i][l][-l-i] == 1 || board[i][l][-l-i] != 1)
-			// 	{
-			// 		cout<<"Error! there is a ring between the given 2 points"<<endl;
-			// 		cout<< "Above error printed in Board.cpp: moveRing." << endl;
-			// 		correct = false;	
-			// 		break;
-			// 	}
-			// }
+
 			if (correct)
 			{
-				//flip the row
-				for(int i=v_start+1; i<v_end; i++)
+				for(int i=v_start+1; i<v_end; i++) {
+					if(board[i + boardSize][l + boardSize][-l-i + boardSize] == 2) {
+						numDiscs--;
+						numOppDiscs++;
+					}
+					else if (board[i + boardSize][l + boardSize][-l-i + boardSize] == -2){
+						numOppDiscs--;
+						numDiscs++;
+					}
 					board[i + boardSize][l + boardSize][-l-i + boardSize] = -board[i + boardSize][l + boardSize][-l-i + boardSize];
+				}
 			}
 		}
 		else if (r1 == r2)
 		{
 			int r = r1;
 			bool correct = true;
-			//check if valid row is being removed
 			int l_start = min(l1,l2) ,l_end = max(l1,l2);
-			// for(int i=l_start+1; i<l_end; i++)
-			// {
-			// 	if (board[-r-i][i][r] == 1 || board[-r-i][i][r] == -1)
-			// 	{
-			// 		cout<<"Error! there is a ring between the given 2 points"<<endl;
-			// 		cout<< "Above error printed in Board.cpp: moveRing." << endl;
-			// 		correct = false;	
-			// 		break;
-			// 	}
-			// }
+
 			if (correct)
 			{
-				//flip the row
-				for(int i=l_start+1; i<l_end; i++)
+				for(int i=l_start+1; i<l_end; i++) {
+					if(board[-r-i + boardSize][i + boardSize][v + boardSize] == 2) {
+						numDiscs--;
+						numOppDiscs++;
+					}
+					else(board[-r-i + boardSize][i + boardSize][v + boardSize] == -2) {
+						numOppDiscs--;
+						numDiscs++;
+					}
 					board[-r-i + boardSize][i + boardSize][v + boardSize] = -board[-r-i + boardSize][i + boardSize][v + boardSize];
+				}
 			}
 		}
 		else
@@ -338,87 +287,83 @@ void Board::moveRing (int hexagon1, int position1, int hexagon2, int position2) 
 }
 
 void Board::undoMoveRing(int hexagon1, int position1, int hexagon2, int position2) {
-	//we dont check if the func is called by our player or opponent player
-	//i.e opponent cannot move our ring and vice-versa
+
 	int v1, l1, r1, v2, l2, r2 = 0;
 	convertTo(hexagon1, position1, v1, l1, r1);
 	convertTo(hexagon2, position2, v2, l2, r2);
 
 	if(board[v2 + boardSize][l2 + boardSize][r2 + boardSize] == 1 || board[v2 + boardSize][l2 + boardSize][r2 + boardSize] == -1) 
 	{
-		//change the ring and add the initial marker
+		if(board[v1 + boardSize][l1 + boardSize][r1 + boardSize] == 2)
+			numDiscs--;
+		else(board[v1 + boardSize][l1 + boardSize][r1 + boardSize] == -2)
+			numOppDiscs--;
+
 		board[v1 + boardSize][l1 + boardSize][r1 + boardSize] = board[v2 + boardSize][l2 + boardSize][r2 + boardSize];
 		
 		board[v2 + boardSize][l2 + boardSize][r2 + boardSize] = 0;
 		
-		//flip all the markers
 		if (v1 == v2)
 		{
 			int v = v1;
 			bool correct = true;
-			//check if valid row is being removed
 			int l_start = min(l1,l2) ,l_end = max(l1,l2);
-			// for(int i=l_start+1; i<l_end; i++)
-			// {
-			// 	if (board[v][i][-v-i] == 1 || board[v][i][-v-i] == -1)
-			// 	{
-			// 		cout<<"Error! there is a ring between the given 2 points"<<endl;
-			// 		cout<< "Above error printed in Board.cpp: moveRing." << endl;
-			// 		correct = false;	
-			// 		break;
-			// 	}
-			// }
+
 			if (correct)
 			{
-				//flip the row
-				for(int i=l_start+1; i<l_end; i++)
+				for(int i=l_start+1; i<l_end; i++) {
+					if(board[v + boardSize][i + boardSize][-v-i + boardSize] == 2) {
+						numDiscs--;
+						numOppDiscs++;
+					}
+					else(board[v + boardSize][i + boardSize][-v-i + boardSize] == -2) {
+						numOppDiscs--;
+						numDiscs++;
+					}
 					board[v + boardSize][i + boardSize][-v-i + boardSize] = -board[v + boardSize][i + boardSize][-v-i + boardSize];
+				}
 			}
 		}
 		else if (l1 == l2)
 		{
 			int l = l1;
 			bool correct = true;
-			//check if valid row is being removed
 			int v_start = min(v1,v2) ,v_end = max(v1,v2);
-			// for(int i=v_start+1; i<v_end; i++)
-			// {
-			// 	if (board[i][l][-l-i] == 1 || board[i][l][-l-i] != 1)
-			// 	{
-			// 		cout<<"Error! there is a ring between the given 2 points"<<endl;
-			// 		cout<< "Above error printed in Board.cpp: moveRing." << endl;
-			// 		correct = false;	
-			// 		break;
-			// 	}
-			// }
+
 			if (correct)
 			{
-				//flip the row
-				for(int i=v_start+1; i<v_end; i++)
+				for(int i=v_start+1; i<v_end; i++) {
+					if(board[i + boardSize][l + boardSize][-l-i + boardSize] == 2) {
+						numDiscs--;
+						numOppDiscs++;
+					}
+					else if (board[i + boardSize][l + boardSize][-l-i + boardSize] == -2){
+						numOppDiscs--;
+						numDiscs++;
+					}
 					board[i + boardSize][l + boardSize][-l-i + boardSize] = -board[i + boardSize][l + boardSize][-l-i + boardSize];
+				}
 			}
 		}
 		else if (r1 == r2)
 		{
 			int r = r1;
 			bool correct = true;
-			//check if valid row is being removed
 			int l_start = min(l1,l2) ,l_end = max(l1,l2);
-			// for(int i=l_start+1; i<l_end; i++)
-			// {
-			// 	if (board[-r-i][i][r] == 1 || board[-r-i][i][r] == -1)
-			// 	{
-			// 		cout<<"Error! there is a ring between the given 2 points"<<endl;
-			// 		cout<< "Above error printed in Board.cpp: moveRing." << endl;
-			// 		correct = false;	
-			// 		break;
-			// 	}
-			// }
+
 			if (correct)
 			{
-				//flip the row
-				for(int i=l_start+1; i<l_end; i++)
+				for(int i=l_start+1; i<l_end; i++) {
+					if(board[-r-i + boardSize][i + boardSize][v + boardSize] == 2) {
+						numDiscs--;
+						numOppDiscs++;
+					}
+					else(board[-r-i + boardSize][i + boardSize][v + boardSize] == -2) {
+						numOppDiscs--;
+						numDiscs++;
+					}
 					board[-r-i + boardSize][i + boardSize][v + boardSize] = -board[-r-i + boardSize][i + boardSize][v + boardSize];
+				}
 			}
 		}
 		else
@@ -657,10 +602,14 @@ void Board::undoRemoveRing(int colour, int hexagonNum, int position) {
 	}
 	else {
 		board[v + boardSize][l + boardSize][r + boardSize] = colour;
-		if(colour == 1)
+		if(colour == 1) {
 			numRings++;
-		else
+			ringsScored--;
+		}
+		else {
 			numOppRings++;
+			oppRingsScored--;
+		}
 	}
 }
 
