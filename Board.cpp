@@ -147,7 +147,8 @@ int Board::getNumOppDiscs () {
 	return numOppDiscs;
 }
 
-void Board::convertTo (int& hexagonNum, int& position, int& v, int& l, int& r) {
+//checked
+void Board::convertTo (int hexagonNum, int position, int& v, int& l, int& r) {
 	
 	int segment = 0;
 
@@ -172,7 +173,8 @@ void Board::convertTo (int& hexagonNum, int& position, int& v, int& l, int& r) {
 	}
 }
 
-void Board::convertBack (int& v, int& l, int& r, int& hexagonNum, int& position) {
+//checked
+void Board::convertBack (int v, int l, int r, int& hexagonNum, int& position) {
 	hexagonNum = max(max(abs(v), abs(l)), ans(r));
 	if(v == 0 && l == 0 && r == 0)
 		position = 0;
@@ -207,6 +209,7 @@ void Board::addRing (int colour, int hexagonNum, int position)
 	if(board[v + boardSize][l + boardSize][r + boardSize] == 0) 
 	{
 		board[v + boardSize][l + boardSize][r + boardSize] = colour;
+
 		if(colour == 1)
 			numRings++;
 		else
