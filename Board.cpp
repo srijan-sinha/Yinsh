@@ -154,6 +154,7 @@ void Board::convertBack (int v, int l, int r, int& hexagonNum, int& position) {
 	}
 }
 
+//checked
 void Board::addRing (int colour, int hexagonNum, int position) 
 {
 	
@@ -385,6 +386,7 @@ void Board::undoMoveRing(int hexagon1, int position1, int hexagon2, int position
 	}
 }
 
+//checked
 void Board::removeRow (int hexagon1, int position1, int hexagon2, int position2) {
 	int v1, l1, r1, v2, l2, r2 = 0;
 	convertTo(hexagon1, position1, v1, l1, r1);
