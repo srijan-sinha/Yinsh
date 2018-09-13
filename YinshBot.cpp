@@ -269,5 +269,15 @@ bool YinshBot::checkGameEnd () {
 }
 
 double YinshBot::evalFunction () {
-	
+	double weight1 = 5;
+	double weight2 = -5;
+	double weight3 = 15;
+	double weight4 = -15;
+	double weight5 = 50;
+	double weight6 = -70;
+
+	double eval = 0;
+	eval = eval + (weight1 * board->getNumDiscs) + (weight2 * board->getNumOppDiscs);
+	eval = eval + (weight3 * board->getNumRings) + (weight4 * board->getNumOppRings);
+	eval = eval + (weight5 * board->getRingsScored) + (weight6 * board->getOppRingsScored);
 }

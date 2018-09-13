@@ -1,10 +1,14 @@
 //////////////////////////////
 
-// Updation of ringV, ringL, ringR has to be done in all the functions where rings are added or moved or removed and undo functions as well.
+// Updation of ringV, ringL, ringR has to be done in undo functions.
 
 //////////////////////////////
 
+//////////////////////////////
 
+// moveRingMoves ki jagah addRingMoves call kiya hai har jagah.
+
+//////////////////////////////
 
 #include "Board.h"
 
@@ -108,15 +112,6 @@ void Board::convertTo (int& hexagonNum, int& position, int& v, int& l, int& r) {
 	if(hexagonNum == 0) { v = 0; l = 0; r = 0; }
 	else {
 		segment = position / hexagonNum;
-		// if(position % hexagonNum == 0) {
-		// 	if(segment == 0) { v = 0; l = hexagonNum; r = -1 * hexagonNum; }
-		// 	else if(segment == 1) { v = hexagonNum; l = 0; r = -1 * hexagonNum; }
-		// 	else if(segment == 2) { v = hexagonNum; l = -1 * hexagonNum; r = 0; }
-		// 	else if(segment == 3) { v = 0; l = -1 * hexagonNum; r = hexagonNum; }
-		// 	else if(segment == 4) { v = -1 * hexagonNum; l = 0; r = hexagonNum; }
-		// 	else if(segment == 5) { v = -1 * hexagonNum; l = hexagonNum; r = 0; }
-		// }
-		
 		if(segment == 0) { v = position % hexagonNum; l = hexagonNum - (position % hexagonNum); r = -1 * hexagonNum; }
 		else if(segment == 1) { v = hexagonNum; l = -1 * (position % hexagonNum); r = -1 * (hexagonNum - (position % hexagonNum)); }
 		else if(segment == 2) { v = hexagonNum - (position % hexagonNum); l = -1 * hexagonNum; r = position % hexagonNum; }
@@ -161,10 +156,18 @@ void Board::addRing (int colour, int hexagonNum, int position)
 	if(board[v + boardSize][l + boardSize][r + boardSize] == 0) 
 	{
 		board[v + boardSize][l + boardSize][r + boardSize] = colour;
-		if(colour == 1)
+		if(colour == 1) {
 			numRings++;
-		else
+			ringV.push_back(v);
+			ringV.push_back(l);
+			ringV.push_back(r);
+		}
+		else {
 			numOppRings++;
+			ringV_opp.push_back(v);
+			ringV_opp.push_back(l);
+			ringV_opp.push_back(r);
+		}
 	}
 	else
 	{
