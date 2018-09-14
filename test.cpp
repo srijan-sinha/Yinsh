@@ -157,6 +157,49 @@ void addRing (int colour, int hexagonNum, int position)
 	}
 }
 
+void undoAddRing(int hexagonNum, int position) 
+{
+	int v, l, r = 0;
+	convertTo(hexagonNum, position, v, l, r);
+	cout<<board[v + boardSize][l + boardSize][r + boardSize]<<endl;
+	if(board[v + boardSize][l + boardSize][r + boardSize] != 1 && board[v + boardSize][l + boardSize][r + boardSize] != -1) {
+		cout << "Error! Ring not found for removal! Hexagon number: " <<  hexagonNum << " Point number: " << position << endl;
+		cout << "Above error printed in Board.cpp: undoAddRing." << endl;
+	}
+	else {
+		if(board[v + boardSize][l + boardSize][r + boardSize] == 1)
+		{
+			numRings--;
+			for(int i=0;i<ringV.size();i++)
+			{
+				if(ringV.at(i) == v && ringL.at(i) == l)
+				{
+					ringV.erase(ringV.begin() + i,ringV.begin() + i+1);
+					ringL.erase(ringL.begin() + i,ringL.begin() + i+1);
+					ringR.erase(ringR.begin() + i,ringR.begin() + i+1);
+					break;
+				}
+			}
+		}
+		else
+		{
+			numOppRings--;
+			for(int i=0;i<ringV_opp.size();i++)
+			{
+				if(ringV_opp.at(i) == v && ringL_opp.at(i) == l)
+				{
+					ringV_opp.erase(ringV_opp.begin() + i,ringV_opp.begin() + i+1);
+					ringL_opp.erase(ringL_opp.begin() + i,ringL_opp.begin() + i+1);
+					ringR_opp.erase(ringR_opp.begin() + i,ringR_opp.begin() + i+1);
+					break;
+				}
+			}
+		}
+		board[v + boardSize][l + boardSize][r + boardSize] = 0;
+		
+	}
+}
+
 void moveRing (int hexagon1, int position1, int hexagon2, int position2) 
 {
 
@@ -279,6 +322,124 @@ void moveRing (int hexagon1, int position1, int hexagon2, int position2)
 
 }
 
+void undoMoveRing(int hexagon1, int position1, int hexagon2, int position2) 
+{
+
+	int v1, l1, r1, v2, l2, r2 = 0;
+	convertTo(hexagon1, position1, v1, l1, r1);
+	convertTo(hexagon2, position2, v2, l2, r2);
+
+	if(board[v2 + boardSize][l2 + boardSize][r2 + boardSize] == 1 || board[v2 + boardSize][l2 + boardSize][r2 + boardSize] == -1) 
+	{
+		if(board[v1 + boardSize][l1 + boardSize][r1 + boardSize] == 2)
+		{
+			numDiscs--;
+			for(int i=0;i<ringV.size();i++)
+			{
+				if(ringV.at(i) == v2 && ringL.at(i) == l2)
+				{
+					ringV.at(i) = v1;
+					ringL.at(i) = l1;
+					ringR.at(i) = r1;
+					break;
+				}
+			}
+		}
+		else if (board[v1 + boardSize][l1 + boardSize][r1 + boardSize] == -2)
+		{
+			numOppDiscs--;
+			for(int i=0;i<ringV_opp.size();i++)
+			{
+				if(ringV_opp.at(i) == v2 && ringL_opp.at(i) == l2)
+				{
+					ringV_opp.at(i) = v1;
+					ringL_opp.at(i) = l1;
+					ringR_opp.at(i) = r1;
+					break;
+				}
+			}
+		}
+		board[v1 + boardSize][l1 + boardSize][r1 + boardSize] = board[v2 + boardSize][l2 + boardSize][r2 + boardSize];
+		
+		board[v2 + boardSize][l2 + boardSize][r2 + boardSize] = 0;
+		
+		if (v1 == v2)
+		{
+			int v = v1;
+			bool correct = true;
+			int l_start = min(l1,l2) ,l_end = max(l1,l2);
+
+			if (correct)
+			{
+				for(int i=l_start+1; i<l_end; i++) {
+					if(board[v + boardSize][i + boardSize][-v-i + boardSize] == 2) {
+						numDiscs--;
+						numOppDiscs++;
+					}
+					else if (board[v + boardSize][i + boardSize][-v-i + boardSize] == -2) {
+						numOppDiscs--;
+						numDiscs++;
+					}
+					board[v + boardSize][i + boardSize][-v-i + boardSize] = -board[v + boardSize][i + boardSize][-v-i + boardSize];
+				}
+			}
+		}
+		else if (l1 == l2)
+		{
+			int l = l1;
+			bool correct = true;
+			int v_start = min(v1,v2) ,v_end = max(v1,v2);
+
+			if (correct)
+			{
+				for(int i=v_start+1; i<v_end; i++) {
+					if(board[i + boardSize][l + boardSize][-l-i + boardSize] == 2) {
+						numDiscs--;
+						numOppDiscs++;
+					}
+					else if (board[i + boardSize][l + boardSize][-l-i + boardSize] == -2){
+						numOppDiscs--;
+						numDiscs++;
+					}
+					board[i + boardSize][l + boardSize][-l-i + boardSize] = -board[i + boardSize][l + boardSize][-l-i + boardSize];
+				}
+			}
+		}
+		else if (r1 == r2)
+		{
+			int r = r1;
+			bool correct = true;
+			int l_start = min(l1,l2) ,l_end = max(l1,l2);
+
+			if (correct)
+			{
+				for(int i=l_start+1; i<l_end; i++) {
+					if (board[-r-i + boardSize][i + boardSize][r + boardSize] == 2) {
+						numDiscs--;
+						numOppDiscs++;
+					}
+					else if (board[-r-i + boardSize][i + boardSize][r + boardSize] == -2) {
+						numOppDiscs--;
+						numDiscs++;
+					}
+					board[-r-i + boardSize][i + boardSize][r + boardSize] = -board[-r-i + boardSize][i + boardSize][r + boardSize];
+				}
+			}
+		}
+		else
+		{
+			cout << "Error! Given points (" <<  hexagon1 << "," << position1 << ") and (" <<  hexagon2 << "," << position2 << ") are not on same line" << endl;
+			cout << "Above error printed in Board.cpp: moveRing." << endl;
+		}
+	}
+	else
+	{
+		cout << "Error! Cannot move ring at Hexagon number: " <<  hexagon1 << " Point number: " << position1 << " to a point at Hexagon number: " <<  hexagon2 << " Point number: " << position2 << endl;
+		cout << "Above error printed in Board.cpp: moveRing." << endl;
+	}
+}
+
+
 void removeRing (int hexagonNum, int position) {
 	
 	int v, l, r = 0;
@@ -322,6 +483,129 @@ void removeRing (int hexagonNum, int position) {
 		cout << "Above error printed in Board.cpp: removeRing." << endl;
 	}
 }
+
+void undoRemoveRing(int colour, int hexagonNum, int position) {
+	int v, l, r = 0;
+	convertTo(hexagonNum, position, v, l, r);
+
+	if(board[v + boardSize][l + boardSize][r + boardSize] != 0) {
+		cout << "Error! Empty space not found for ring addition! Hexagon number: " <<  hexagonNum << " Point number: " << position << endl;
+		cout << "Above error printed in Board.cpp: undoRemoveRing." << endl;
+	}
+	else {
+		board[v + boardSize][l + boardSize][r + boardSize] = colour;
+		if(colour == 1) {
+			numRings++;
+			ringsScored--;
+			ringV.push_back(v);
+			ringL.push_back(l);
+			ringR.push_back(r);
+		}
+		else {
+			numOppRings++;
+			oppRingsScored--;
+			ringV_opp.push_back(v);
+			ringL_opp.push_back(l);
+			ringR_opp.push_back(r);
+		}
+	}
+}
+
+
+void removeRow (int hexagon1, int position1, int hexagon2, int position2) 
+{
+	int v1, l1, r1, v2, l2, r2 = 0;
+	convertTo(hexagon1, position1, v1, l1, r1);
+	convertTo(hexagon2, position2, v2, l2, r2);
+
+	if (v1 == v2)
+	{
+		int v = v1;
+		int a = board[v + boardSize][l1 + boardSize][r1 + boardSize];
+		int l_start = min(l1,l2) ,l_end = max(l1,l2);
+		for(int i=l_start; i<=l_end; i++)
+			board[v + boardSize][i + boardSize][-v-i + boardSize] = 0;
+		if(a == 2)
+			numDiscs = numDiscs - 5;
+		else
+			numOppDiscs = numOppDiscs - 5;
+	}
+	else if (l1 == l2)
+	{
+		int l = l1;
+		int a = board[v1 + boardSize][l + boardSize][-v1-l + boardSize];
+		int v_start = min(v1,v2) ,v_end = max(v1,v2);
+		for(int i=v_start; i<=v_end; i++)
+			board[i + boardSize][l + boardSize][-l-i + boardSize] = 0;
+		if(a == 2)
+			numDiscs = numDiscs - 5;
+		else
+			numOppDiscs = numOppDiscs - 5;
+	}
+	else if (r1 == r2)
+	{
+		int r = r1;
+		int a = board[-r-l1 + boardSize][l1 + boardSize][r + boardSize];
+		int l_start = min(l1,l2) ,l_end = max(l1,l2);
+		for(int i=l_start; i<=l_end; i++)
+			board[-r-i + boardSize][i + boardSize][r + boardSize] = 0;
+		if(a == 2)
+			numDiscs = numDiscs - 5;
+		else
+			numOppDiscs = numOppDiscs - 5;
+	}
+	else
+	{
+		cout << "Error! Given points (" <<  hexagon1 << "," << position1 << ") and (" <<  hexagon2 << "," << position2 << ") are not on same line" << endl;
+		cout << "Above error printed in Board.cpp: removeRow." << endl;	
+	}
+}
+
+void undoRemoveRow(int colour, int hexagon1, int position1, int hexagon2, int position2) {
+	int v1, l1, r1, v2, l2, r2 = 0;
+	convertTo(hexagon1, position1, v1, l1, r1);
+	convertTo(hexagon2, position2, v2, l2, r2);
+
+	if (v1 == v2)
+	{
+		int v = v1;
+		int l_start = min(l1,l2) ,l_end = max(l1,l2);
+		for(int i=l_start; i<=l_end; i++)
+			board[v + boardSize][i + boardSize][-v-i + boardSize] = 2 * colour;
+		if(colour == 1)
+			numDiscs = numDiscs + 5;
+		else
+			numOppDiscs = numOppDiscs + 5;
+	}
+	else if (l1 == l2)
+	{
+		int l = l1;
+		int v_start = min(v1,v2) ,v_end = max(v1,v2);
+		for(int i=v_start; i<=v_end; i++)
+			board[i + boardSize][l + boardSize][-l-i + boardSize] = 2 * colour;
+		if(colour == 1)
+			numDiscs = numDiscs + 5;
+		else
+			numOppDiscs = numOppDiscs + 5;
+	}
+	else if (r1 == r2)
+	{
+		int r = r1;
+		int l_start = min(l1,l2) ,l_end = max(l1,l2);
+		for(int i=l_start; i<=l_end; i++)
+			board[-r-i + boardSize][i + boardSize][r + boardSize] = 2 * colour;
+		if(colour == 1)
+			numDiscs = numDiscs + 5;
+		else
+			numOppDiscs = numOppDiscs + 5;
+	}
+	else
+	{
+		cout << "Error! Given points (" <<  hexagon1 << "," << position1 << ") and (" <<  hexagon2 << "," << position2 << ") are not on same line" << endl;
+		cout << "Above error printed in Board.cpp: removeRow." << endl;	
+	}
+}
+
 
 void print_ring_vectors()
 {
@@ -384,13 +668,13 @@ bool row_detected(int& v1, int& l1, int& r1, int& v2, int& l2, int& r2, int pers
 				v_temp = v;
 				l_temp = l;
 				r_temp = r;
-				if (check(v_temp,l_temp,r_temp))
+				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*2)
 				{
-					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*2)
-					{
-						count++;
-						nextUp(v_temp,l_temp,r_temp);
-					}
+					count++;
+					nextUp(v_temp,l_temp,r_temp);
+					if(!check(v_temp,l_temp,r_temp))
+						break;
+
 				}
 				v_up = v_temp;
 				l_up = l_temp;
@@ -398,20 +682,16 @@ bool row_detected(int& v1, int& l1, int& r1, int& v2, int& l2, int& r2, int pers
 				v_temp = v;
 				l_temp = l;
 				r_temp = r;
-				nextDown(v_temp,l_temp,r_temp);
-				// cout<<v_temp<<l_temp<<r_temp<<endl;
-				if (check(v_temp,l_temp,r_temp))
-				{	
-					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*2)
-					{
-						count++;
-						nextDown(v_temp,l_temp,r_temp);
-					}
+				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*2)
+				{
+					count++;
+					nextDown(v_temp,l_temp,r_temp);
+					if(!check(v_temp,l_temp,r_temp))
+						break;
 				}
+
 				if (count >= sequenceLength)
 				{
-					cout<<v<<l<<r<<endl;
-					cout<<count<<endl;
 					nextDown(v_up,l_up,r_up);
 					nextUp(v_temp,l_temp,r_temp);
 					v1 = v_temp;
@@ -428,13 +708,12 @@ bool row_detected(int& v1, int& l1, int& r1, int& v2, int& l2, int& r2, int pers
 				v_temp = v;
 				l_temp = l;
 				r_temp = r;
-				if (check(v_temp,l_temp,r_temp))
+				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*2)
 				{
-					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*2)
-					{
-						count++;
-						nextUpLeft(v_temp,l_temp,r_temp);
-					}
+					count++;
+					nextUpLeft(v_temp,l_temp,r_temp);
+					if(!check(v_temp,l_temp,r_temp))
+						break;
 				}
 				v_up = v_temp;
 				l_up = l_temp;
@@ -442,17 +721,16 @@ bool row_detected(int& v1, int& l1, int& r1, int& v2, int& l2, int& r2, int pers
 				v_temp = v;
 				l_temp = l;
 				r_temp = r;
-				if (check(v_temp,l_temp,r_temp))
+				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*2)
 				{
-					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*2)
-					{
-						count++;
-						nextDownLeft(v_temp,l_temp,r_temp);
-					}
+					count++;
+					nextDownRight(v_temp,l_temp,r_temp);
+					if(!check(v_temp,l_temp,r_temp))
+						break;
 				}
 				if (count >= sequenceLength)
 				{
-					nextDownLeft(v_up,l_up,r_up);
+					nextDownRight(v_up,l_up,r_up);
 					nextUpLeft(v_temp,l_temp,r_temp);
 					v1 = v_temp;
 					l1 = l_temp;
@@ -468,13 +746,12 @@ bool row_detected(int& v1, int& l1, int& r1, int& v2, int& l2, int& r2, int pers
 				v_temp = v;
 				l_temp = l;
 				r_temp = r;
-				if (check(v_temp,l_temp,r_temp))
+				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*2)
 				{
-					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*2)
-					{
-						count++;
-						nextUpRight(v_temp,l_temp,r_temp);
-					}
+					count++;
+					nextUpRight(v_temp,l_temp,r_temp);
+					if(!check(v_temp,l_temp,r_temp))
+						break;
 				}
 				v_up = v_temp;
 				l_up = l_temp;
@@ -482,19 +759,17 @@ bool row_detected(int& v1, int& l1, int& r1, int& v2, int& l2, int& r2, int pers
 				v_temp = v;
 				l_temp = l;
 				r_temp = r;
-				if (check(v_temp,l_temp,r_temp))
+				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*2)
 				{
-					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*2)
-					{
-						count++;
-						nextDownRight(v_temp,l_temp,r_temp);
-					}
+					count++;
+					nextDownLeft(v_temp,l_temp,r_temp);
+					if(!check(v_temp,l_temp,r_temp))
+						break;
 				}
 				if (count >= sequenceLength)
 				{
-					nextDownRight(v_up,l_up,r_up);
+					nextDownLeft(v_up,l_up,r_up);
 					nextUpRight(v_temp,l_temp,r_temp);
-					
 					v1 = v_temp;
 					l1 = l_temp;
 					r1 = r_temp;
@@ -510,513 +785,345 @@ bool row_detected(int& v1, int& l1, int& r1, int& v2, int& l2, int& r2, int pers
 	return false;
 }
 
-vector<int> row_detect(int hexagon1, int position1, int hexagon2, int position2, int perspective)
-{
-	int v1, l1, r1, v2, l2, r2 = 0;
-	convertTo(hexagon1, position1, v1, l1, r1);
-	convertTo(hexagon2, position2, v2, l2, r2);
-	int count,v_temp,l_temp,r_temp,v_up,l_up,r_up;
-		
-	vector<int> vect;
-	if (v1 == v2)
-	{
-		int v = v1;
-		int l_start = min(l1,l2) ,l_end = max(l1,l2);
-		for(int i=l_start; i<=l_end; i++)
-		{
-			count = 0;
-			v_temp = v;
-			l_temp = i;
-			r_temp = -v-i;
 
-			if (check(v_temp,l_temp,r_temp))
-			{
-				//check along left axis;
-				nextUpLeft(v_temp,l_temp,r_temp);
-				if(v_temp,l_temp,r_temp)
-				{
-					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
-					{
-						count++;
-						nextUpLeft(v_temp,l_temp,r_temp);
-						if(check(v_temp,l_temp,r_temp))
-								break;
-					}
-				}
-				v_up = v_temp;
-				l_up = l_temp;
-				r_up = r_temp;
-				v_temp = v;
-				l_temp = i;
-				r_temp = -v-i;
-				nextDownLeft(v_temp,l_temp,r_temp);
-				if(v_temp,l_temp,r_temp)
-				{
-					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
-					{
-						count++;
-						nextDownLeft(v_temp,l_temp,r_temp);
-						if(check(v_temp,l_temp,r_temp))
-								break;
-					}
-				}
-				if (count >= sequenceLength-1)
-				{
-					nextUpLeft(v_temp,l_temp,r_temp);
-					nextDownLeft(v_up,l_up,r_up);
-					int h1,p1,h2,p2;
-					convertBack(v_up,l_up,r_up,h1,p1);
-					cout<<"up coordi: "<<v_up<<l_up<<r_up<<endl;
-					convertBack(v_temp,l_temp,r_temp,h2,p2);
-					cout<<"up coordi: "<<v_temp<<l_temp<<r_temp<<endl;
-					vect.push_back(h1);
-					vect.push_back(p1);
-					vect.push_back(h2);
-					vect.push_back(p2);
+// vector<int> row_detect(int hexagon1, int position1, int hexagon2, int position2, int perspective)
+// {
+// 	int v1, l1, r1, v2, l2, r2 = 0;
+// 	convertTo(hexagon1, position1, v1, l1, r1);
+// 	convertTo(hexagon2, position2, v2, l2, r2);
+// 	vector<int> v;
+// 	if (v1 == v2)
+// 	{
+// 		int v = v1;
+// 		int l_start = min(l1,l2) ,l_end = max(l1,l2);
+// 		int count,v_temp,l_temp,r_temp,v_up,l_up,r_up;
+// 		int count_vert = 0;
+// 		for(int i=l_start+1; i<=l_end; i++)
+// 		{
+// 			count = 0;
+// 			v_temp = v;
+// 			l_temp = i;
+// 			r_temp = -v-i;
+// 			if (check(v_temp,l_temp,r_temp))
+// 			{
+// 				//check along left axis;
+// 				nextUpLeft(v_temp,l_temp,r_temp);
+// 				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+// 				{
+// 					count++;
+// 					nextUpLeft(v_temp,l_temp,r_temp);
+// 				}
+// 				v_up = v_temp;
+// 				l_up = l_temp;
+// 				r_up = r_temp;
+// 				v_temp = v;
+// 				l_temp = i;
+// 				r_temp = -v-i;
+// 				nextDownLeft(v_temp,l_temp,r_temp);
+// 				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+// 				{
+// 					count++;
+// 					nextDownLeft(v_temp,l_temp,r_temp);
+// 				}
+// 				if (count >= sequenceLength-1)
+// 				{
+// 					int h1,p1,h2,p2;
+// 					convertBack(v_up,l_up,r_up,h1,p1);
+// 					convertBack(v_temp,l_temp,r_temp,h2,p2);
+// 					v.push_back(h1);
+// 					v.push_back(p1);
+// 					v.push_back(h2);
+// 					v.push_back(p2);
 					
-					return vect;
-				}
+// 					return v;
+// 				}
 
 
-				v_temp = v;
-				l_temp = i;
-				r_temp = -v-i;
+// 				v_temp = v;
+// 				l_temp = i;
+// 				r_temp = -v-i;
 
 
-				//check along right axis;
-				nextUpRight(v_temp,l_temp,r_temp);
-				if (check(v_temp,l_temp,r_temp))
-				{
-					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
-					{
-						count++;
-						nextUpRight(v_temp,l_temp,r_temp);
-						if(check(v_temp,l_temp,r_temp))
-							break;
-					}
-				}
-				v_up = v_temp;
-				l_up = l_temp;
-				r_up = r_temp;
-				v_temp = v;
-				l_temp = i;
-				r_temp = -v-i;
-				nextDownRight(v_temp,l_temp,r_temp);
-				if (check(v_temp,l_temp,r_temp))
-				{
-					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
-					{
-						count++;
-						nextDownRight(v_temp,l_temp,r_temp);
-						if(check(v_temp,l_temp,r_temp))
-							break;
-					}
-				}
-				if (count >= sequenceLength-1)
-				{
-					nextUpRight(v_temp,l_temp,r_temp);
-					nextDownRight(v_up,l_up,r_up);
-					int h1,p1,h2,p2;
-					convertBack(v_up,l_up,r_up,h1,p1);
-					convertBack(v_temp,l_temp,r_temp,h2,p2);
-					vect.push_back(h1);
-					vect.push_back(p1);
-					vect.push_back(h2);
-					vect.push_back(p2);
+// 				//check along right axis;
+// 				nextUpRight(v_temp,l_temp,r_temp);
+// 				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+// 				{
+// 					count++;
+// 					nextUpRight(v_temp,l_temp,r_temp);
+// 				}
+// 				v_up = v_temp;
+// 				l_up = l_temp;
+// 				r_up = r_temp;
+// 				v_temp = v;
+// 				l_temp = i;
+// 				r_temp = -v-i;
+// 				nextDownRight(v_temp,l_temp,r_temp);
+// 				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+// 				{
+// 					count++;
+// 					nextDownRight(v_temp,l_temp,r_temp);
+// 				}
+// 				if (count >= sequenceLength-1)
+// 				{
+// 					int h1,p1,h2,p2;
+// 					convertBack(v_up,l_up,r_up,h1,p1);
+// 					convertBack(v_temp,l_temp,r_temp,h2,p2);
+// 					v.push_back(h1);
+// 					v.push_back(p1);
+// 					v.push_back(h2);
+// 					v.push_back(p2);
 					
-					return vect;
-				}
+// 					return v;
+// 				}
 
-				v_temp = v;
-				l_temp = i;
-				r_temp = -v-i;
-				int h,p;
-				convertBack(v,i,-v-i,h,p);
 
+// 				//check vertical row
+// 				v_temp = v;
+// 				l_temp = i;
+// 				r_temp = -v-i;
+
+// 				if(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(-2))
+// 					count_vert++;
 				
-				cout<<"checking for the point "<<v_temp<<" "<<l_temp<<" "<<r_temp<<endl;
-				cout<<board[v+boardSize][i+boardSize][-v-i+boardSize]<<endl;
-				//check vertical row
-				
+// 			}
 
-				nextUp(v_temp,l_temp,r_temp);
-				cout<<"checking for the point "<<v_temp<<" "<<l_temp<<" "<<r_temp<<endl;
-				cout<<board[v_temp+boardSize][l_temp+boardSize][r_temp+boardSize]<<endl;
-				if (check(v_temp,l_temp,r_temp))
-				{
-					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
-					{
-						count++;
-						nextDown(v_temp,l_temp,r_temp);
-						if(check(v_temp,l_temp,r_temp))
-							break;
-					}
-				}
-				v_up = v_temp;
-				l_up = l_temp;
-				r_up = r_temp;
-				v_temp = v;
-				l_temp = i;
-				r_temp = -v-i;
-				nextDown(v_temp,l_temp,r_temp);
-				if (check(v_temp,l_temp,r_temp))
-				{
-					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
-					{
-						count++;
-						nextDown(v_temp,l_temp,r_temp);
-						if(check(v_temp,l_temp,r_temp))
-							break;
-					}
-				}	
-				cout<<count<<endl;
-				if (count >= sequenceLength-1)
-				{
-					nextUp(v_temp,l_temp,r_temp);
-					nextDown(v_up,l_up,r_up);
-				
-					int h1,p1,h2,p2;
-					convertBack(v_up,l_up,r_up,h1,p1);
-					convertBack(v_temp,l_temp,r_temp,h2,p2);
-					vect.push_back(h1);
-					vect.push_back(p1);
-					vect.push_back(h2);
-					vect.push_back(p2);
-					
-					return vect;
-				}
-				
-			}
-
-		}
+// 		}
+// 		if (count_vert >= sequenceLength-1)
+// 		{
+// 			int h1,p1,h2,p2;
+// 			convertBack(v,l_start,-v-l_start,h1,p1);
+// 			convertBack(v,l_end,-v-l_end,h2,p2);
+// 			v.push_back(h1);
+// 			v.push_back(p1);
+// 			v.push_back(h2);
+// 			v.push_back(p2);
+			
+// 			return v;
+// 		}
 		
-		
-	}
-	else if (l1 == l2)
-	{
-		int l = l1;
-		int v_start = min(v1,v2) ,v_end = max(v1,v2);
-		for(int i=v_start+1; i<=v_end; i++)
-		{
-			count = 0;
-			v_temp = i;
-			l_temp = l;
-			r_temp = -l-i;
-			if (check(v_temp,l_temp,r_temp))
-			{
-				//check along left axis;
-				nextUp(v_temp,l_temp,r_temp);
-				if(v_temp,l_temp,r_temp)
-				{
-					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
-					{
-						count++;
-						nextUp(v_temp,l_temp,r_temp);
-						if(check(v_temp,l_temp,r_temp))
-							break;
-					}
-				}
-				v_up = v_temp;
-				l_up = l_temp;
-				r_up = r_temp;
-				v_temp = i;
-				l_temp = l;
-				r_temp = -l-i;
-				nextDown(v_temp,l_temp,r_temp);
-				if(v_temp,l_temp,r_temp)
-				{
-					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
-					{
-						count++;
-						nextDown(v_temp,l_temp,r_temp);
-						if(check(v_temp,l_temp,r_temp))
-							break;
-					}
-				}
-				if (count >= sequenceLength-1)
-				{
-					nextUp(v_temp,l_temp,r_temp);
-					nextDown(v_up,l_up,r_up);
-					int h1,p1,h2,p2;
-					convertBack(v_up,l_up,r_up,h1,p1);
-					convertBack(v_temp,l_temp,r_temp,h2,p2);
-					vect.push_back(h1);
-					vect.push_back(p1);
-					vect.push_back(h2);
-					vect.push_back(p2);
+// 	}
+// 	else if (l1 == l2)
+// 	{
+// 		int l = l1;
+// 		int v_start = min(v1,v2) ,v_end = max(v1,v2);
+// 		int count_left = 0;
+// 		for(int i=v_start+1; i<=v_end; i++)
+// 		{
+// 			count = 0;
+// 			v_temp = i;
+// 			l_temp = l;
+// 			r_temp = -l-i;
+// 			if (check(v_temp,l_temp,r_temp))
+// 			{
+// 				//check along left axis;
+// 				nextUp(v_temp,l_temp,r_temp);
+// 				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+// 				{
+// 					count++;
+// 					nextUp(v_temp,l_temp,r_temp);
+// 				}
+// 				v_up = v_temp;
+// 				l_up = l_temp;
+// 				r_up = r_temp;
+// 				v_temp = i;
+// 				l_temp = l;
+// 				r_temp = -l-i;
+// 				nextDown(v_temp,l_temp,r_temp);
+// 				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+// 				{
+// 					count++;
+// 					nextDown(v_temp,l_temp,r_temp);
+// 				}
+// 				if (count >= sequenceLength-1)
+// 				{
+// 					int h1,p1,h2,p2;
+// 					convertBack(v_up,l_up,r_up,h1,p1);
+// 					convertBack(v_temp,l_temp,r_temp,h2,p2);
+// 					v.push_back(h1);
+// 					v.push_back(p1);
+// 					v.push_back(h2);
+// 					v.push_back(p2);
 					
-					return vect;
-				}
+// 					return v;
+// 				}
 
 
-				v_temp = i;
-				l_temp = l;
-				r_temp = -l-i;
+// 				v_temp = i;
+// 				l_temp = l;
+// 				r_temp = -l-i;
 
 
-				//check along right axis;
-				nextUpRight(v_temp,l_temp,r_temp);
-				if(v_temp,l_temp,r_temp)
-				{
-					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
-					{
-						count++;
-						nextUpRight(v_temp,l_temp,r_temp);
-						if(check(v_temp,l_temp,r_temp))
-							break;
-					}
-				}
-				v_up = v_temp;
-				l_up = l_temp;
-				r_up = r_temp;
-				v_temp = i;
-				l_temp = l;
-				r_temp = -l-i;
-				nextDownRight(v_temp,l_temp,r_temp);
-				if(v_temp,l_temp,r_temp)
-				{
-					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
-					{
-						count++;
-						nextDownRight(v_temp,l_temp,r_temp);
-						if(check(v_temp,l_temp,r_temp))
-							break;
-					}
-				}
-				if (count >= sequenceLength-1)
-				{
-					nextUpRight(v_temp,l_temp,r_temp);
-					nextDownRight(v_up,l_up,r_up);
-					int h1,p1,h2,p2;
-					convertBack(v_up,l_up,r_up,h1,p1);
-					convertBack(v_temp,l_temp,r_temp,h2,p2);
-					vect.push_back(h1);
-					vect.push_back(p1);
-					vect.push_back(h2);
-					vect.push_back(p2);
+// 				//check along right axis;
+// 				nextUpRight(v_temp,l_temp,r_temp);
+// 				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+// 				{
+// 					count++;
+// 					nextUpRight(v_temp,l_temp,r_temp);
+// 				}
+// 				v_up = v_temp;
+// 				l_up = l_temp;
+// 				r_up = r_temp;
+// 				v_temp = i;
+// 				l_temp = l;
+// 				r_temp = -l-i;
+// 				nextDownRight(v_temp,l_temp,r_temp);
+// 				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+// 				{
+// 					count++;
+// 					nextDownRight(v_temp,l_temp,r_temp);
+// 				}
+// 				if (count >= sequenceLength-1)
+// 				{
+// 					int h1,p1,h2,p2;
+// 					convertBack(v_up,l_up,r_up,h1,p1);
+// 					convertBack(v_temp,l_temp,r_temp,h2,p2);
+// 					v.push_back(h1);
+// 					v.push_back(p1);
+// 					v.push_back(h2);
+// 					v.push_back(p2);
 					
-					return vect;
-				}
+// 					return v;
+// 				}
 
 
-				//check left axis row
-				v_temp = i;
-				l_temp = l;
-				r_temp = -l-i;
+// 				//check left axis row
+// 				v_temp = i;
+// 				l_temp = l;
+// 				r_temp = -l-i;
 
-				nextUpLeft(v_temp,l_temp,r_temp);
-				if(v_temp,l_temp,r_temp)
-				{
-					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
-					{
-						count++;
-						nextUpLeft(v_temp,l_temp,r_temp);
-						if(check(v_temp,l_temp,r_temp))
-							break;
-					}
-				}
-				v_up = v_temp;
-				l_up = l_temp;
-				r_up = r_temp;
-				v_temp = i;
-				l_temp = l;
-				r_temp = -l-i;
-				nextDownLeft(v_temp,l_temp,r_temp);
-				if(v_temp,l_temp,r_temp)
-				{
-					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
-					{
-						count++;
-						nextDownLeft(v_temp,l_temp,r_temp);
-						if(check(v_temp,l_temp,r_temp))
-							break;
-					}
-				}
-				if (count >= sequenceLength-1)
-				{
-					nextUpLeft(v_temp,l_temp,r_temp);
-					nextDownLeft(v_up,l_up,r_up);
-					int h1,p1,h2,p2;
-					convertBack(v_up,l_up,r_up,h1,p1);
-					convertBack(v_temp,l_temp,r_temp,h2,p2);
-					vect.push_back(h1);
-					vect.push_back(p1);
-					vect.push_back(h2);
-					vect.push_back(p2);
-					
-					return vect;
-				}
-			}
-		}	
-		
-	}
-	else if (r1 == r2)
-	{
-		int r = r1;
-		int l_start = min(l1,l2) ,l_end = max(l1,l2);
-		for(int i=l_start+1; i<=l_end; i++)
-		{
-			count = 0;
-			v_temp = -r-i;
-			l_temp = i;
-			r_temp = r;
-			if (check(v_temp,l_temp,r_temp))
-			{
-				//check along left axis;
-				nextUpLeft(v_temp,l_temp,r_temp);
-				if(v_temp,l_temp,r_temp)
-				{
-					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
-					{
-						count++;
-						nextUpLeft(v_temp,l_temp,r_temp);
-						if(check(v_temp,l_temp,r_temp))
-							break;
-					}
-				}
-				v_up = v_temp;
-				l_up = l_temp;
-				r_up = r_temp;
-				v_temp = -r-i;
-				l_temp = i;
-				r_temp = r;
-				nextDownLeft(v_temp,l_temp,r_temp);
-				if(v_temp,l_temp,r_temp)
-				{
-					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
-					{
-						count++;
-						nextDownLeft(v_temp,l_temp,r_temp);
-						if(check(v_temp,l_temp,r_temp))
-							break;
-					}
-				}
-				if (count >= sequenceLength-1)
-				{
-					nextUpLeft(v_temp,l_temp,r_temp);
-					nextDownLeft(v_up,l_up,r_up);
-					int h1,p1,h2,p2;
-					convertBack(v_up,l_up,r_up,h1,p1);
-					convertBack(v_temp,l_temp,r_temp,h2,p2);
-					vect.push_back(h1);
-					vect.push_back(p1);
-					vect.push_back(h2);
-					vect.push_back(p2);
-					
-					return vect;
-				}
-
-
-				v_temp = -r-i;
-				l_temp = i;
-				r_temp = r;
-
-
-				//check along right axis;
-				nextUp(v_temp,l_temp,r_temp);
-				if(v_temp,l_temp,r_temp)
-				{
-					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
-					{
-						count++;
-						nextUp(v_temp,l_temp,r_temp);
-						if(check(v_temp,l_temp,r_temp))
-							break;
-					}
-				}
-				v_up = v_temp;
-				l_up = l_temp;
-				r_up = r_temp;
-				v_temp = -r-i;
-				l_temp = i;
-				r_temp = r;
-				nextDown(v_temp,l_temp,r_temp);
-				if(v_temp,l_temp,r_temp)
-				{
-					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
-					{
-						count++;
-						nextDown(v_temp,l_temp,r_temp);
-						if(check(v_temp,l_temp,r_temp))
-							break;
-					}
-				}
-				if (count >= sequenceLength-1)
-				{
-					nextUp(v_temp,l_temp,r_temp);
-					nextDown(v_up,l_up,r_up);
-					int h1,p1,h2,p2;
-					convertBack(v_up,l_up,r_up,h1,p1);
-					convertBack(v_temp,l_temp,r_temp,h2,p2);
-					vect.push_back(h1);
-					vect.push_back(p1);
-					vect.push_back(h2);
-					vect.push_back(p2);
-					
-					return vect;
-				}
-
-
-				//check right axis row
-				v_temp = -r-i;
-				l_temp = i;
-				r_temp = r;
-
-				nextUpRight(v_temp,l_temp,r_temp);
-				if(v_temp,l_temp,r_temp)
-				{
-					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
-					{
-						count++;
-						nextUpRight(v_temp,l_temp,r_temp);
-						if(check(v_temp,l_temp,r_temp))
-							break;
-					}
-				}
-				v_up = v_temp;
-				l_up = l_temp;
-				r_up = r_temp;
-				v_temp = -r-i;
-				l_temp = i;
-				r_temp = r;
-				nextDownRight(v_temp,l_temp,r_temp);
-				if(v_temp,l_temp,r_temp)
-				{
-					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
-					{
-						count++;
-						nextDownRight(v_temp,l_temp,r_temp);
-						if(check(v_temp,l_temp,r_temp))
-							break;
-					}
-				}
-				if (count >= sequenceLength-1)
-				{
-					nextUpRight(v_temp,l_temp,r_temp);
-					nextDownRight(v_up,l_up,r_up);
-					int h1,p1,h2,p2;
-					convertBack(v_up,l_up,r_up,h1,p1);
-					convertBack(v_temp,l_temp,r_temp,h2,p2);
-					vect.push_back(h1);
-					vect.push_back(p1);
-					vect.push_back(h2);
-					vect.push_back(p2);
-					
-					return vect;
-				}
-
+// 				if(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(-2))
+// 					count_left++;
 				
-			}
-		}
-		
-	}
-	else
-	{
-		cout << "Error! Given points (" <<  hexagon1 << "," << position1 << ") and (" <<  hexagon2 << "," << position2 << ") are not on same line" << endl;
-		cout << "Above error printed in Board.cpp: Row_detect" << endl;	
-	}
-	return vect;
-}
+// 			}
+// 		}	
+// 		if (count_left >= sequenceLength-1)
+// 		{
+// 			int h1,p1,h2,p2;
+// 			convertBack(v_start,l,-v_start-l,h1,p1);
+// 			convertBack(v_end,l,-v_end-l,h2,p2);
+// 			v.push_back(h1);
+// 			v.push_back(p1);
+// 			v.push_back(h2);
+// 			v.push_back(p2);
+			
+// 			return v;
+// 		}	
+// 	}
+// 	else if (r1 == r2)
+// 	{
+// 		int r = r1;
+// 		int l_start = min(l1,l2) ,l_end = max(l1,l2);
+// 		int count_right = 0;
+// 		for(int i=l_start+1; i<=l_end; i++)
+// 		{
+// 			count = 0;
+// 			v_temp = -r-i;
+// 			l_temp = i;
+// 			r_temp = r;
+// 			if (check(v_temp,l_temp,r_temp))
+// 			{
+// 				//check along left axis;
+// 				nextUpLeft(v_temp,l_temp,r_temp);
+// 				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+// 				{
+// 					count++;
+// 					nextUpLeft(v_temp,l_temp,r_temp);
+// 				}
+// 				v_up = v_temp;
+// 				l_up = l_temp;
+// 				r_up = r_temp;
+// 				v_temp = -r-i;
+// 				l_temp = i;
+// 				r_temp = r;
+// 				nextDownLeft(v_temp,l_temp,r_temp);
+// 				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+// 				{
+// 					count++;
+// 					nextDownLeft(v_temp,l_temp,r_temp);
+// 				}
+// 				if (count >= sequenceLength-1)
+// 				{
+// 					int h1,p1,h2,p2;
+// 					convertBack(v_up,l_up,r_up,h1,p1);
+// 					convertBack(v_temp,l_temp,r_temp,h2,p2);
+// 					v.push_back(h1);
+// 					v.push_back(p1);
+// 					v.push_back(h2);
+// 					v.push_back(p2);
+					
+// 					return v;
+// 				}
+
+
+// 				v_temp = -r-i;
+// 				l_temp = i;
+// 				r_temp = r;
+
+
+// 				//check along right axis;
+// 				nextUp(v_temp,l_temp,r_temp);
+// 				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+// 				{
+// 					count++;
+// 					nextUp(v_temp,l_temp,r_temp);
+// 				}
+// 				v_up = v_temp;
+// 				l_up = l_temp;
+// 				r_up = r_temp;
+// 				v_temp = -r-i;
+// 				l_temp = i;
+// 				r_temp = r;
+// 				nextDown(v_temp,l_temp,r_temp);
+// 				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+// 				{
+// 					count++;
+// 					nextDown(v_temp,l_temp,r_temp);
+// 				}
+// 				if (count >= sequenceLength-1)
+// 				{
+// 					int h1,p1,h2,p2;
+// 					convertBack(v_up,l_up,r_up,h1,p1);
+// 					convertBack(v_temp,l_temp,r_temp,h2,p2);
+// 					v.push_back(h1);
+// 					v.push_back(p1);
+// 					v.push_back(h2);
+// 					v.push_back(p2);
+					
+// 					return v;
+// 				}
+
+
+// 				//check right axis row
+// 				v_temp = -r-i;
+// 				l_temp = i;
+// 				r_temp = r;
+
+// 				if(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(-2))
+// 					count_right++;
+				
+// 			}
+// 		}
+// 		if (count_right >= sequenceLength-1)
+// 		{
+// 			int h1,p1,h2,p2;
+// 			convertBack(-r-l_start,l_start,r,h1,p1);
+// 			convertBack(-r-l_end,l_end,r,h2,p2);
+// 			v.push_back(h1);
+// 			v.push_back(p1);
+// 			v.push_back(h2);
+// 			v.push_back(p2);
+			
+// 			return v;
+// 		}
+// 	}
+// 	else
+// 	{
+// 		cout << "Error! Given points (" <<  hexagon1 << "," << position1 << ") and (" <<  hexagon2 << "," << position2 << ") are not on same line" << endl;
+// 		cout << "Above error printed in Board.cpp: Row_detect" << endl;	
+// 	}
+
+// }
+
 
 void row_detected_modified(vector< vector<int> > &start, vector< vector<int> > &end, int perspective)
 {
@@ -1079,10 +1186,11 @@ void row_detected_modified(vector< vector<int> > &start, vector< vector<int> > &
 							break;
 					}
 				}
-				
+						
 				if (count >= sequenceLength)
 				{
-					nextDownLeft(v_temp,l_temp,r_temp);
+					nextDownRight(v_temp,l_temp,r_temp);
+					
 					vector<int> v1;
 					v1.push_back(v);
 					v1.push_back(l);
@@ -1115,7 +1223,8 @@ void row_detected_modified(vector< vector<int> > &start, vector< vector<int> > &
 				}
 				if (count >= sequenceLength)
 				{
-					nextDownRight(v_temp,l_temp,r_temp);
+
+					nextDownLeft(v_temp,l_temp,r_temp);
 					vector<int> v1;
 					v1.push_back(v);
 					v1.push_back(l);
@@ -1134,6 +1243,7 @@ void row_detected_modified(vector< vector<int> > &start, vector< vector<int> > &
 	}
 	// return false;
 }
+
 
 
 
@@ -1164,130 +1274,62 @@ int main()
 
 	board = tempBoard;
 	print_board();
-	
-	// int v,l,r;
-	// convertTo(3,0,v,l,r);
-	// cout<<v<<l<<r<<endl;
-	// int h,p;
-	// convertBack(0,1,-1,h,p);
-	// cout<<h<<p<<endl;
-	
 
-	addRing(1,3,5);
-	cout<<endl;
-	print_board();
-	
 	addRing(-1,0,0);
 	cout<<endl;
 	print_board();
-	
-	addRing(1,5,17);
-	cout<<endl;
-	print_board();
-	
-	addRing(-1,4,23);
+
+	undoAddRing(0,0);
 	cout<<endl;
 	print_board();
 
-	addRing(-1,1,3);
-	cout<<endl;
-	print_board();
-	
-	moveRing(3,5,3,3);
-	cout<<endl;
-	print_board();
-	
-	moveRing(3,3,3,6);
-	cout<<endl;
-	print_board();
-	
-	moveRing(4,23,5,1);
-	cout<<endl;
-	print_board();
-	
-	moveRing(5,1,4,22);
-	cout<<endl;
-	print_board();
-	
-	moveRing(5,17,4,14);
+
+	addRing(1,5,14);
 	cout<<endl;
 	print_board();
 
-	moveRing(4,14,3,11);
+	addRing(1,5,16);
 	cout<<endl;
 	print_board();
 
-	moveRing(3,11,2,8);
+	addRing(-1,5,17);
 	cout<<endl;
 	print_board();
 
-	moveRing(2,8,2,9);
-	cout<<endl;
-	print_board();
-	
-	vector<int> row;
-	row = row_detect(2,9,2,10,1);
-	cout<<endl;
-	cout<<"4444444444444444444"<<endl;
-	for(int i=0;i<row.size();i++)
-		cout<<row.at(i)<<" ";
-	cout<<endl;
-	print_board();
-	
-
-	// moveRing(2,9,2,10);
-	// cout<<endl;
-	// print_board();
-
-	moveRing(0,0,1,0);
-	cout<<endl;
-	print_board();
-	
-	moveRing(1,0,2,0);
-	cout<<endl;
-	print_board();
-	
-	moveRing(2,0,3,0);
-	cout<<endl;
-	print_board();
-	
-	moveRing(3,0,4,0);
+	moveRing(5,14,4,12);
 	cout<<endl;
 	print_board();
 
-	moveRing(4,0,4,1);
+	undoMoveRing(5,14,4,12);
 	cout<<endl;
 	print_board();
-	
-	moveRing(1,3,2,6);
+
+	moveRing(5,14,4,12);
 	cout<<endl;
 	print_board();
-	
-	cout<<"numRings: "<<numRings<<" numOppRings: "<<numOppRings<<" numDiscs: "<<numDiscs<<" numOppDiscs: "<<numOppDiscs<<endl;
 
-	print_ring_vectors();
-	
-	// removeRing(5,17);
-	// cout<<endl;
-	// print_board();
-	
-	cout<<"numRings: "<<numRings<<" numOppRings: "<<numOppRings<<" numDiscs: "<<numDiscs<<" numOppDiscs: "<<numOppDiscs<<endl;
-	
-	print_ring_vectors();
-	
+	moveRing(4,12,4,13);
 	cout<<endl;
-	// int v=0,l=0,r=0;
-	// nextUp(v,l,r);
-	// cout<<v<<l<<r<<endl;
+	print_board();
 
-	// int v1,l1,r1,v2,l2,r2;
-	// cout<<row_detected(v1,l1,r1,v2,l2,r2,1)<<endl;
-	// cout<<v1<<l1<<r1<<" "<<v2<<l2<<r2<<endl;
-	// cout<<row_detected(v1,l1,r1,v2,l2,r2,-1)<<endl;
-	// cout<<v1<<l1<<r1<<" "<<v2<<l2<<r2<<endl;
+	moveRing(4,13,4,14);
 	cout<<endl;
+	print_board();
+
+	moveRing(4,14,4,15);
+	cout<<endl;
+	print_board();
+
+	//check row_detect()
+	//check remove row
+	//for last move check the row_detected
+	
+	moveRing(4,15,4,16);
+	cout<<endl;
+	print_board();
+
 	vector< vector<int> > s,e;
-	row_detected_modified(s,e,-1);
+	row_detected_modified(s,e,1);
 	for(int i=0;i<s.size();i++)
 	{
 		for(int j=0;j<3;j++)
@@ -1301,6 +1343,172 @@ int main()
 		}
 		cout<<endl;
 	}
+	cout<<"row_detected_modified completed"<<endl;
+	int v1,l1,r1,v2,l2,r2;
+	cout<<row_detected(v1,l1,r1,v2,l2,r2,1)<<endl;
+	cout<<v1<<l1<<r1<<" "<<v2<<l2<<r2<<endl;
+
+	moveRing(5,17,3,9);
+	cout<<endl;
+	print_board();
+
+
+	moveRing(5,16,3,10);
+	cout<<endl;
+	print_board();
+
+	removeRow(5,14,4,15);
+	cout<<endl;
+	print_board();
+
+	removeRing(4,16);
+	cout<<endl;
+	print_board();
+
+	undoRemoveRing(1,4,16);
+	cout<<endl;
+	print_board();
+	// undoRemoveRow(1,5,14,4,15);
+	// cout<<endl;
+	// print_board();
+
+//TESTCASE 1	
+	// int v,l,r;
+	// convertTo(3,0,v,l,r);
+	// cout<<v<<l<<r<<endl;
+	// int h,p;
+	// convertBack(0,1,-1,h,p);
+	// cout<<h<<p<<endl;
+	
+
+	// addRing(1,3,5);
+	// cout<<endl;
+	// print_board();
+	
+	// addRing(-1,0,0);
+	// cout<<endl;
+	// print_board();
+	
+	// addRing(1,5,17);
+	// cout<<endl;
+	// print_board();
+	
+	// addRing(-1,4,23);
+	// cout<<endl;
+	// print_board();
+
+	// addRing(-1,1,3);
+	// cout<<endl;
+	// print_board();
+	
+	// moveRing(3,5,3,3);
+	// cout<<endl;
+	// print_board();
+	
+	// moveRing(3,3,3,6);
+	// cout<<endl;
+	// print_board();
+	
+	// moveRing(4,23,5,1);
+	// cout<<endl;
+	// print_board();
+	
+	// moveRing(5,1,4,22);
+	// cout<<endl;
+	// print_board();
+	
+	// moveRing(5,17,4,14);
+	// cout<<endl;
+	// print_board();
+
+	// moveRing(4,14,3,11);
+	// cout<<endl;
+	// print_board();
+
+	// moveRing(3,11,2,8);
+	// cout<<endl;
+	// print_board();
+
+	// moveRing(2,8,2,9);
+	// cout<<endl;
+	// print_board();
+	
+	// vector<int> row;
+	// row = row_detect(2,9,2,10,1);
+	// cout<<endl;
+	// cout<<"4444444444444444444"<<endl;
+	// for(int i=0;i<row.size();i++)
+	// 	cout<<row.at(i)<<" ";
+	// cout<<endl;
+	// print_board();
+	
+
+	// // moveRing(2,9,2,10);
+	// // cout<<endl;
+	// // print_board();
+
+	// moveRing(0,0,1,0);
+	// cout<<endl;
+	// print_board();
+	
+	// moveRing(1,0,2,0);
+	// cout<<endl;
+	// print_board();
+	
+	// moveRing(2,0,3,0);
+	// cout<<endl;
+	// print_board();
+	
+	// moveRing(3,0,4,0);
+	// cout<<endl;
+	// print_board();
+
+	// moveRing(4,0,4,1);
+	// cout<<endl;
+	// print_board();
+	
+	// moveRing(1,3,2,6);
+	// cout<<endl;
+	// print_board();
+	
+	// cout<<"numRings: "<<numRings<<" numOppRings: "<<numOppRings<<" numDiscs: "<<numDiscs<<" numOppDiscs: "<<numOppDiscs<<endl;
+
+	// print_ring_vectors();
+	
+	// // removeRing(5,17);
+	// // cout<<endl;
+	// // print_board();
+	
+	// cout<<"numRings: "<<numRings<<" numOppRings: "<<numOppRings<<" numDiscs: "<<numDiscs<<" numOppDiscs: "<<numOppDiscs<<endl;
+	
+	// print_ring_vectors();
+	
+	// cout<<endl;
+	// // int v=0,l=0,r=0;
+	// // nextUp(v,l,r);
+	// // cout<<v<<l<<r<<endl;
+
+	// // int v1,l1,r1,v2,l2,r2;
+	// // cout<<row_detected(v1,l1,r1,v2,l2,r2,1)<<endl;
+	// // cout<<v1<<l1<<r1<<" "<<v2<<l2<<r2<<endl;
+	// // cout<<row_detected(v1,l1,r1,v2,l2,r2,-1)<<endl;
+	// // cout<<v1<<l1<<r1<<" "<<v2<<l2<<r2<<endl;
+	// cout<<endl;
+	// vector< vector<int> > s,e;
+	// row_detected_modified(s,e,-1);
+	// for(int i=0;i<s.size();i++)
+	// {
+	// 	for(int j=0;j<3;j++)
+	// 	{
+	// 		cout<<s.at(i).at(j);
+	// 	}
+	// 	cout<<" ";
+	// 	for(int j=0;j<3;j++)
+	// 	{
+	// 		cout<<e.at(i).at(j);
+	// 	}
+	// 	cout<<endl;
+	// }
 
 	return 0;
 }
