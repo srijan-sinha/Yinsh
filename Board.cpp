@@ -689,45 +689,54 @@ vector<string> Board::generateMoveList(int perspective)
 		{
 			moves = addRingMoves(moves);
 		}
-		else if (!check_row)
+		else
 		{
-			for(int i=0;i<ringV.size();i++)
-			{
-				v = ringV.at(i);
-				l = ringL.at(i);
-				r = ringR.at(j);
-				moves = addRingMoves(moves,v,l,r,perspective, ringV, ringL, ringR);
+			string empty = "";
+			moves = uptoMoveRingMoves(empty, perspective);
+			for(int i = 0; i < moves.size(); i++) {
+				replace(i, afterMoveRingMoves(moves.at(i), perspective));
 			}
+
+		}
+		// else if (!check_row)
+		// {
+		// 	for(int i=0;i<ringV.size();i++)
+		// 	{
+		// 		v = ringV.at(i);
+		// 		l = ringL.at(i);
+		// 		r = ringR.at(j);
+		// 		moves = addRingMoves(moves,v,l,r,perspective, ringV, ringL, ringR);
+		// 	}
 			
-		}
-		else if (check_row)
-		{
-			int h1,p1,h2,p2;
-			convertBack(v1,l1,r1,h1,p1);
-			convertBack(v2,l2,r2,h2,p2);
-			//command to remove the row
-			s += "RS" + h1 + " " + p1;
-			s += "RE" + h2 + " " + p2;
-			//command to remove the ring
-			for(int i=0;i<ringV.size();i++)
-			{
-				int h,p;
-				convertBack(ringV.at(i),ringL.at(i),ringR.at(i),h,p);
-				s += "X" + h + " " + p;
-				// moves.push_back(s);
-				for(int i=0;i<ringV.size();i++)
-				{
-					v = ringV.at(i);
-					l = ringL.at(i);
-					r = ringR.at(j);
-					moves = addRingMoves(moves,v,l,r,perspective, ringV, ringL, ringR);
-				}	
-				for(int j=0;j<moves.size();j++)
-				{
-					moves.at(j) = s + moves.at(j);
-				}	
-			}
-		}
+		// }
+		// else if (check_row)
+		// {
+		// 	int h1,p1,h2,p2;
+		// 	convertBack(v1,l1,r1,h1,p1);
+		// 	convertBack(v2,l2,r2,h2,p2);
+		// 	//command to remove the row
+		// 	s += "RS" + h1 + " " + p1;
+		// 	s += "RE" + h2 + " " + p2;
+		// 	//command to remove the ring
+		// 	for(int i=0;i<ringV.size();i++)
+		// 	{
+		// 		int h,p;
+		// 		convertBack(ringV.at(i),ringL.at(i),ringR.at(i),h,p);
+		// 		s += "X" + h + " " + p;
+		// 		// moves.push_back(s);
+		// 		for(int i=0;i<ringV.size();i++)
+		// 		{
+		// 			v = ringV.at(i);
+		// 			l = ringL.at(i);
+		// 			r = ringR.at(j);
+		// 			moves = addRingMoves(moves,v,l,r,perspective, ringV, ringL, ringR);
+		// 		}	
+		// 		for(int j=0;j<moves.size();j++)
+		// 		{
+		// 			moves.at(j) = s + moves.at(j);
+		// 		}	
+		// 	}
+		// }
 		
 	}
 	else if (perspective == -1)
@@ -779,6 +788,19 @@ vector<string> Board::generateMoveList(int perspective)
 	return moves;
 	
 }
+
+vector<string> Board::uptoMoveRingMoves (string s, int perspective) {
+	vector< vector<int> > start;
+	vector< vector<int> > end;
+	vector <string> allMoves;
+	int h1, p1, h2, p2;
+	row_detected_modified(start, end, perspective);
+	if(start.size() != 0) {
+		for(int i = 0; i < start.size(); i++) {
+			convertBack(start.at(i).at(0), start.at(i).at(1), start.at(i).at(2), h1, p1);
+			convertBack(end.at(i).at(0), end.at(i).at(1), end.at(i).at(2), h2, p2);
+		} 
+	}
 
 vector<string> Board::addRingMoves (vector<string> moves) 
 {
