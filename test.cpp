@@ -518,7 +518,116 @@ bool row_detected(int& v1, int& l1, int& r1, int& v2, int& l2, int& r2, int pers
 	return false;
 }
 
+void row_detected_modified(vector< vector<int> > start, vector< vector<int> > end, int perspective)
+{
+	for(int v = -boardSize;v<boardSize;v++)
+	{
+		for(int l = -boardSize;l<boardSize;l++)
+		{
+			int r = -v-l;
+			int v_temp,l_temp,r_temp,count=0;
+			int v_up,l_up,r_up;
+			if(check(v,l,r))
+			{
+				//check for vertical row;
+				count = 0;
+				v_temp = v;
+				l_temp = l;
+				r_temp = r;
+				if (check(v_temp,l_temp,r_temp))
+				{
+					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*2)
+					{
+						count++;
+						nextUp(v_temp,l_temp,r_temp);
+						if(!check(v_temp,l_temp,r_temp))
+							break;
+					}
+				}
+				if (count >= sequenceLength)
+				{
+					nextUp(v_temp,l_temp,r_temp);
+					vector<int> v1;
+					v1.push_back(v);
+					v1.push_back(l);
+					v1.push_back(r);
+					start.push_back(v1);
+					vector<int> v2;
+					v2.push_back(v_temp);
+					v2.push_back(l_temp);
+					v2.push_back(r_temp);
+					end.push_back(v2);
+					
+				}
 
+				//check for left row;
+				count = 0;
+				v_temp = v;
+				l_temp = l;
+				r_temp = r;
+				if (check(v_temp,l_temp,r_temp))
+				{
+					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*2)
+					{
+						count++;
+						nextUpLeft(v_temp,l_temp,r_temp);
+						if(!check(v_temp,l_temp,r_temp))
+							break;
+					}
+				}
+				
+				if (count >= sequenceLength)
+				{
+					nextUpLeft(v_temp,l_temp,r_temp);
+					vector<int> v1;
+					v1.push_back(v);
+					v1.push_back(l);
+					v1.push_back(r);
+					start.push_back(v1);
+					vector<int> v2;
+					v2.push_back(v_temp);
+					v2.push_back(l_temp);
+					v2.push_back(r_temp);
+					end.push_back(v2);
+					
+				}
+
+				//check for right row;
+				count = 0;
+				v_temp = v;
+				l_temp = l;
+				r_temp = r;
+				if (check(v_temp,l_temp,r_temp))
+				{
+					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*2)
+					{
+						count++;
+						nextUpRight(v_temp,l_temp,r_temp);
+						if(!check(v_temp,l_temp,r_temp))
+							break;
+					}
+				}
+				if (count >= sequenceLength)
+				{
+					nextUpRight(v_temp,l_temp,r_temp);
+					vector<int> v1;
+					v1.push_back(v);
+					v1.push_back(l);
+					v1.push_back(r);
+					start.push_back(v1);
+					vector<int> v2;
+					v2.push_back(v_temp);
+					v2.push_back(l_temp);
+					v2.push_back(r_temp);
+					end.push_back(v2);
+					
+				}
+			}
+
+		}
+	}
+	// return false;
+}
 
 
 int main()
@@ -654,11 +763,12 @@ int main()
 	// nextUp(v,l,r);
 	// cout<<v<<l<<r<<endl;
 
-	int v1,l1,r1,v2,l2,r2;
-	cout<<row_detected(v1,l1,r1,v2,l2,r2,1)<<endl;
-	cout<<v1<<l1<<r1<<" "<<v2<<l2<<r2<<endl;
-	cout<<row_detected(v1,l1,r1,v2,l2,r2,-1)<<endl;
-	cout<<v1<<l1<<r1<<" "<<v2<<l2<<r2<<endl;
+	// int v1,l1,r1,v2,l2,r2;
+	// cout<<row_detected(v1,l1,r1,v2,l2,r2,1)<<endl;
+	// cout<<v1<<l1<<r1<<" "<<v2<<l2<<r2<<endl;
+	// cout<<row_detected(v1,l1,r1,v2,l2,r2,-1)<<endl;
+	// cout<<v1<<l1<<r1<<" "<<v2<<l2<<r2<<endl;
+	
 
 	return 0;
 }
