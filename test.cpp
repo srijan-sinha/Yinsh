@@ -87,14 +87,6 @@ void convertTo (int hexagonNum, int position, int& v, int& l, int& r)
 	else 
 	{
 		segment = position / hexagonNum;
-		// if(position % hexagonNum == 0) {
-		// 	if(segment == 0) { v = 0; l = hexagonNum; r = -1 * hexagonNum; }
-		// 	else if(segment == 1) { v = hexagonNum; l = 0; r = -1 * hexagonNum; }
-		// 	else if(segment == 2) { v = hexagonNum; l = -1 * hexagonNum; r = 0; }
-		// 	else if(segment == 3) { v = 0; l = -1 * hexagonNum; r = hexagonNum; }
-		// 	else if(segment == 4) { v = -1 * hexagonNum; l = 0; r = hexagonNum; }
-		// 	else if(segment == 5) { v = -1 * hexagonNum; l = hexagonNum; r = 0; }
-		// }
 		
 		if(segment == 0) { v = position % hexagonNum; l = hexagonNum - (position % hexagonNum); r = -1 * hexagonNum; }
 		else if(segment == 1) { v = hexagonNum; l = -1 * (position % hexagonNum); r = -1 * (hexagonNum - (position % hexagonNum)); }
@@ -537,15 +529,19 @@ vector<int> row_detect(int hexagon1, int position1, int hexagon2, int position2,
 			l_temp = i;
 			r_temp = -v-i;
 
-				cout<<"checking for the point "<<v_temp<<" "<<l_temp<<" "<<r_temp<<endl;
 			if (check(v_temp,l_temp,r_temp))
 			{
 				//check along left axis;
 				nextUpLeft(v_temp,l_temp,r_temp);
-				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+				if(v_temp,l_temp,r_temp)
 				{
-					count++;
-					nextUpLeft(v_temp,l_temp,r_temp);
+					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+					{
+						count++;
+						nextUpLeft(v_temp,l_temp,r_temp);
+						if(check(v_temp,l_temp,r_temp))
+								break;
+					}
 				}
 				v_up = v_temp;
 				l_up = l_temp;
@@ -554,15 +550,20 @@ vector<int> row_detect(int hexagon1, int position1, int hexagon2, int position2,
 				l_temp = i;
 				r_temp = -v-i;
 				nextDownLeft(v_temp,l_temp,r_temp);
-				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+				if(v_temp,l_temp,r_temp)
 				{
-					count++;
-					nextDownLeft(v_temp,l_temp,r_temp);
+					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+					{
+						count++;
+						nextDownLeft(v_temp,l_temp,r_temp);
+						if(check(v_temp,l_temp,r_temp))
+								break;
+					}
 				}
-
 				if (count >= sequenceLength-1)
 				{
-
+					nextUpLeft(v_temp,l_temp,r_temp);
+					nextDownLeft(v_up,l_up,r_up);
 					int h1,p1,h2,p2;
 					convertBack(v_up,l_up,r_up,h1,p1);
 					cout<<"up coordi: "<<v_up<<l_up<<r_up<<endl;
@@ -584,10 +585,15 @@ vector<int> row_detect(int hexagon1, int position1, int hexagon2, int position2,
 
 				//check along right axis;
 				nextUpRight(v_temp,l_temp,r_temp);
-				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+				if (check(v_temp,l_temp,r_temp))
 				{
-					count++;
-					nextUpRight(v_temp,l_temp,r_temp);
+					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+					{
+						count++;
+						nextUpRight(v_temp,l_temp,r_temp);
+						if(check(v_temp,l_temp,r_temp))
+							break;
+					}
 				}
 				v_up = v_temp;
 				l_up = l_temp;
@@ -596,13 +602,20 @@ vector<int> row_detect(int hexagon1, int position1, int hexagon2, int position2,
 				l_temp = i;
 				r_temp = -v-i;
 				nextDownRight(v_temp,l_temp,r_temp);
-				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+				if (check(v_temp,l_temp,r_temp))
 				{
-					count++;
-					nextDownRight(v_temp,l_temp,r_temp);
+					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+					{
+						count++;
+						nextDownRight(v_temp,l_temp,r_temp);
+						if(check(v_temp,l_temp,r_temp))
+							break;
+					}
 				}
 				if (count >= sequenceLength-1)
 				{
+					nextUpRight(v_temp,l_temp,r_temp);
+					nextDownRight(v_up,l_up,r_up);
 					int h1,p1,h2,p2;
 					convertBack(v_up,l_up,r_up,h1,p1);
 					convertBack(v_temp,l_temp,r_temp,h2,p2);
@@ -629,10 +642,15 @@ vector<int> row_detect(int hexagon1, int position1, int hexagon2, int position2,
 				nextUp(v_temp,l_temp,r_temp);
 				cout<<"checking for the point "<<v_temp<<" "<<l_temp<<" "<<r_temp<<endl;
 				cout<<board[v_temp+boardSize][l_temp+boardSize][r_temp+boardSize]<<endl;
-				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+				if (check(v_temp,l_temp,r_temp))
 				{
-					count++;
-					nextUp(v_temp,l_temp,r_temp);
+					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+					{
+						count++;
+						nextDown(v_temp,l_temp,r_temp);
+						if(check(v_temp,l_temp,r_temp))
+							break;
+					}
 				}
 				v_up = v_temp;
 				l_up = l_temp;
@@ -688,10 +706,15 @@ vector<int> row_detect(int hexagon1, int position1, int hexagon2, int position2,
 			{
 				//check along left axis;
 				nextUp(v_temp,l_temp,r_temp);
-				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+				if(v_temp,l_temp,r_temp)
 				{
-					count++;
-					nextUp(v_temp,l_temp,r_temp);
+					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+					{
+						count++;
+						nextUp(v_temp,l_temp,r_temp);
+						if(check(v_temp,l_temp,r_temp))
+							break;
+					}
 				}
 				v_up = v_temp;
 				l_up = l_temp;
@@ -700,13 +723,20 @@ vector<int> row_detect(int hexagon1, int position1, int hexagon2, int position2,
 				l_temp = l;
 				r_temp = -l-i;
 				nextDown(v_temp,l_temp,r_temp);
-				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+				if(v_temp,l_temp,r_temp)
 				{
-					count++;
-					nextDown(v_temp,l_temp,r_temp);
+					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+					{
+						count++;
+						nextDown(v_temp,l_temp,r_temp);
+						if(check(v_temp,l_temp,r_temp))
+							break;
+					}
 				}
 				if (count >= sequenceLength-1)
 				{
+					nextUp(v_temp,l_temp,r_temp);
+					nextDown(v_up,l_up,r_up);
 					int h1,p1,h2,p2;
 					convertBack(v_up,l_up,r_up,h1,p1);
 					convertBack(v_temp,l_temp,r_temp,h2,p2);
@@ -726,10 +756,15 @@ vector<int> row_detect(int hexagon1, int position1, int hexagon2, int position2,
 
 				//check along right axis;
 				nextUpRight(v_temp,l_temp,r_temp);
-				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+				if(v_temp,l_temp,r_temp)
 				{
-					count++;
-					nextUpRight(v_temp,l_temp,r_temp);
+					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+					{
+						count++;
+						nextUpRight(v_temp,l_temp,r_temp);
+						if(check(v_temp,l_temp,r_temp))
+							break;
+					}
 				}
 				v_up = v_temp;
 				l_up = l_temp;
@@ -738,13 +773,20 @@ vector<int> row_detect(int hexagon1, int position1, int hexagon2, int position2,
 				l_temp = l;
 				r_temp = -l-i;
 				nextDownRight(v_temp,l_temp,r_temp);
-				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+				if(v_temp,l_temp,r_temp)
 				{
-					count++;
-					nextDownRight(v_temp,l_temp,r_temp);
+					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+					{
+						count++;
+						nextDownRight(v_temp,l_temp,r_temp);
+						if(check(v_temp,l_temp,r_temp))
+							break;
+					}
 				}
 				if (count >= sequenceLength-1)
 				{
+					nextUpRight(v_temp,l_temp,r_temp);
+					nextDownRight(v_up,l_up,r_up);
 					int h1,p1,h2,p2;
 					convertBack(v_up,l_up,r_up,h1,p1);
 					convertBack(v_temp,l_temp,r_temp,h2,p2);
@@ -763,10 +805,15 @@ vector<int> row_detect(int hexagon1, int position1, int hexagon2, int position2,
 				r_temp = -l-i;
 
 				nextUpLeft(v_temp,l_temp,r_temp);
-				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+				if(v_temp,l_temp,r_temp)
 				{
-					count++;
-					nextUpLeft(v_temp,l_temp,r_temp);
+					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+					{
+						count++;
+						nextUpLeft(v_temp,l_temp,r_temp);
+						if(check(v_temp,l_temp,r_temp))
+							break;
+					}
 				}
 				v_up = v_temp;
 				l_up = l_temp;
@@ -775,13 +822,20 @@ vector<int> row_detect(int hexagon1, int position1, int hexagon2, int position2,
 				l_temp = l;
 				r_temp = -l-i;
 				nextDownLeft(v_temp,l_temp,r_temp);
-				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+				if(v_temp,l_temp,r_temp)
 				{
-					count++;
-					nextDownLeft(v_temp,l_temp,r_temp);
+					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+					{
+						count++;
+						nextDownLeft(v_temp,l_temp,r_temp);
+						if(check(v_temp,l_temp,r_temp))
+							break;
+					}
 				}
 				if (count >= sequenceLength-1)
 				{
+					nextUpLeft(v_temp,l_temp,r_temp);
+					nextDownLeft(v_up,l_up,r_up);
 					int h1,p1,h2,p2;
 					convertBack(v_up,l_up,r_up,h1,p1);
 					convertBack(v_temp,l_temp,r_temp,h2,p2);
@@ -810,10 +864,15 @@ vector<int> row_detect(int hexagon1, int position1, int hexagon2, int position2,
 			{
 				//check along left axis;
 				nextUpLeft(v_temp,l_temp,r_temp);
-				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+				if(v_temp,l_temp,r_temp)
 				{
-					count++;
-					nextUpLeft(v_temp,l_temp,r_temp);
+					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+					{
+						count++;
+						nextUpLeft(v_temp,l_temp,r_temp);
+						if(check(v_temp,l_temp,r_temp))
+							break;
+					}
 				}
 				v_up = v_temp;
 				l_up = l_temp;
@@ -822,13 +881,20 @@ vector<int> row_detect(int hexagon1, int position1, int hexagon2, int position2,
 				l_temp = i;
 				r_temp = r;
 				nextDownLeft(v_temp,l_temp,r_temp);
-				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+				if(v_temp,l_temp,r_temp)
 				{
-					count++;
-					nextDownLeft(v_temp,l_temp,r_temp);
+					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+					{
+						count++;
+						nextDownLeft(v_temp,l_temp,r_temp);
+						if(check(v_temp,l_temp,r_temp))
+							break;
+					}
 				}
 				if (count >= sequenceLength-1)
 				{
+					nextUpLeft(v_temp,l_temp,r_temp);
+					nextDownLeft(v_up,l_up,r_up);
 					int h1,p1,h2,p2;
 					convertBack(v_up,l_up,r_up,h1,p1);
 					convertBack(v_temp,l_temp,r_temp,h2,p2);
@@ -848,10 +914,15 @@ vector<int> row_detect(int hexagon1, int position1, int hexagon2, int position2,
 
 				//check along right axis;
 				nextUp(v_temp,l_temp,r_temp);
-				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+				if(v_temp,l_temp,r_temp)
 				{
-					count++;
-					nextUp(v_temp,l_temp,r_temp);
+					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+					{
+						count++;
+						nextUp(v_temp,l_temp,r_temp);
+						if(check(v_temp,l_temp,r_temp))
+							break;
+					}
 				}
 				v_up = v_temp;
 				l_up = l_temp;
@@ -860,13 +931,20 @@ vector<int> row_detect(int hexagon1, int position1, int hexagon2, int position2,
 				l_temp = i;
 				r_temp = r;
 				nextDown(v_temp,l_temp,r_temp);
-				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+				if(v_temp,l_temp,r_temp)
 				{
-					count++;
-					nextDown(v_temp,l_temp,r_temp);
+					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+					{
+						count++;
+						nextDown(v_temp,l_temp,r_temp);
+						if(check(v_temp,l_temp,r_temp))
+							break;
+					}
 				}
 				if (count >= sequenceLength-1)
 				{
+					nextUp(v_temp,l_temp,r_temp);
+					nextDown(v_up,l_up,r_up);
 					int h1,p1,h2,p2;
 					convertBack(v_up,l_up,r_up,h1,p1);
 					convertBack(v_temp,l_temp,r_temp,h2,p2);
@@ -885,10 +963,15 @@ vector<int> row_detect(int hexagon1, int position1, int hexagon2, int position2,
 				r_temp = r;
 
 				nextUpRight(v_temp,l_temp,r_temp);
-				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+				if(v_temp,l_temp,r_temp)
 				{
-					count++;
-					nextUpRight(v_temp,l_temp,r_temp);
+					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+					{
+						count++;
+						nextUpRight(v_temp,l_temp,r_temp);
+						if(check(v_temp,l_temp,r_temp))
+							break;
+					}
 				}
 				v_up = v_temp;
 				l_up = l_temp;
@@ -897,13 +980,20 @@ vector<int> row_detect(int hexagon1, int position1, int hexagon2, int position2,
 				l_temp = i;
 				r_temp = r;
 				nextDownRight(v_temp,l_temp,r_temp);
-				while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+				if(v_temp,l_temp,r_temp)
 				{
-					count++;
-					nextDownRight(v_temp,l_temp,r_temp);
+					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*(2))
+					{
+						count++;
+						nextDownRight(v_temp,l_temp,r_temp);
+						if(check(v_temp,l_temp,r_temp))
+							break;
+					}
 				}
 				if (count >= sequenceLength-1)
 				{
+					nextUpRight(v_temp,l_temp,r_temp);
+					nextDownRight(v_up,l_up,r_up);
 					int h1,p1,h2,p2;
 					convertBack(v_up,l_up,r_up,h1,p1);
 					convertBack(v_temp,l_temp,r_temp,h2,p2);

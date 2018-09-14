@@ -106,13 +106,18 @@ int Board::getNumOppDiscs () {
 }
 
 //checked
-void Board::convertTo (int hexagonNum, int position, int& v, int& l, int& r) {
-	
+void Board::convertTo (int hexagonNum, int position, int& v, int& l, int& r) 
+{
 	int segment = 0;
 
-	if(hexagonNum == 0) { v = 0; l = 0; r = 0; }
-	else {
+	if(hexagonNum == 0) 
+	{ 
+		v = 0; l = 0; r = 0; 
+	}
+	else 
+	{
 		segment = position / hexagonNum;
+		
 		if(segment == 0) { v = position % hexagonNum; l = hexagonNum - (position % hexagonNum); r = -1 * hexagonNum; }
 		else if(segment == 1) { v = hexagonNum; l = -1 * (position % hexagonNum); r = -1 * (hexagonNum - (position % hexagonNum)); }
 		else if(segment == 2) { v = hexagonNum - (position % hexagonNum); l = -1 * hexagonNum; r = position % hexagonNum; }
@@ -124,17 +129,17 @@ void Board::convertTo (int hexagonNum, int position, int& v, int& l, int& r) {
 
 //checked
 void Board::convertBack (int v, int l, int r, int& hexagonNum, int& position) {
-	hexagonNum = max(max(abs(v), abs(l)), ans(r));
+	hexagonNum = max(max(abs(v), abs(l)), abs(r));
 	if(v == 0 && l == 0 && r == 0)
 		position = 0;
 	else {
-		if(max == abs(v)) {
+		if(hexagonNum == abs(v)) {
 			if(v > 0)
 				position = 2*hexagonNum + r; 
 			else
 				position = 4*hexagonNum + l;
 		}
-		else if(max == abs(r)) {
+		else if(hexagonNum == abs(r)) {
 			if(r > 0)
 				position = 3*hexagonNum - v;
 			else
@@ -144,7 +149,7 @@ void Board::convertBack (int v, int l, int r, int& hexagonNum, int& position) {
 			if(l > 0)
 				position = 5*hexagonNum - r;
 			else
-				position = 3*hexgaonNum - v; 
+				position = 3*hexagonNum - v; 
 		}
 	}
 }
@@ -155,23 +160,25 @@ void Board::addRing (int colour, int hexagonNum, int position)
 	
 	int v, l, r = 0;
 	convertTo(hexagonNum, position, v, l, r);
-
 	if(board[v + boardSize][l + boardSize][r + boardSize] == 0) 
 	{
 		board[v + boardSize][l + boardSize][r + boardSize] = colour;
-
+		
 		if(colour == 1)
+		{
 			numRings++;
 			ringV.push_back(v);
-			ringV.push_back(l);
-			ringV.push_back(r);
+			ringL.push_back(l);
+			ringR.push_back(r);
 		}
-		else {
+		else
+		{
 			numOppRings++;
 			ringV_opp.push_back(v);
-			ringV_opp.push_back(l);
-			ringV_opp.push_back(r);
+			ringL_opp.push_back(l);
+			ringR_opp.push_back(r);
 		}
+		
 	}
 	else
 	{
@@ -198,8 +205,8 @@ void Board::undoAddRing(int hexagonNum, int position) {
 }
 
 //checked
-void Board::moveRing (int hexagon1, int position1, int hexagon2, int position2) {
-
+void Board::moveRing (int hexagon1, int position1, int hexagon2, int position2) 
+{
 	int v1, l1, r1, v2, l2, r2 = 0;
 	convertTo(hexagon1, position1, v1, l1, r1);
 	convertTo(hexagon2, position2, v2, l2, r2);
@@ -208,13 +215,35 @@ void Board::moveRing (int hexagon1, int position1, int hexagon2, int position2) 
 	{
 		board[v2 + boardSize][l2 + boardSize][r2 + boardSize] = board[v1 + boardSize][l1 + boardSize][r1 + boardSize];
 		
-		if (board[v1 + boardSize][l1 + boardSize][r1 + boardSize] == 1) {
+		if (board[v1 + boardSize][l1 + boardSize][r1 + boardSize] == 1) 
+		{
 			board[v1 + boardSize][l1 + boardSize][r1 + boardSize] = 2;
 			numDiscs++;
+			for(int i=0;i<ringV.size();i++)
+			{
+				if(ringV.at(i) == v1 && ringL.at(i) == l1)
+				{
+					ringV.at(i) = v2;
+					ringL.at(i) = l2;
+					ringR.at(i) = r2;
+					break;
+				}
+			}
 		}
-		else {
+		else 
+		{
 			board[v1 + boardSize][l1 + boardSize][r1 + boardSize] = -2;
 			numOppDiscs++;
+			for(int i=0;i<ringV_opp.size();i++)
+			{
+				if(ringV_opp.at(i) == v1 && ringL_opp.at(i) == l1)
+				{
+					ringV_opp.at(i) = v2;
+					ringL_opp.at(i) = l2;
+					ringR_opp.at(i) = r2;
+					break;
+				}
+			}
 		}
 		//flip all the markers
 		if (v1 == v2)
@@ -584,17 +613,38 @@ void Board::removeRing (int hexagonNum, int position) {
 	
 	int v, l, r = 0;
 	convertTo(hexagonNum, position, v, l, r);
-
 	if(board[v + boardSize][l + boardSize][r + boardSize] == 1 || board[v + boardSize][l + boardSize][r + boardSize] == -1) {
 		if(board[v + boardSize][l + boardSize][r + boardSize] == 1) {
 			numRings--;
 			ringsScored++;
+			for(int i=0;i<ringV.size();i++)
+			{
+				if(ringV.at(i) == v && ringL.at(i) == l)
+				{
+					ringV.erase(ringV.begin() + i,ringV.begin() + i+1);
+					ringL.erase(ringL.begin() + i,ringL.begin() + i+1);
+					ringR.erase(ringR.begin() + i,ringR.begin() + i+1);
+					break;
+				}
+			}
 		}
-		else {
+		else 
+		{
 			numOppRings--;
 			oppRingsScored++;
+			for(int i=0;i<ringV_opp.size();i++)
+			{
+				if(ringV_opp.at(i) == v && ringL_opp.at(i) == l)
+				{
+					ringV_opp.erase(ringV_opp.begin() + i,ringV_opp.begin() + i+1);
+					ringL_opp.erase(ringL_opp.begin() + i,ringL_opp.begin() + i+1);
+					ringR_opp.erase(ringR_opp.begin() + i,ringR_opp.begin() + i+1);
+					break;
+				}
+			}
 		}
-		board[v + boardSize][l + boardSize][r + boardSize] == 0;
+		board[v + boardSize][l + boardSize][r + boardSize] = 0;
+	
 	}
 	else
 	{
@@ -1521,6 +1571,123 @@ bool Board::row_detected(int& v1, int& l1, int& r1, int& v2, int& l2, int& r2, i
 		}
 	}
 	return false;
+}
+
+void Board::row_detected_modified(vector< vector<int> > &start, vector< vector<int> > &end, int perspective)
+{
+	for(int v = -boardSize;v<boardSize;v++)
+	{
+		for(int l = -boardSize;l<boardSize;l++)
+		{
+			int r = -v-l;
+			int v_temp,l_temp,r_temp,count=0;
+			int v_up,l_up,r_up;
+			if(check(v,l,r))
+			{
+				//check for vertical row;
+				count = 0;
+				v_temp = v;
+				l_temp = l;
+				r_temp = r;
+				if (check(v_temp,l_temp,r_temp))
+				{
+					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*2)
+					{
+						count++;
+						nextUp(v_temp,l_temp,r_temp);
+						if(!check(v_temp,l_temp,r_temp))
+							break;
+						if (count==sequenceLength)
+							break;
+					}
+				}
+				if (count >= sequenceLength)
+				{
+					nextDown(v_temp,l_temp,r_temp);
+					vector<int> v1;
+					v1.push_back(v);
+					v1.push_back(l);
+					v1.push_back(r);
+					start.push_back(v1);
+					vector<int> v2;
+					v2.push_back(v_temp);
+					v2.push_back(l_temp);
+					v2.push_back(r_temp);
+					end.push_back(v2);
+					
+				}
+
+				//check for left row;
+				count = 0;
+				v_temp = v;
+				l_temp = l;
+				r_temp = r;
+				if (check(v_temp,l_temp,r_temp))
+				{
+					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*2)
+					{
+						count++;
+						nextUpLeft(v_temp,l_temp,r_temp);
+						if(!check(v_temp,l_temp,r_temp))
+							break;
+						if (count==sequenceLength)
+							break;
+					}
+				}
+				
+				if (count >= sequenceLength)
+				{
+					nextDownLeft(v_temp,l_temp,r_temp);
+					vector<int> v1;
+					v1.push_back(v);
+					v1.push_back(l);
+					v1.push_back(r);
+					start.push_back(v1);
+					vector<int> v2;
+					v2.push_back(v_temp);
+					v2.push_back(l_temp);
+					v2.push_back(r_temp);
+					end.push_back(v2);
+					
+				}
+
+				//check for right row;
+				count = 0;
+				v_temp = v;
+				l_temp = l;
+				r_temp = r;
+				if (check(v_temp,l_temp,r_temp))
+				{
+					while(board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == perspective*2)
+					{
+						count++;
+						nextUpRight(v_temp,l_temp,r_temp);
+						if(!check(v_temp,l_temp,r_temp))
+							break;
+						if (count==sequenceLength)
+							break;
+					}
+				}
+				if (count >= sequenceLength)
+				{
+					nextDownRight(v_temp,l_temp,r_temp);
+					vector<int> v1;
+					v1.push_back(v);
+					v1.push_back(l);
+					v1.push_back(r);
+					start.push_back(v1);
+					vector<int> v2;
+					v2.push_back(v_temp);
+					v2.push_back(l_temp);
+					v2.push_back(r_temp);
+					end.push_back(v2);
+					
+				}
+			}
+
+		}
+	}
+	// return false;
 }
 
 //all checked from here
