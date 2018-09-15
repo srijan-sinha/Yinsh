@@ -6,7 +6,8 @@
 
 //////////////////////////////
 
-// moveRingMoves ki jagah addRingMoves call kiya hai har jagah.
+// Do chhote chhote functions hain string ke. Woh implement karde. String ke hain. 
+// Comment mein likha hai kya karna hai. And unko board.h mein abhi daala nahi hai. Sirf cpp mein hain neeche.
 
 //////////////////////////////
 
@@ -689,8 +690,6 @@ void Board::undoRemoveRing(int colour, int hexagonNum, int position)
 		}
 	}
 }
-
-
 vector<string> Board::generateMoveList(int perspective) 
 {
 	
@@ -709,11 +708,8 @@ vector<string> Board::generateMoveList(int perspective)
 		else
 		{
 			string empty = "";
-			moves = uptoMoveRingMoves(empty, perspective);
-			for(int i = 0; i < moves.size(); i++) {
-				replace(i, afterMoveRingMoves(moves.at(i), perspective));
-			}
-
+			moves.push_back(empty);
+			moves = fullMoves(moves, perspective);
 		}
 		// else if (!check_row)
 		// {
@@ -806,19 +802,133 @@ vector<string> Board::generateMoveList(int perspective)
 	
 }
 
-vector<string> Board::uptoMoveRingMoves (string s, int perspective) 
-{
-	vector< vector<int> > start;
-	vector< vector<int> > end;
-	vector <string> allMoves;
-	int h1, p1, h2, p2;
-	row_detected_modified(start, end, perspective);
-	if(start.size() != 0) {
-		for(int i = 0; i < start.size(); i++) {
-			convertBack(start.at(i).at(0), start.at(i).at(1), start.at(i).at(2), h1, p1);
-			convertBack(end.at(i).at(0), end.at(i).at(1), end.at(i).at(2), h2, p2);
-		} 
+vector<string> Board::fullMoves(vector <string> moves, int perspective) {
+
+	bool flag = true;
+	vector<string> allMoves;
+	for(int i = 0; i < moves.size(); i++) {
+		executeCommand(moves.at(i));
+		append(allMoves, fullMove(moves.at(i), perspective));
+		undoCommand(moves.at(i));
 	}
+}
+
+vector<string> Board::fullMove(string s, int perspective) { 
+	vector < vector<int> > start;
+	vector < vector<int> > end;
+	row_detected_modified(start, end, perspective);
+	if(contains(s, "M") && (lastLiteral(s) == 2 || lastLiteral(s) == 3)) { // 
+		vector<string> additionalMoves;
+		if((perspective == 1 && ringsScored == ringsToWin) || (perspective == -1 && oppRingsScored == ringsToWin)) {
+			additionalMoves.push_back(s);
+			return additionalMoves;
+		}
+		if(start.size() != 0) {
+			int h1, p1, h2, p2 = 0;
+			vector<string> deleteRowMoves;
+			for(int i = 0; i < start.size(); i++) {
+				convertBack(start.at(i).at(0), start.at(i).at(1), start.at(i).at(2), h1, p1);
+				convertBack(end.at(i).at(0), end.at(i).at(1), end.at(i).at(2), h2, p2);
+				deleteRowMoves.push_back("RS " + h1 + " "+ p1 + " RE "+ h2 + " " + p2);
+			}
+			additionalMoves = fullMoves(deleteRowMoves, perspective);
+			for(int i = 0; i < additionalMoves.size(); i++) {
+				additionalMoves.at(i) = s + " " + additionalMoves.at(i);
+			}
+		}
+		else {
+			additionalMoves.push_back(s);
+		}
+		return additionalMoves;
+	}
+	else if(contains(s, "M") && lastLiteral(s) == 1) {
+		vector<string> deleteRingMove;
+		vector<string> additionalMoves;
+		int h, p;
+		if(perspective == 1) {
+			for(int i = 0; i < ringV.size(); i++) {
+				convertBack(ringV.at(i), ringL.at(i), ringR.at(i), h, p);
+				deleteRingMove.push_back("X" + h + " " + p);
+			}
+		}
+		else {
+			for(int i = 0; i < ringV_opp.size(); i++) {
+				convertBack(ringV_opp.at(i), ringL_opp.at(i), ringR_opp.at(i), h, p);
+				deleteRingMove.push_back("X" + h + " " + p);
+			}
+		}
+		additionalMoves = fullMoves(deleteRingMove, perspective);
+		for(int i = 0; i < additionalMoves.size(); i++) {
+			additionalMoves.at(i) = s + " " + additionalMoves.at(i);
+		}
+		return additionalMoves;
+	}
+	else if(!(contains(s, "M")) && lastLiteral(s) == 2) { 
+		
+		vector<string> additionalMoves;
+		if((perspective == 1 && ringsScored == ringsToWin) || (perspective == -1 && oppRingsScored == ringsToWin)) {
+			additionalMoves.push_back(s);
+			return additionalMoves;
+		}
+
+		if(start.size() == 0) {
+			vector<string> ringMove = moveRingMoves(perspective);
+			additionalMoves = fullMoves(ringMove, perspective);
+			for(int i = 0; i < additionalMoves.size(); i++) {
+				additionalMoves.at(i) = s + " " + additionalMoves.at(i);
+			}
+		}
+		else {
+			int h1, p1, h2, p2 = 0;
+			vector<string> deleteRowMoves;
+			for(int i = 0; i < start.size(); i++) {
+				convertBack(start.at(i).at(0), start.at(i).at(1), start.at(i).at(2), h1, p1);
+				convertBack(end.at(i).at(0), end.at(i).at(1), end.at(i).at(2), h2, p2);
+				deleteRowMoves.push_back("RS " + h1 + " "+ p1 + " RE "+ h2 + " " + p2);
+			}
+			additionalMoves = fullMoves(deleteRowMoves, perspective);
+			for(int i = 0; i < additionalMoves.size(); i++) {
+				additionalMoves.at(i) = s + " " + additionalMoves.at(i);
+			}
+		}
+		return additionalMoves;
+	}
+	else if(!(contains(s, "M")) && lastLiteral(s) == 1){
+		vector<string> deleteRingMove;
+		vector<string> additionalMoves;
+		int h, p;
+		if(perspective == 1) {
+			for(int i = 0; i < ringV.size(); i++) {
+				convertBack(ringV.at(i), ringL.at(i), ringR.at(i), h, p);
+				deleteRingMove.push_back("X" + h + " " + p);
+			}
+		}
+		else {
+			for(int i = 0; i < ringV_opp.size(); i++) {
+				convertBack(ringV_opp.at(i), ringL_opp.at(i), ringR_opp.at(i), h, p);
+				deleteRingMove.push_back("X" + h + " " + p);
+			}
+		}
+		additionalMoves = fullMoves(deleteRingMove, perspective);
+		for(int i = 0; i < additionalMoves.size(); i++) {
+			additionalMoves.at(i) = s + " " + additionalMoves.at(i);
+		}
+		return additionalMoves;
+	}
+	else {
+		vector<string> additionalMoves;
+		additionalMoves.push_back(s);
+		return additionalMoves;
+		cout << "Error! Code should not go into else!" << endl;
+		cout << "Error printed in fullMove" << endl;
+	}
+}
+int Board::lastLiteral(string s) {
+	//returns 1 -> RE, 2 -> X, 3 -> M
+}
+
+bool Board::contains(string s, string sub) {
+	//returns true if sub is contained in s. sub always has size 1. 
 }
 
 vector<string> Board::addRingMoves (vector<string> moves) 
