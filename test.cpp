@@ -1245,6 +1245,26 @@ void row_detected_modified(vector< vector<int> > &start, vector< vector<int> > &
 }
 
 
+vector<string> addRingMoves (vector<string> moves) 
+{
+
+	int r = 0;
+	int hexagonNum = 0;
+	int position = 0;
+	for(int v = -1 * boardSize; v < boardSize + 1; v++) {
+		for(int l = -1 * boardSize; l < boardSize + 1; l++) {
+			r = -v-l;
+			if(check(v, l, r)) {
+				if(board[v + boardSize][l + boardSize][r + boardSize] == 0) {
+					convertBack(v, l, r, hexagonNum, position);
+					string s = "P " + to_string(hexagonNum) + " " + to_string(position);
+					moves.push_back(s);
+				}
+			}
+		}
+	}
+	return moves;
+}
 
 
 int main()
@@ -1368,6 +1388,14 @@ int main()
 	undoRemoveRing(1,4,16);
 	cout<<endl;
 	print_board();
+
+	vector<string> m;
+	m = addRingMoves(m);
+	for(int i=0;i<m.size();i++)
+	{
+		cout<<m.at(i)<<endl;
+	}
+	cout<<m.size()<<endl;
 	// undoRemoveRow(1,5,14,4,15);
 	// cout<<endl;
 	// print_board();

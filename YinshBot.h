@@ -41,7 +41,7 @@ class YinshBot {
 		 * @param k is the number of markers in a line required to remove a ring.
 		 * @param l is the number of rings to be removed to win.
 		 */
-		YinshBot(int n, int m, int k, int l, int startTurn);
+		YinshBot(int n, int m, int k, int l);
 
 
 		/**
@@ -61,7 +61,7 @@ class YinshBot {
 		string findNextMove();
 
 
-		string miniMax(int depth, int perspective);
+		string miniMax(int depth, int perspective, string& move);
 
 
 		vector<string> moveList();
@@ -79,5 +79,5 @@ class YinshBot {
 		 * @param board contains the configuration of the Board.
 		 * @return a double which has the likability of the current board configuration.
 		 */
-		double evalFunction(Board board);
+		double evalFunction();
 }

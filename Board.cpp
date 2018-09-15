@@ -469,8 +469,10 @@ void Board::undoMoveRing(int hexagon1, int position1, int hexagon2, int position
 		cout << "Above error printed in Board.cpp: moveRing." << endl;
 	}
 }
+
 //checked
-void Board::removeRow (int hexagon1, int position1, int hexagon2, int position2) {
+void Board::removeRow (int hexagon1, int position1, int hexagon2, int position2) 
+{
 	int v1, l1, r1, v2, l2, r2 = 0;
 	convertTo(hexagon1, position1, v1, l1, r1);
 	convertTo(hexagon2, position2, v2, l2, r2);
@@ -567,7 +569,8 @@ void Board::removeRow (int hexagon1, int position1, int hexagon2, int position2)
 }
 
 //checked
-void undoRemoveRow(int colour, int hexagon1, int position1, int hexagon2, int position2) {
+void Board::undoRemoveRow(int colour, int hexagon1, int position1, int hexagon2, int position2) 
+{
 	int v1, l1, r1, v2, l2, r2 = 0;
 	convertTo(hexagon1, position1, v1, l1, r1);
 	convertTo(hexagon2, position2, v2, l2, r2);
@@ -611,8 +614,10 @@ void undoRemoveRow(int colour, int hexagon1, int position1, int hexagon2, int po
 		cout << "Above error printed in Board.cpp: removeRow." << endl;	
 	}
 }
+
 //checked
-void Board::removeRing (int hexagonNum, int position) {
+void Board::removeRing (int hexagonNum, int position) 
+{
 	
 	int v, l, r = 0;
 	convertTo(hexagonNum, position, v, l, r);
@@ -657,7 +662,8 @@ void Board::removeRing (int hexagonNum, int position) {
 }
 
 //checked
-void Board::undoRemoveRing(int colour, int hexagonNum, int position) {
+void Board::undoRemoveRing(int colour, int hexagonNum, int position) 
+{
 	int v, l, r = 0;
 	convertTo(hexagonNum, position, v, l, r);
 
@@ -800,7 +806,8 @@ vector<string> Board::generateMoveList(int perspective)
 	
 }
 
-vector<string> Board::uptoMoveRingMoves (string s, int perspective) {
+vector<string> Board::uptoMoveRingMoves (string s, int perspective) 
+{
 	vector< vector<int> > start;
 	vector< vector<int> > end;
 	vector <string> allMoves;
@@ -812,6 +819,7 @@ vector<string> Board::uptoMoveRingMoves (string s, int perspective) {
 			convertBack(end.at(i).at(0), end.at(i).at(1), end.at(i).at(2), h2, p2);
 		} 
 	}
+}
 
 vector<string> Board::addRingMoves (vector<string> moves) 
 {
@@ -834,294 +842,188 @@ vector<string> Board::addRingMoves (vector<string> moves)
 	return moves;
 }
 
-vector<string> Board::moveRingMoves (vector<string> moves, int v, int l, int r,int perspective, vector<int> ringV_local, vector<int> ringL_local, vector<int> ringR_local) 
+vector<string> Board::moveRingMoves (vector<string> moves, int perspective, vector<int> ringV_local, vector<int> ringL_local, vector<int> ringR_local) 
 {
-	int l_temp,r_temp,v_temp;
-	//in v
-	int i = 1;
-	bool marker = false;
-	while(true)
+	for(int i=0;i<ringV_local.size();i++)
 	{
-		//move up
-		v_temp = v;
-		l_temp = l + i;
-		r_temp = r - i;
-		i++;
-		if (!check(v_temp,l_temp,r_temp))
-			break;
-		if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
-			break;
-		if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
+		int v = ringV_local.at(i);
+		int l = ringL_local.at(i);
+		int r = ringR_local.at(i);
+		int l_temp,r_temp,v_temp;
+		//in v
+		int i = 1;
+		bool marker = false;
+		while(true)
 		{
-			marker = true;
-			continue;
-		}
-		int hexagonNum1,hexagonNum2,position1,position2;
-		convertBack(v, l, r, hexagonNum1, position1);
-		string s = "S " + hexagonNum1 + " " + position1;
-		convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
-		s += "M" + hexagonNum2 + " " + position2;
-		vector<int> v = row_detect(hexagonNum1,position1,hexagonNum2,position2,perspective);
-		if (v.size() != 0)
-		{
-			//command to remove the row
-			s += "RS" + v.at(0) + " " + v.at(1);
-			s += "RE" + v.at(2) + " " + v.at(3);
-			//command to remove the ring
-			for(int i=0;i<ringV_local.size();i++)
+			//move up
+			v_temp = v;
+			l_temp = l + i;
+			r_temp = r - i;
+			i++;
+			if (!check(v_temp,l_temp,r_temp))
+				break;
+			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
+				break;
+			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
 			{
-				int h,p;
-				convertBack(ringV_local.at(i),ringL_local.at(i),ringR_local.at(i),h,p);
-				s += "X" + h + " " + p;
-				moves.push_back(s);		
+				marker = true;
+				continue;
 			}
-
-		}
-		else
-		{
+			int hexagonNum1,hexagonNum2,position1,position2;
+			convertBack(v, l, r, hexagonNum1, position1);
+			string s = "S " + hexagonNum1 + " " + position1;
+			convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
+			s += "M" + hexagonNum2 + " " + position2;
 			moves.push_back(s);
+			
+			if (marker)
+				break;
 		}
-		if (marker)
-			break;
-	}
 
-	i = 1;
-	marker = false;
-	while(true)
-	{
-		//move down
-		v_temp = v;
-		l_temp = l - i;
-		r_temp = r + i;
-		i++;
-		if (!check(v_temp,l_temp,r_temp))
-			break;
-		if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
-			break;
-		if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
+		i = 1;
+		marker = false;
+		while(true)
 		{
-			marker = true;
-			continue;
-		}
-		int hexagonNum1,hexagonNum2,position1,position2;
-		convertBack(v, l, r, hexagonNum1, position1);
-		string s = "S " + hexagonNum1 + " " + position1;
-		convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
-		s += "M" + hexagonNum2 + " " + position2;
-		vector<int> v = row_detect(hexagonNum1,position1,hexagonNum2,position2,perspective);
-		if (v.size() != 0)
-		{
-			//command to remove the row
-			s += "RS" + v.at(0) + " " + v.at(1);
-			s += "RE" + v.at(2) + " " + v.at(3);
-			//command to remove the ring
-			for(int i=0;i<ringV_local.size();i++)
+			//move down
+			v_temp = v;
+			l_temp = l - i;
+			r_temp = r + i;
+			i++;
+			if (!check(v_temp,l_temp,r_temp))
+				break;
+			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
+				break;
+			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
 			{
-				int h,p;
-				convertBack(ringV_local.at(i),ringL_local.at(i),ringR_local.at(i),h,p);
-				s += "X" + h + " " + p;
-				moves.push_back(s);		
+				marker = true;
+				continue;
 			}
-
-		}
-		else
-		{
+			int hexagonNum1,hexagonNum2,position1,position2;
+			convertBack(v, l, r, hexagonNum1, position1);
+			string s = "S " + hexagonNum1 + " " + position1;
+			convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
+			s += "M" + hexagonNum2 + " " + position2;
 			moves.push_back(s);
+			if (marker)
+				break;
 		}
-		if (marker)
-			break;
-	}
 
-	//in l
-	i = 1;
-	marker = false;
-	while(true)
-	{
-		//move up
-		v_temp = v + i;
-		l_temp = l;
-		r_temp = r - i;
-		i++;
-		if (!check(v_temp,l_temp,r_temp))
-			break;
-		if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
-			break;
-		if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
+		//in l
+		i = 1;
+		marker = false;
+		while(true)
 		{
-			marker = true;
-			continue;
-		}
-		int hexagonNum1,hexagonNum2,position1,position2;
-		convertBack(v, l, r, hexagonNum1, position1);
-		string s = "S " + hexagonNum1 + " " + position1;
-		convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
-		s += "M" + hexagonNum2 + " " + position2;
-		vector<int> v = row_detect(hexagonNum1,position1,hexagonNum2,position2,perspective);
-		if (v.size() != 0)
-		{
-			//command to remove the row
-			s += "RS" + v.at(0) + " " + v.at(1);
-			s += "RE" + v.at(2) + " " + v.at(3);
-			//command to remove the ring
-			for(int i=0;i<ringV_local.size();i++)
+			//move up
+			v_temp = v + i;
+			l_temp = l;
+			r_temp = r - i;
+			i++;
+			if (!check(v_temp,l_temp,r_temp))
+				break;
+			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
+				break;
+			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
 			{
-				int h,p;
-				convertBack(ringV_local.at(i),ringL_local.at(i),ringR_local.at(i),h,p);
-				s += "X" + h + " " + p;
-				moves.push_back(s);		
+				marker = true;
+				continue;
 			}
-
-		}
-		else
-		{
+			int hexagonNum1,hexagonNum2,position1,position2;
+			convertBack(v, l, r, hexagonNum1, position1);
+			string s = "S " + hexagonNum1 + " " + position1;
+			convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
+			s += "M" + hexagonNum2 + " " + position2;
 			moves.push_back(s);
+			if (marker)
+				break;
 		}
-		if (marker)
-			break;
-	}
 
-	i = 1;
-	marker = false;
-	while(true)
-	{
-		//move up
-		v_temp = v - i;
-		l_temp = l;
-		r_temp = r + i;
-		i++;
-		if (!check(v_temp,l_temp,r_temp))
-			break;
-		if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
-			break;
-		if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
+		i = 1;
+		marker = false;
+		while(true)
 		{
-			marker = true;
-			continue;
-		}
-		int hexagonNum1,hexagonNum2,position1,position2;
-		convertBack(v, l, r, hexagonNum1, position1);
-		string s = "S " + hexagonNum1 + " " + position1;
-		convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
-		s += "M" + hexagonNum2 + " " + position2;
-		vector<int> v = row_detect(hexagonNum1,position1,hexagonNum2,position2,perspective);
-		if (v.size() != 0)
-		{
-			//command to remove the row
-			s += "RS" + v.at(0) + " " + v.at(1);
-			s += "RE" + v.at(2) + " " + v.at(3);
-			//command to remove the ring
-			for(int i=0;i<ringV_local.size();i++)
+			//move up
+			v_temp = v - i;
+			l_temp = l;
+			r_temp = r + i;
+			i++;
+			if (!check(v_temp,l_temp,r_temp))
+				break;
+			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
+				break;
+			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
 			{
-				int h,p;
-				convertBack(ringV_local.at(i),ringL_local.at(i),ringR_local.at(i),h,p);
-				s += "X" + h + " " + p;
-				moves.push_back(s);		
+				marker = true;
+				continue;
 			}
-
-		}
-		else
-		{
+			int hexagonNum1,hexagonNum2,position1,position2;
+			convertBack(v, l, r, hexagonNum1, position1);
+			string s = "S " + hexagonNum1 + " " + position1;
+			convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
+			s += "M" + hexagonNum2 + " " + position2;
 			moves.push_back(s);
+			if (marker)
+				break;
 		}
-		if (marker)
-			break;
-	}
 
-	//in r
-	i = 1;
-	marker = false;
-	while(true)
-	{
-		//move up
-		v_temp = v - i;
-		l_temp = l + i;
-		r_temp = r;
-		i++;
-		if (!check(v_temp,l_temp,r_temp))
-			break;
-		if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
-			break;
-		if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
+		//in r
+		i = 1;
+		marker = false;
+		while(true)
 		{
-			marker = true;
-			continue;
-		}
-		int hexagonNum1,hexagonNum2,position1,position2;
-		convertBack(v, l, r, hexagonNum1, position1);
-		string s = "S " + hexagonNum1 + " " + position1;
-		convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
-		s += "M" + hexagonNum2 + " " + position2;
-		vector<int> v = row_detect(hexagonNum1,position1,hexagonNum2,position2,perspective);
-		if (v.size() != 0)
-		{
-			//command to remove the row
-			s += "RS" + v.at(0) + " " + v.at(1);
-			s += "RE" + v.at(2) + " " + v.at(3);
-			//command to remove the ring
-			for(int i=0;i<ringV_local.size();i++)
+			//move up
+			v_temp = v - i;
+			l_temp = l + i;
+			r_temp = r;
+			i++;
+			if (!check(v_temp,l_temp,r_temp))
+				break;
+			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
+				break;
+			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
 			{
-				int h,p;
-				convertBack(ringV_local.at(i),ringL_local.at(i),ringR_local.at(i),h,p);
-				s += "X" + h + " " + p;
-				moves.push_back(s);		
+				marker = true;
+				continue;
 			}
-
-		}
-		else
-		{
+			int hexagonNum1,hexagonNum2,position1,position2;
+			convertBack(v, l, r, hexagonNum1, position1);
+			string s = "S " + hexagonNum1 + " " + position1;
+			convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
+			s += "M" + hexagonNum2 + " " + position2;
 			moves.push_back(s);
+			if (marker)
+				break;
 		}
-		if (marker)
-			break;
-	}
 
-	i = 1;
-	marker = false;
-	while(true)
-	{
-		//move up
-		v_temp = v + i;
-		l_temp = l - i;
-		r_temp = r;
-		i++;
-		if (!check(v_temp,l_temp,r_temp))
-			break;
-		if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
-			break;
-		if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
+		i = 1;
+		marker = false;
+		while(true)
 		{
-			marker = true;
-			continue;
-		}
-		int hexagonNum1,hexagonNum2,position1,position2;
-		convertBack(v, l, r, hexagonNum1, position1);
-		string s = "S " + hexagonNum1 + " " + position1;
-		convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
-		s += "M" + hexagonNum2 + " " + position2;
-		vector<int> v = row_detect(hexagonNum1,position1,hexagonNum2,position2,perspective);
-		if (v.size() != 0)
-		{
-			//command to remove the row
-			s += "RS" + v.at(0) + " " + v.at(1);
-			s += "RE" + v.at(2) + " " + v.at(3);
-			//command to remove the ring
-			for(int i=0;i<ringV_local.size();i++)
+			//move up
+			v_temp = v + i;
+			l_temp = l - i;
+			r_temp = r;
+			i++;
+			if (!check(v_temp,l_temp,r_temp))
+				break;
+			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
+				break;
+			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
 			{
-				int h,p;
-				convertBack(ringV_local.at(i),ringL_local.at(i),ringR_local.at(i),h,p);
-				s += "X" + h + " " + p;
-				moves.push_back(s);		
+				marker = true;
+				continue;
 			}
-
-		}
-		else
-		{
+			int hexagonNum1,hexagonNum2,position1,position2;
+			convertBack(v, l, r, hexagonNum1, position1);
+			string s = "S " + hexagonNum1 + " " + position1;
+			convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
+			s += "M" + hexagonNum2 + " " + position2;
 			moves.push_back(s);
+			if (marker)
+				break;
 		}
-		if (marker)
-			break;
+	
 	}
-
+	
 	return moves;
 }
 
@@ -1384,7 +1286,8 @@ void Board::row_detected_modified(vector< vector<int> > &start, vector< vector<i
 
 
 //all checked from here
-bool Board::check (int v, int l, int r) {
+bool Board::check (int v, int l, int r) 
+{
 	if(abs(v) > boardSize || abs(l) > boardSize || abs(r) > boardSize)
 		return false;
 	if ((abs(v) == boardSize && abs(l) == boardSize) || (abs(l) == boardSize && abs(r) == boardSize) || (abs(r) == boardSize && abs(v) == boardSize))

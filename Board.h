@@ -78,7 +78,8 @@ class Board {
 		 */
 		void initBoard(int size);
 
-
+		void convertTo (int hexagonNum, int position, int& v, int& l, int& r); 
+		void convertBack (int v, int l, int r, int& hexagonNum, int& position);
 		/**
 		 * @return the board size.
 		 */
@@ -202,7 +203,7 @@ class Board {
 		 * @param hexagonNum is the hexagon number of the ring location.
 		 * @param position is the position of the ring on the hexagon.
 		 */
-		void removeRing(int colour, int hexagonNum, int position);
+		void removeRing(int hexagonNum, int position);
 
 
 		/**
@@ -225,7 +226,7 @@ class Board {
 		/**
 		 * Appends all possible moves for a ring addition to the current board configuration.
 		 */
-		void addRingMoves(vector<string> moves);
+		vector<string> addRingMoves(vector<string> moves);
 
 
 		/**
@@ -235,8 +236,7 @@ class Board {
 		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
 		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
 		 */
-		void moveRingMoves(vector<string> moves, int v, int l, int r);
-
+		vector<string> moveRingMoves (vector<string> moves, int perspective, vector<int> ringV_local, vector<int> ringL_local, vector<int> ringR_local);
 
 		/**
 		 * Checks if the given coordinates are valid.
@@ -244,6 +244,11 @@ class Board {
 		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
 		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
 		 */
+		
+		bool row_detected(int& v1, int& l1, int& r1, int& v2, int& l2, int& r2, int perspective);
+		void row_detected_modified(vector< vector<int> > &start, vector< vector<int> > &end, int perspective);
+
+
 		bool check(int v, int l, int r);
 
 
