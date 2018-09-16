@@ -822,6 +822,7 @@ vector<string> Board::fullMove(string s, int perspective)
 	}
 	else if(!(contains(s, 'M')) && lastLiteral(s) == 1)
 	{
+cerr<<"case 4"<<endl;
 		vector<string> deleteRingMove;
 		vector<string> additionalMoves;
 		int h, p;
@@ -1682,6 +1683,11 @@ void Board::executeCommand (string command,int perspective)
 
 }
 
+bool Board::checkLine(int v1, int l1, int r1, int v2, int l2, int r2){ 
+	if((v1 == v2) || (l1 == l2) || (r1 == r2))
+		return true;
+	return false;
+}
 
 void Board::undoCommand (string command,int perspective) 
 {

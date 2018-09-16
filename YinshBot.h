@@ -67,7 +67,8 @@ class YinshBot {
 
 		void changeTurn();
 		vector<string> moveList(int perspective);
-
+		int getRingVLR(int perspective, int vlr, int i);
+		int ringAttacks();
 
 		/**
 		 * Checks if the game has ended after each ply.

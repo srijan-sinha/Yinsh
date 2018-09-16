@@ -115,17 +115,68 @@ void YinshBot::undoCommand(string s, int perspective) {
 	board->undoCommand(s, perspective);
 }
 
+int YinshBot::getRingVLR(int perspective, int vlr, int i) {
+	if(perspective == 1) {
+		if(vlr == 1)
+			return board->ringV.at(i);
+		else if(vlr == 2)
+			return board->ringL.at(i);
+		else
+			return board->ringR.at(i);
+	}
+	else {
+		if(vlr == 1)
+			return board->ringV_opp.at(i);
+		else if(vlr == 2)
+			return board->ringL_opp.at(i);
+		else
+			return board->ringR_opp.at(i);
+	}
+}
+
+int YinshBot::ringAttacks() {
+	int count = 0;
+	for(int i = 0; i < board->getNumOppRings(); i++) {
+		for(int j = 0; j < board->getNumRings(); j++) {
+			if(board->checkLine(getRingVLR(-1, 1, i), getRingVLR(-1, 2, i), getRingVLR(-1, 3, i), getRingVLR(1, 1, j), getRingVLR(1, 2, j), getRingVLR(1, 3, j)))
+				count++;
+		}
+	}
+	return count;
+}
+
 double YinshBot::evalFunction () {
-	double weight1 = 10;
+	double weight1 = 7;
 	double weight2 = -5;
 	double weight3 = 20;
 	double weight4 = -15;
-	double weight5 = 50;
-	double weight6 = -70;
+	double weight5 = 500;
+	double weight6 = -200;
+	double weight7 = 2;
+	double weight8 = -1;
+	double weight9 = 10;
+	double weight10 = 15;
+	double weight11 = -12;
 
 	double eval = 0;
-	eval = eval + (weight1 * board->getNumDiscs()) + (weight2 * board->getNumOppDiscs());
-	eval = eval + (weight3 * board->getNumRings()) + (weight4 * board->getNumOppRings());
-	eval = eval + (weight5 * board->getRingsScored()) + (weight6 * board->getOppRingsScored());
+
+	if(board->getNumRings() <= maxRings) {
+		int h, p = 1;
+		for(int i = 0; i < board->getNumRings(); i++) {
+			board->convertBack(getRingVLR(1, 1, i), getRingVLR(1, 2, i), getRingVLR(1, 3, i), h, p);
+			eval = eval + (weight7 * (360/(h+1)));
+		}
+		for(int i = 0; i < board->getNumOppRings(); i++) {
+			board->convertBack(getRingVLR(2, 1, i), getRingVLR(2, 2, i), getRingVLR(2, 3, i), h, p);
+			eval = eval + (weight8 * (360/(h+1)));
+		}
+		eval = eval + (weight9 * ringAttacks());
+	}
+	else {
+		eval = eval + (weight1 * board->getNumDiscs()) + (weight2 * board->getNumOppDiscs());
+		eval = eval + (weight3 * board->getNumRings()) + (weight4 * board->getNumOppRings());
+		eval = eval + (weight5 * board->getRingsScored()) + (weight6 * board->getOppRingsScored());
+		// eval = eval + (weight10 * discsOurControl()) + (weight11 * discsOppControl());
+	}
 	return eval;
 }

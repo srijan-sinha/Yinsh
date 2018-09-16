@@ -208,6 +208,8 @@ class Board {
 		int lastLiteral(string s);
 		bool contains(string s, char sub);
 		vector<string> append(vector<string> A, vector<string> B);
+		bool checkLine(int v1, int l1, int r1, int v2, int l2, int r2);
+
 		/**
 		 * Appends all possible moves for a ring addition to the current board configuration.
 		 */
