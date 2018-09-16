@@ -27,19 +27,21 @@ YinshBot::YinshBot (int n, int m, int k, int l) {
 }
 
 
-string YinshBot::findNextMove () {
+string YinshBot::findNextMove (vector) {
 
 	string move = "";
-	miniMax(5, turn, move);
-
+	vector<string> bestMoves;
+	miniMax(3, turn, bestMoves);
+	return bestMoves.at(bestMoves.size() - 1);
 }
 
-int YinshBot::miniMax(int depth, int perspective, string& move) {
+int YinshBot::miniMax(int depth, int perspective, vector<string>& bestMoves) {
 	
 	vector<string> moves = moveList();
 	int score = 0;
 	int tempScore = 0;
 	string tempMove = "";
+	string move = "";
 
 	if(depth == 0) {
 		return evalFunction();
@@ -48,7 +50,7 @@ int YinshBot::miniMax(int depth, int perspective, string& move) {
 		for(int i = 0; i < moves.size(); i++) {
 			tempMove = moves.at(i);
 			executeCommand(tempMove);
-			tempScore = minimax(depth - 1, -1*perspective);
+			tempScore = miniMax(depth - 1, -1*perspective, bestMoves);
 			if(perspective == 1) {
 				if(tempScore > score) {
 					score = tempScore;
@@ -63,6 +65,7 @@ int YinshBot::miniMax(int depth, int perspective, string& move) {
 			}
 			undoCommand(tempMove);
 		}
+		bestMoves.push_back(move);
 	}
 }
 
