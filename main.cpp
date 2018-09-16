@@ -17,38 +17,64 @@ int main ()
 	Board *b  = new Board(5,5,5,5);
 	b->initBoard(5);
 	b->print_board();
-	cout<<"^^"<<endl;
-
-	b->addRing(1,0,0);
+	
+	b->addDisc(1,2,5);
 	cout<<endl;
 	b->print_board();
 
-	b->moveRing(0,0,3,0);
+	b->addDisc(1,2,4);
+	cout<<endl;
+	b->print_board();
+	
+	b->addDisc(1,3,5);
 	cout<<endl;
 	b->print_board();
 
-	b->moveRing(3,0,1,3);
+	b->addDisc(1,4,6);
+	cout<<endl;
+	b->print_board();
+
+	b->addDisc(1,4,8);
+	cout<<endl;
+	b->print_board();
+
+	b->addDisc(1,4,9);
+	cout<<endl;
+	b->print_board();
+
+	b->addDisc(1,4,10);
+	cout<<endl;
+	b->print_board();
+
+	b->addDisc(1,4,11);
+	cout<<endl;
+	b->print_board();
+
+	b->addDisc(1,5,9);
 	cout<<endl;
 	b->print_board();
 
 
-	vector<string> m;
-	m = b->addRingMoves(m);
-	for(int i=0;i<m.size();i++)
-	{
-		cout<<m.at(i)<<endl;
-	}
-	cout<<m.size()<<endl;
+	b->addDisc(-1,2,6);
+	cout<<endl;
+	b->print_board();
 
-	// b->print_ring_vectors();
+	b->addRing(1,4,12);
+	cout<<endl;
+	b->print_board();
 
-	vector<string> n;
-	n = b->moveRingMoves(n,1,b->ringV,b->ringL,b->ringR);
-	for(int i=0;i<n.size();i++)
-	{
-		cout<<n.at(i)<<endl;
-	}
-	cout<<n.size()<<endl;
+	b->addRing(1,4,14);
+	cout<<endl;
+	b->print_board();
+
+	b->addRing(1,4,17);
+	cout<<endl;
+	b->print_board();
+
+	// b->moveRing(4,12,1,3);
+	// cout<<endl;
+	// b->print_board();
+
 
 	vector<string> o;
 	o = b->fullMove("",1);

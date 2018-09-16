@@ -127,7 +127,7 @@ class Board {
 		 */
 		void addRing(int colour, int hexagonNum, int position);
 
-
+		void addDisc (int colour, int hexagonNum, int position); 
 		/**
 		 * Undoes addition of a ring at the mentioned location on the board.
 		 * @param hexagonNum is the distance of the point from the centre of the board.
