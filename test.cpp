@@ -2,13 +2,7 @@
 #include<string.h>
 #include<bits/stdc++.h>
 using namespace std;
-int boardSize = 5;
-int*** board;
-int numRings=0,numOppRings=0;
-int numDiscs,numOppDiscs;
-int ringsScored,oppRingsScored;
-vector<int> ringV,ringR,ringL,ringV_opp,ringR_opp,ringL_opp;
-int sequenceLength = 5;
+
 
 bool check (int v, int l, int r) {
 	if(abs(v) > 5 || abs(l) > 5 || abs(r) > 5)
@@ -1244,6 +1238,480 @@ void row_detected_modified(vector< vector<int> > &start, vector< vector<int> > &
 	// return false;
 }
 
+void executeCommand (string command,int perspective) 
+{
+	cout<<"command received: "<<command<<endl;
+	int i=0;
+	while(i<command.size())
+	{
+		if(command.at(i) == 'P')
+		{
+			int h,p;
+			i++;
+			i++;
+			int j = i,count = 0;
+			while(i<command.size())
+			{
+				if (command.at(i) == ' ')
+					break;
+				i++;
+				count++;
+			}
+			h = stoi(command.substr(j,count));
+			i++;
+			j = i;
+			count = 0;
+			while(i<command.size())
+			{
+				if (command.at(i) == ' ')
+					break;
+				i++;
+				count++;
+			}
+			cout<<"here again"<<endl;
+			p = stoi(command.substr(j,count));
+			i++;
+			//call the func to add a ring
+			addRing(perspective,h,p);
+		}
+		else if (command.at(i) == 'S')
+		{
+			int h1,p1,h2,p2;
+			i++;
+			i++;
+			int j = i,count = 0;
+			while(i<command.size())
+			{
+				if (command.at(i) == ' ')
+					break;
+				i++;
+				count++;
+			}
+			h1 = stoi(command.substr(j,count));
+			i++;
+			j = i;
+			count = 0;
+			while(i<command.size())
+			{
+				if (command.at(i) == ' ')
+					break;
+				i++;
+				count++;
+			}
+			p1 = stoi(command.substr(j,count));
+			i++;
+			if (command.at(i) == 'M')
+			{
+				i++;
+				i++;
+				j = i;
+				count = 0;
+				while(i<command.size())
+				{
+					if (command.at(i) == ' ')
+						break;
+					i++;
+					count++;
+				}
+				h2 = stoi(command.substr(j,count));
+				i++;
+				j = i;
+				count = 0;
+				while(i<command.size())
+				{
+					if (command.at(i) == ' ')
+						break;
+					i++;
+					count++;
+				}
+				p2 = stoi(command.substr(j,count));
+				i++;
+				
+				//call the func for move the ring 
+				moveRing(h1,p1,h2,p2);	
+			}
+			else
+			{
+				cout<<"ERROR!!! in parser"<<endl;
+			}
+
+		}
+		else if (command.substr(i,2) == "RS")
+		{
+			i=i+2;
+			int h1,p1,h2,p2,h3,p3;
+			i++;
+			int j = i,count = 0;
+			while(i<command.size())
+			{
+				if (command.at(i) == ' ')
+					break;
+				i++;
+				count++;
+			}
+			h1 = stoi(command.substr(j,count));
+			i++;
+			j = i;
+			count = 0;
+			while(i<command.size())
+			{
+				if (command.at(i) == ' ')
+					break;
+				i++;
+				count++;
+			}
+			p1 = stoi(command.substr(j,count));
+			i++;
+
+			if (command.substr(i,2) == "RE")
+			{
+				i=i+2;
+				i++;
+				j = i;
+				count = 0;
+				while(i<command.size())
+				{
+					if (command.at(i) == ' ')
+						break;
+					i++;
+					count++;
+				}
+				h2 = stoi(command.substr(j,count));
+				i++;
+				j = i;
+				count = 0;
+				while(i<command.size())
+				{
+					if (command.at(i) == ' ')
+						break;
+					i++;
+					count++;
+				}
+				p2 = stoi(command.substr(j,count));
+				i++;
+				if (command.at(i) == 'X')
+				{
+					i++;
+					i++;
+					j = i;
+					count = 0;
+					while(i<command.size())
+					{
+						if (command.at(i) == ' ')
+							break;
+						i++;
+						count++;
+					}
+					h3 = stoi(command.substr(j,count));
+					i++;
+					j = i;
+					count = 0;
+					while(i<command.size())
+					{
+						if (command.at(i) == ' ')
+							break;
+						i++;
+						count++;
+					}
+					p3 = stoi(command.substr(j,count));
+					i++;
+
+					//call the func to remove the row
+					removeRow(h1,p1,h2,p2);
+					removeRing(h3,p3);
+				}
+				else
+				{
+					cout<<"ERROR!!!!! in parser"<<endl;
+				}
+			}
+			else
+			{
+				cout<<"ERROR!!!! in parser"<<endl;
+			}
+		}
+	}
+}
+
+void undoCommand (string command,int perspective) 
+{
+	cout<<"command received: "<<command<<endl;
+	int i=0;
+	while(i<command.size())
+	{
+		if(command.at(i) == 'P')
+		{
+			int h,p;
+			i++;
+			i++;
+			int j = i,count = 0;
+			while(i<command.size())
+			{
+				if (command.at(i) == ' ')
+					break;
+				i++;
+				count++;
+			}
+			h = stoi(command.substr(j,count));
+			i++;
+			j = i;
+			count = 0;
+			while(i<command.size())
+			{
+				if (command.at(i) == ' ')
+					break;
+				i++;
+				count++;
+			}
+			cout<<"here again"<<endl;
+			p = stoi(command.substr(j,count));
+			i++;
+			//call the func to add a ring
+			undoAddRing(h,p);
+		}
+		else if (command.at(i) == 'S')
+		{
+			int h1,p1,h2,p2;
+			i++;
+			i++;
+			int j = i,count = 0;
+			while(i<command.size())
+			{
+				if (command.at(i) == ' ')
+					break;
+				i++;
+				count++;
+			}
+			h1 = stoi(command.substr(j,count));
+			i++;
+			j = i;
+			count = 0;
+			while(i<command.size())
+			{
+				if (command.at(i) == ' ')
+					break;
+				i++;
+				count++;
+			}
+			p1 = stoi(command.substr(j,count));
+			i++;
+			if (command.at(i) == 'M')
+			{
+				i++;
+				i++;
+				j = i;
+				count = 0;
+				while(i<command.size())
+				{
+					if (command.at(i) == ' ')
+						break;
+					i++;
+					count++;
+				}
+				h2 = stoi(command.substr(j,count));
+				i++;
+				j = i;
+				count = 0;
+				while(i<command.size())
+				{
+					if (command.at(i) == ' ')
+						break;
+					i++;
+					count++;
+				}
+				p2 = stoi(command.substr(j,count));
+				i++;
+				
+				//call the func for move the ring 	
+				undoMoveRing(h1,p1,h2,p2);
+			}
+			else
+			{
+				cout<<"ERROR!!! in parser"<<endl;
+			}
+
+		}
+		else if (command.substr(i,2) == "RS")
+		{
+			i=i+2;
+			int h1,p1,h2,p2,h3,p3;
+			i++;
+			int j = i,count = 0;
+			while(i<command.size())
+			{
+				if (command.at(i) == ' ')
+					break;
+				i++;
+				count++;
+			}
+			h1 = stoi(command.substr(j,count));
+			i++;
+			j = i;
+			count = 0;
+			while(i<command.size())
+			{
+				if (command.at(i) == ' ')
+					break;
+				i++;
+				count++;
+			}
+			p1 = stoi(command.substr(j,count));
+			i++;
+
+			if (command.substr(i,2) == "RE")
+			{
+				i=i+2;
+				i++;
+				j = i;
+				count = 0;
+				while(i<command.size())
+				{
+					if (command.at(i) == ' ')
+						break;
+					i++;
+					count++;
+				}
+				h2 = stoi(command.substr(j,count));
+				i++;
+				j = i;
+				count = 0;
+				while(i<command.size())
+				{
+					if (command.at(i) == ' ')
+						break;
+					i++;
+					count++;
+				}
+				p2 = stoi(command.substr(j,count));
+				i++;
+				if (command.at(i) == 'X')
+				{
+					i++;
+					i++;
+					j = i;
+					count = 0;
+					while(i<command.size())
+					{
+						if (command.at(i) == ' ')
+							break;
+						i++;
+						count++;
+					}
+					h3 = stoi(command.substr(j,count));
+					i++;
+					j = i;
+					count = 0;
+					while(i<command.size())
+					{
+						if (command.at(i) == ' ')
+							break;
+						i++;
+						count++;
+					}
+					p3 = stoi(command.substr(j,count));
+					i++;
+
+					//call the func to remove the row
+					undoRemoveRow(perspective,h1,p1,h2,p2);
+					undoRemoveRing(perspective,h3,p3);
+				}
+				else
+				{
+					cout<<"ERROR!!!!! in parser"<<endl;
+				}
+			}
+			else
+			{
+				cout<<"ERROR!!!! in parser"<<endl;
+			}
+		}
+	}
+}
+
+
+vector<string> append(vector<string> A, vector<string> B)
+{
+	A.insert(A.end(), B.begin(), B.end());
+	return A;
+}
+
+int lastLiteral(string s) 
+{
+	int i = s.size()-1;
+	int count = 0;
+	while(true)
+	{
+		if(s.at(i) == ' ')
+			count++;
+		i--;
+		if (count == 2)
+			break;
+	}
+	if(s.at(i) == 'E')
+		return 1;
+	else if (s.at(i) == 'X')
+		return 2;
+	else
+		return 3;
+	//returns 1 -> RE, 2 -> X, 3 -> M
+}
+
+
+bool contains(string s, char sub) 
+{
+	for (int i = 0; i < s.size(); ++i)
+	{
+		if (s.at(i) == sub)
+			return true;
+	}
+	return false;
+	//returns true if sub is contained in s. sub always has size 1. 
+}
+
+string end_part(string s)
+{
+	int i = s.size()-1;
+	int count = 0;
+	while(true)
+	{
+		if(s.at(i) == ' ')
+			count++;
+		i--;
+		if (count == 2)
+			break;
+	}
+	if(s.at(i) == 'E')
+	{
+		count = 0;
+		while(true)
+		{
+			if(s.at(i) == ' ')
+				count++;
+			i--;
+			if (count == 3)
+				break;
+		}
+		i--;
+		return s.substr(i,s.size() - i);
+	}
+	else if (s.at(i) == 'X')
+		return s.substr(i,s.size() - i);
+	else if (s.at(i) == 'M')
+	{
+		count = 0;
+		while(true)
+		{
+			if(s.at(i) == ' ')
+				count++;
+			i--;
+			if (count == 3)
+				break;
+		}
+		return s.substr(i,s.size() - i);
+	}
+	else
+		return "";
+}
 
 vector<string> addRingMoves (vector<string> moves) 
 {
@@ -1265,6 +1733,330 @@ vector<string> addRingMoves (vector<string> moves)
 	}
 	return moves;
 }
+
+vector<string> moveRingMoves (vector<string> moves, int perspective, vector<int> ringV_local, vector<int> ringL_local, vector<int> ringR_local) 
+{
+	for(int j=0;j<ringV_local.size();j++)
+	{
+		int v = ringV_local.at(j);
+		int l = ringL_local.at(j);
+		int r = ringR_local.at(j);
+		int l_temp,r_temp,v_temp;
+		//in v
+		int i = 1;
+		bool marker = false;
+		while(true)
+		{
+			//move up
+
+			v_temp = v;
+			l_temp = l + i;
+			r_temp = r - i;
+			i++;
+			if (!check(v_temp,l_temp,r_temp))
+				break;
+			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
+				break;
+			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
+			{
+				marker = true;
+				continue;
+			}
+			int hexagonNum1,hexagonNum2,position1,position2;
+			convertBack(v, l, r, hexagonNum1, position1);
+			string s = "S " + to_string(hexagonNum1) + " " + to_string(position1);
+			convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
+			s += " M " + to_string(hexagonNum2) + " " + to_string(position2);
+			moves.push_back(s);
+			
+			if (marker)
+				break;
+		}
+
+		i = 1;
+		marker = false;
+		while(true)
+		{
+			//move down
+			v_temp = v;
+			l_temp = l - i;
+			r_temp = r + i;
+			i++;
+			if (!check(v_temp,l_temp,r_temp))
+				break;
+			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
+				break;
+			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
+			{
+				marker = true;
+				continue;
+			}
+			int hexagonNum1,hexagonNum2,position1,position2;
+			convertBack(v, l, r, hexagonNum1, position1);
+			string s = "S " + to_string(hexagonNum1) + " " + to_string(position1);
+			convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
+			s += " M " + to_string(hexagonNum2) + " " + to_string(position2);
+			moves.push_back(s);
+			if (marker)
+				break;
+		}
+
+		//in l
+		i = 1;
+		marker = false;
+		while(true)
+		{
+			//move up
+			v_temp = v + i;
+			l_temp = l;
+			r_temp = r - i;
+			i++;
+			if (!check(v_temp,l_temp,r_temp))
+				break;
+			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
+				break;
+			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
+			{
+				marker = true;
+				continue;
+			}
+			int hexagonNum1,hexagonNum2,position1,position2;
+			convertBack(v, l, r, hexagonNum1, position1);
+			string s = "S " + to_string(hexagonNum1) + " " + to_string(position1);
+			convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
+			s += " M " + to_string(hexagonNum2) + " " + to_string(position2);
+			moves.push_back(s);
+			if (marker)
+				break;
+		}
+
+		i = 1;
+		marker = false;
+		while(true)
+		{
+			//move up
+			v_temp = v - i;
+			l_temp = l;
+			r_temp = r + i;
+			i++;
+			if (!check(v_temp,l_temp,r_temp))
+				break;
+			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
+				break;
+			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
+			{
+				marker = true;
+				continue;
+			}
+			int hexagonNum1,hexagonNum2,position1,position2;
+			convertBack(v, l, r, hexagonNum1, position1);
+			string s = "S " + to_string(hexagonNum1) + " " + to_string(position1);
+			convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
+			s += " M " + to_string(hexagonNum2) + " " + to_string(position2);
+			moves.push_back(s);
+			if (marker)
+				break;
+		}
+
+		//in r
+		i = 1;
+		marker = false;
+		while(true)
+		{
+			//move up
+			v_temp = v - i;
+			l_temp = l + i;
+			r_temp = r;
+			i++;
+			if (!check(v_temp,l_temp,r_temp))
+				break;
+			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
+				break;
+			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
+			{
+				marker = true;
+				continue;
+			}
+			int hexagonNum1,hexagonNum2,position1,position2;
+			convertBack(v, l, r, hexagonNum1, position1);
+			string s = "S " + to_string(hexagonNum1) + " " + to_string(position1);
+			convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
+			s += " M " + to_string(hexagonNum2) + " " + to_string(position2);
+			moves.push_back(s);
+			if (marker)
+				break;
+		}
+
+		i = 1;
+		marker = false;
+		while(true)
+		{
+			//move up
+			v_temp = v + i;
+			l_temp = l - i;
+			r_temp = r;
+			i++;
+			if (!check(v_temp,l_temp,r_temp))
+				break;
+			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
+				break;
+			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
+			{
+				marker = true;
+				continue;
+			}
+			int hexagonNum1,hexagonNum2,position1,position2;
+			convertBack(v, l, r, hexagonNum1, position1);
+			string s = "S " + to_string(hexagonNum1) + " " + to_string(position1);
+			convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
+			s += " M " + to_string(hexagonNum2) + " " + to_string(position2);
+			moves.push_back(s);
+			if (marker)
+				break;
+		}
+	
+	}
+	
+	return moves;
+}
+
+
+vector<string> fullMoves(vector<string> moves, int perspective) {
+
+	bool flag = true;
+	vector<string> allMoves;
+	for(int i = 0; i < moves.size(); i++) 
+	{
+		string t = end_part(moves.at(i));
+		executeCommand(t,perspective);
+		append(allMoves, fullMove(moves.at(i), perspective));
+		undoCommand(t,perspective);
+	}
+}
+
+
+vector<string> fullMove(string s, int perspective) 
+{ 
+	vector < vector<int> > start;
+	vector < vector<int> > end;
+	row_detected_modified(start, end, perspective);
+	if(contains(s, 'M') && (lastLiteral(s) == 2 || lastLiteral(s) == 3)) 
+	{ // 
+		vector<string> additionalMoves;
+		if((perspective == 1 && ringsScored == ringsToWin) || (perspective == -1 && oppRingsScored == ringsToWin)) {
+			additionalMoves.push_back(s);
+			return additionalMoves;
+		}
+		if(start.size() != 0) {
+			int h1, p1, h2, p2 = 0;
+			vector<string> deleteRowMoves;
+			for(int i = 0; i < start.size(); i++) {
+				convertBack(start.at(i).at(0), start.at(i).at(1), start.at(i).at(2), h1, p1);
+				convertBack(end.at(i).at(0), end.at(i).at(1), end.at(i).at(2), h2, p2);
+				deleteRowMoves.push_back("RS " + to_string(h1) + " "+ to_string(p1) + " RE "+ to_string(h2) + " " + to_string(p2));
+			}
+			// additionalMoves = fullMoves(deleteRowMoves, perspective);
+			for(int i = 0; i < additionalMoves.size(); i++) {
+				additionalMoves.at(i) = s + " " + additionalMoves.at(i);
+			}
+		}
+		else {
+			additionalMoves.push_back(s);
+		}
+		return additionalMoves;
+	}
+	else if(contains(s, 'M') && lastLiteral(s) == 1) {
+		vector<string> deleteRingMove;
+		vector<string> additionalMoves;
+		int h, p;
+		if(perspective == 1) {
+			for(int i = 0; i < ringV.size(); i++) {
+				convertBack(ringV.at(i), ringL.at(i), ringR.at(i), h, p);
+				deleteRingMove.push_back("X" + to_string(h) + " " + to_string(p));
+			}
+		}
+		else {
+			for(int i = 0; i < ringV_opp.size(); i++) {
+				convertBack(ringV_opp.at(i), ringL_opp.at(i), ringR_opp.at(i), h, p);
+				deleteRingMove.push_back("X" + to_string(h) + " " + to_string(p));
+			}
+		}
+		additionalMoves = fullMoves(deleteRingMove, perspective);
+		for(int i = 0; i < additionalMoves.size(); i++) {
+			additionalMoves.at(i) = s + " " + additionalMoves.at(i);
+		}
+		return additionalMoves;
+	}
+	else if(!(contains(s, 'M')) && (lastLiteral(s) == 2 || lastLiteral(s) == 4) ) 
+	{ 
+		
+		vector<string> additionalMoves;
+		if((perspective == 1 && ringsScored == ringsToWin) || (perspective == -1 && oppRingsScored == ringsToWin)) {
+			additionalMoves.push_back(s);
+			return additionalMoves;
+		}
+
+		if(start.size() == 0) 
+		{
+			vector<string> ringMove;
+			if (perspective == 1)
+				ringMove = moveRingMoves(ringMove, perspective, ringV, ringL, ringR);
+			else
+				ringMove = moveRingMoves(ringMove, perspective, ringV_opp, ringL_opp, ringR_opp);
+				
+			additionalMoves = fullMoves(ringMove, perspective);
+			for(int i = 0; i < additionalMoves.size(); i++) {
+				additionalMoves.at(i) = s + " " + additionalMoves.at(i);
+			}
+		}
+		else {
+			int h1, p1, h2, p2 = 0;
+			vector<string> deleteRowMoves;
+			for(int i = 0; i < start.size(); i++) {
+				convertBack(start.at(i).at(0), start.at(i).at(1), start.at(i).at(2), h1, p1);
+				convertBack(end.at(i).at(0), end.at(i).at(1), end.at(i).at(2), h2, p2);
+				deleteRowMoves.push_back("RS " + to_string(h1) + " "+ to_string(p1) + " RE "+ to_string(h2) + " " + to_string(p2));
+			}
+			additionalMoves = fullMoves(deleteRowMoves, perspective);
+			for(int i = 0; i < additionalMoves.size(); i++) {
+				additionalMoves.at(i) = s + " " + additionalMoves.at(i);
+			}
+		}
+		return additionalMoves;
+	}
+	else if(!(contains(s, 'M')) && lastLiteral(s) == 1){
+		vector<string> deleteRingMove;
+		vector<string> additionalMoves;
+		int h, p;
+		if(perspective == 1) {
+			for(int i = 0; i < ringV.size(); i++) {
+				convertBack(ringV.at(i), ringL.at(i), ringR.at(i), h, p);
+				deleteRingMove.push_back("X" + to_string(h) + " " + to_string(p));
+			}
+		}
+		else {
+			for(int i = 0; i < ringV_opp.size(); i++) {
+				convertBack(ringV_opp.at(i), ringL_opp.at(i), ringR_opp.at(i), h, p);
+				deleteRingMove.push_back("X" + to_string(h) + " " + to_string(p));
+			}
+		}
+		additionalMoves = fullMoves(deleteRingMove, perspective);
+		for(int i = 0; i < additionalMoves.size(); i++) {
+			additionalMoves.at(i) = s + " " + additionalMoves.at(i);
+		}
+		return additionalMoves;
+	}
+	else {
+		vector<string> additionalMoves;
+		additionalMoves.push_back(s);
+		return additionalMoves;
+		cout << "Error! Code should not go into else!" << endl;
+		cout << "Error printed in fullMove" << endl;
+	}
+}
+
+
+
 
 
 int main()
@@ -1295,99 +2087,18 @@ int main()
 	board = tempBoard;
 	print_board();
 
-	addRing(-1,0,0);
+	addRing(1,0,0);
 	cout<<endl;
 	print_board();
 
-	undoAddRing(0,0);
+	moveRing(0,0,3,0);
 	cout<<endl;
 	print_board();
 
-
-	addRing(1,5,14);
+	moveRing(3,0,1,3);
 	cout<<endl;
 	print_board();
 
-	addRing(1,5,16);
-	cout<<endl;
-	print_board();
-
-	addRing(-1,5,17);
-	cout<<endl;
-	print_board();
-
-	moveRing(5,14,4,12);
-	cout<<endl;
-	print_board();
-
-	undoMoveRing(5,14,4,12);
-	cout<<endl;
-	print_board();
-
-	moveRing(5,14,4,12);
-	cout<<endl;
-	print_board();
-
-	moveRing(4,12,4,13);
-	cout<<endl;
-	print_board();
-
-	moveRing(4,13,4,14);
-	cout<<endl;
-	print_board();
-
-	moveRing(4,14,4,15);
-	cout<<endl;
-	print_board();
-
-	//check row_detect()
-	//check remove row
-	//for last move check the row_detected
-	
-	moveRing(4,15,4,16);
-	cout<<endl;
-	print_board();
-
-	vector< vector<int> > s,e;
-	row_detected_modified(s,e,1);
-	for(int i=0;i<s.size();i++)
-	{
-		for(int j=0;j<3;j++)
-		{
-			cout<<s.at(i).at(j);
-		}
-		cout<<" ";
-		for(int j=0;j<3;j++)
-		{
-			cout<<e.at(i).at(j);
-		}
-		cout<<endl;
-	}
-	cout<<"row_detected_modified completed"<<endl;
-	int v1,l1,r1,v2,l2,r2;
-	cout<<row_detected(v1,l1,r1,v2,l2,r2,1)<<endl;
-	cout<<v1<<l1<<r1<<" "<<v2<<l2<<r2<<endl;
-
-	moveRing(5,17,3,9);
-	cout<<endl;
-	print_board();
-
-
-	moveRing(5,16,3,10);
-	cout<<endl;
-	print_board();
-
-	removeRow(5,14,4,15);
-	cout<<endl;
-	print_board();
-
-	removeRing(4,16);
-	cout<<endl;
-	print_board();
-
-	undoRemoveRing(1,4,16);
-	cout<<endl;
-	print_board();
 
 	vector<string> m;
 	m = addRingMoves(m);
@@ -1396,7 +2107,143 @@ int main()
 		cout<<m.at(i)<<endl;
 	}
 	cout<<m.size()<<endl;
-	// undoRemoveRow(1,5,14,4,15);
+
+	print_ring_vectors();
+
+	vector<string> n;
+	n = moveRingMoves(n,1,ringV,ringL,ringR);
+	for(int i=0;i<n.size();i++)
+	{
+		cout<<n.at(i)<<endl;
+	}
+	cout<<n.size()<<endl;
+
+	vector<string> o;
+	o = fullMove("",1);
+	for(int i=0;i<o.size();i++)
+	{
+		cout<<o.at(i)<<endl;
+	}
+	cout<<o.size()<<endl;
+
+// vector<string> moveRingMoves (vector<string> moves, int perspective, vector<int> ringV_local, vector<int> ringL_local, vector<int> ringR_local) 
+
+
+	// undoAddRing(0,0);
+	// cout<<endl;
+	// print_board();
+
+
+	// addRing(1,5,14);
+	// cout<<endl;
+	// print_board();
+
+	// addRing(1,5,16);
+	// cout<<endl;
+	// print_board();
+
+	// addRing(-1,5,17);
+	// cout<<endl;
+	// print_board();
+
+	// moveRing(5,14,4,12);
+	// cout<<endl;
+	// print_board();
+
+	// undoMoveRing(5,14,4,12);
+	// cout<<endl;
+	// print_board();
+
+	// moveRing(5,14,4,12);
+	// cout<<endl;
+	// print_board();
+
+	// moveRing(4,12,4,13);
+	// cout<<endl;
+	// print_board();
+
+	// moveRing(4,13,4,14);
+	// cout<<endl;
+	// print_board();
+
+	// moveRing(4,14,4,15);
+	// cout<<endl;
+	// print_board();
+
+	// //check row_detect()
+	// //check remove row
+	// //for last move check the row_detected
+	
+	// moveRing(4,15,4,16);
+	// cout<<endl;
+	// print_board();
+
+	// vector< vector<int> > s,e;
+	// row_detected_modified(s,e,1);
+	// for(int i=0;i<s.size();i++)
+	// {
+	// 	for(int j=0;j<3;j++)
+	// 	{
+	// 		cout<<s.at(i).at(j);
+	// 	}
+	// 	cout<<" ";
+	// 	for(int j=0;j<3;j++)
+	// 	{
+	// 		cout<<e.at(i).at(j);
+	// 	}
+	// 	cout<<endl;
+	// }
+	// cout<<"row_detected_modified completed"<<endl;
+	// int v1,l1,r1,v2,l2,r2;
+	// cout<<row_detected(v1,l1,r1,v2,l2,r2,1)<<endl;
+	// cout<<v1<<l1<<r1<<" "<<v2<<l2<<r2<<endl;
+
+	// moveRing(5,17,3,9);
+	// cout<<endl;
+	// print_board();
+
+
+	// moveRing(5,16,3,10);
+	// cout<<endl;
+	// print_board();
+
+	// removeRow(5,14,4,15);
+	// cout<<endl;
+	// print_board();
+
+	// removeRing(4,16);
+	// cout<<endl;
+	// print_board();
+
+	// undoRemoveRing(1,4,16);
+	// cout<<endl;
+	// print_board();
+
+	// vector<string> m;
+	// m = addRingMoves(m);
+	// for(int i=0;i<m.size();i++)
+	// {
+	// 	cout<<m.at(i)<<endl;
+	// }
+	// cout<<m.size()<<endl;
+
+
+ //    vector<string> a,b,c;
+ //    a.push_back("0");
+ //    a.push_back("1");
+ //    b.push_back("2");
+ //    c = append(a,b);
+ //    cout<<endl;
+ //    for (int i = 0; i < c.size(); ++i)
+ //    {
+ //    	cout<<c.at(i)<<" ";
+ //    }
+ //    cout<<endl;
+
+ //    cout<<lastLiteral("S 67 7 M 44 5")<<endl;
+	// cout<<contains("S 67 7 M 44 5",'X')<<endl;
+	// cout<<end_part("RS 45 5 RE 5 6")<<endl;
+	// // undoRemoveRow(1,5,14,4,15);
 	// cout<<endl;
 	// print_board();
 

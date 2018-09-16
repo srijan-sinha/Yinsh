@@ -1,16 +1,18 @@
 #ifndef BOARD_H
 #define BOARD_H
 
+#include <bits/stdc++.h>
 #include <string>
+#include <iostream>
+#include <fstream>
 #include <vector>
-#include <cmath>
 
 using namespace std;
 
 class Board {
 	
-	private:
-		
+	public:
+	
 		int *** board;		//	0 -> Not Occupied	1 -> Our Ring 	-1 -> Opponent's Ring 	2 -> Our Disc 	-2 -> Opponent's Disc 
 
 		int boardSize;
@@ -35,30 +37,9 @@ class Board {
 		vector<int> ringL_opp;
 		vector<int> ringR_opp;
 
-		/**
-		 * Convert coordinate (h, p) to (v, l, r)
-		 * @param hexagonNum is the hexagon number of the location.
-		 * @param position is the position of the location on the hexagon.
-		 * @param v is the respective vertical line number on which the location is located.
-		 * @param l is the respective diagonal line (bottom left to top right) number on which the location is located.
-		 * @param r is the respective vertical line (bottom right to top left) number on which the location is located.
-		 */
-		void convertTo(int hexagonNum, int position, int v, int l, int r);
+		
 
-
-		/**
-		 * Convert coordinate (v, l, r) to (h, p)
-		 * @param v is the respective vertical line number on which the location is located.
-		 * @param l is the respective diagonal line (bottom left to top right) number on which the location is located.
-		 * @param r is the respective vertical line (bottom right to top left) number on which the location is located.
-		 * @param hexagonNum is the hexagon number of the location.
-		 * @param position is the position of the location on the hexagon.
-		 */
-		void convertBack(int v, int l, int r, int hexagonNum, int position);
-
-
-	public:
-
+	
 		/**
 		 * Empty constructor.
 		 */
@@ -221,8 +202,12 @@ class Board {
 		 * @return vector<string> in which each element is a command which can be executed in the given board configuration.
 		 */
 		vector<string> generateMoveList(int perspective);
-
-
+		vector<string> fullMoves(vector<string> moves, int perspective);
+		vector<string> fullMove(string s, int perspective);
+		string end_part(string s);
+		int lastLiteral(string s);
+		bool contains(string s, char sub);
+		vector<string> append(vector<string> A, vector<string> B);
 		/**
 		 * Appends all possible moves for a ring addition to the current board configuration.
 		 */
@@ -257,7 +242,7 @@ class Board {
 		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
 		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
 		 */
-		void nextUp(int v, int l, int r);
+		void nextUp(int& v, int& l, int& r);
 
 
 		/**
@@ -265,7 +250,7 @@ class Board {
 		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
 		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
 		 */
-		void nextDown(int v, int l, int r);
+		void nextDown(int& v, int& l, int& r);
 
 
 		/**
@@ -273,7 +258,7 @@ class Board {
 		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
 		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
 		 */
-		void nextUpRight(int v, int l, int r);
+		void nextUpRight(int& v, int& l, int& r);
 
 
 		/**
@@ -281,7 +266,7 @@ class Board {
 		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
 		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
 		 */
-		void nextUpLeft(int hexagonNum, int position);
+		void nextUpLeft(int& v, int& l, int& r);
 
 
 		/**
@@ -289,7 +274,7 @@ class Board {
 		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
 		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
 		 */
-		void nextDownRight(int hexagonNum, int position);
+		void nextDownRight(int& v, int& l, int& r);
 
 
 		/**
@@ -297,7 +282,11 @@ class Board {
 		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.
 		 * @param r is the diagonal line (bottom right to top left) number on which the location is located.
 		 */
-		void nextDownLeft(int hexagonNum, int position);
+		void nextDownLeft(int& v, int& l, int& r);
 
 		void print_board();
-}
+		void executeCommand (string command,int perspective);
+		void undoCommand (string command,int perspective); 
+
+};
+#endif
