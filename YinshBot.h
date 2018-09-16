@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <limits>
 /**
  * Uncomment for the following libraries
 #include <ctime>
@@ -16,7 +17,8 @@ using namespace std;
 #include "Board.h"
 
 class YinshBot {
-	private:
+	
+	public:
 
 		Board * board;
 		int boardSize;
@@ -26,8 +28,8 @@ class YinshBot {
 		int turn;	//	1 for our, -1 for opponent's
 		int numPlays;
 
-	public:
 
+	
 		/**
 		 * Empty Constructor.
 		 */
@@ -41,30 +43,30 @@ class YinshBot {
 		 * @param k is the number of markers in a line required to remove a ring.
 		 * @param l is the number of rings to be removed to win.
 		 */
-		YinshBot(int n, int m, int k, int l);
+		YinshBot(int n, int m, int k, int l, int startTurn);
 
 
 		/**
 		 * Reads the input string command and executes the respective command.
 		 * @param command is the input command. 
 		 */
-		void executeCommand(string command);
-
-
-		void undoCommand(string command);
+		
 
 
 		/**
 		 * Generates the next move after opponent bot's play and executes it.
 		 * @return the command to send to the server.
 		 */
-		string findNextMove();
+		string findNextMove(int depth);
+		void print_board();
+		void executeCommand(string s, int perspective);
 
+		void undoCommand(string s, int perspective);
 
-		string miniMax(int depth, int perspective, string& move);
+		double miniMax(int depth, int perspective, vector<string>& bestMoves);
 
-
-		vector<string> moveList();
+		void changeTurn();
+		vector<string> moveList(int perspective);
 
 
 		/**
@@ -80,4 +82,5 @@ class YinshBot {
 		 * @return a double which has the likability of the current board configuration.
 		 */
 		double evalFunction();
-}
+};
+#endif
