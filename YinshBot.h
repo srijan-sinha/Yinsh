@@ -1,7 +1,7 @@
 #ifndef YINSH_H
 #define YINSH_H
 
-#include <string>
+#include <string.h>
 #include <iostream>
 #include <fstream>
 #include <vector>

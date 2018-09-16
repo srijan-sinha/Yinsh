@@ -1492,8 +1492,8 @@ void Board::nextDownLeft (int& v, int& l, int& r) {
 void Board::executeCommand (string command,int perspective) 
 {
 	int i=0;
-	cerr<<"command received for execution: "<<command<<endl;
-	cerr << command.size()<<endl;
+	// cerr<<"command received for execution: "<<command<<endl;
+	// cerr << command.size()<<endl;
 	while(i<command.size())
 	{
 		cerr<<i<<endl;
@@ -1695,7 +1695,7 @@ void Board::executeCommand (string command,int perspective)
 
 void Board::undoCommand (string command,int perspective) 
 {
-	cerr<<"command received for undo: "<<command<<endl;
+	// cerr<<"command received for undo: "<<command<<endl;
 	int i=0;
 	while(i<command.size())
 	{

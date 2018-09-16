@@ -11,55 +11,60 @@ int main ()
 	int turn = -1;
 	YinshBot *y = new YinshBot(5,5,5,3,turn);
 	cin >> player_id >> board_size >> time_limit;
-	cerr<<player_id << board_size << time_limit;
-	string s;
-	getline(cin, s);
-	cerr<<s<<endl;
+	cin.ignore();
+	// cerr<<player_id << board_size << time_limit;
+	if (player_id == 1)
+	{
+		string s = "P 0 0";
+		y->executeCommand(s, turn);
+		cout<<s;
+			
+	}
+	int count = 0;
+	while(true)
+	{
+		string in_command;
+		getline(cin, in_command);
+		cerr<<"input command: "<<in_command<<endl;
+		// if(count == 1)
+		// {
+		// 	count++;
+		// 	continue;
+		// }
+		y->executeCommand(in_command, turn);
+		turn = -1 * turn;
+		y->print_board();
+		cerr<<"opp turn done"<<endl;
+		for(int i=0;i<y->board->ringV_opp.size();i++)
+		{
+			cerr<<y->board->ringV_opp.at(i)<<y->board->ringL_opp.at(i)<<y->board->ringR_opp.at(i)<<" ";
+		}
+		cerr<<endl;
+		y->changeTurn();
+		string out_command;
+		if (count<5)
+			out_command = y->findNextMove(1);
+		else
+			out_command = y->findNextMove(1);
+		//output command
+		cout<<out_command<<endl;
+		// cout << "P 1 1" << endl;
+		y->executeCommand(out_command, turn);
+		y->print_board();
+		cerr<<"turn done"<<endl;
+		y->changeTurn();
+		for(int i=0;i<y->board->ringV.size();i++)
+		{
+			cerr<<y->board->ringV.at(i)<<y->board->ringL.at(i)<<y->board->ringR.at(i)<<" ";
+		}
+		turn = -1 * turn;
+		count++;
+		
+	}
+
 	    return 0;
 }
-	// if (player_id == 1)
-	// {
-	// 	string s = "P 0 0";
-	// 	y->executeCommand(s, turn);
-	// 	cout<<s;
-			
-	// }
-	// int count = 0;
-	// while(true)
-	// {
-	// 	string in_command;
-	// 	getline(cin, in_command);
-		
-	// 	y->executeCommand(in_command, turn);
-	// 	turn = -1 * turn;
-	// 	y->print_board();
-	// 	cerr<<"opp turn done"<<endl;
-	// 	for(int i=0;i<y->board->ringV_opp.size();i++)
-	// 	{
-	// 		cerr<<y->board->ringV_opp.at(i)<<y->board->ringL_opp.at(i)<<y->board->ringR_opp.at(i)<<" ";
-	// 	}
-	// 	cerr<<endl;
-	// 	y->changeTurn();
-	// 	string out_command;
-	// 	if (count<5)
-	// 		out_command = y->findNextMove(1);
-	// 	else
-	// 		out_command = y->findNextMove(3);
-	// 	//output command
-	// 	cout<<out_command;
-	// 	y->executeCommand(out_command, turn);
-	// 	y->print_board();
-	// 	cerr<<"turn done"<<endl;
-	// 	y->changeTurn();
-	// 	for(int i=0;i<y->board->ringV.size();i++)
-	// 	{
-	// 		cerr<<y->board->ringV.at(i)<<y->board->ringL.at(i)<<y->board->ringR.at(i)<<" ";
-	// 	}
-	// 	turn = -1 * turn;
-	// 	count++;
-		
-	// }
-
+	
 
 
 

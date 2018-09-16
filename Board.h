@@ -2,7 +2,7 @@
 #define BOARD_H
 
 #include <bits/stdc++.h>
-#include <string>
+#include <string.h>
 #include <iostream>
 #include <fstream>
 #include <vector>
