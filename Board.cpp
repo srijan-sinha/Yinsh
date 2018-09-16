@@ -210,7 +210,7 @@ void Board::undoAddRing(int hexagonNum, int position)
 {
 	int v, l, r = 0;
 	convertTo(hexagonNum, position, v, l, r);
-	cerr<<board[v + boardSize][l + boardSize][r + boardSize]<<endl;
+	// cerr<<board[v + boardSize][l + boardSize][r + boardSize]<<endl;
 	if(board[v + boardSize][l + boardSize][r + boardSize] != 1 && board[v + boardSize][l + boardSize][r + boardSize] != -1) {
 		cerr << "Error! Ring not found for removal! Hexagon number: " <<  hexagonNum << " Point number: " << position << endl;
 		cerr << "Above error printed in Board.cpp: undoAddRing." << endl;
@@ -356,6 +356,7 @@ void Board::moveRing (int hexagon1, int position1, int hexagon2, int position2)
 					board[-r-i + boardSize][i + boardSize][r + boardSize] = -board[-r-i + boardSize][i + boardSize][r + boardSize];
 				}
 			}
+			// cerr<<"move ring done"<<endl;
 		}
 		else
 		{
@@ -369,6 +370,7 @@ void Board::moveRing (int hexagon1, int position1, int hexagon2, int position2)
 		cerr << "Error! Cannot move ring at Hexagon number: " <<  hexagon1 << " Point number: " << position1 << " to a point at Hexagon number: " <<  hexagon2 << " Point number: " << position2 << endl;
 		cerr << "Above error printed in Board.cpp: moveRing." << endl;
 	}
+
 }
 
 //checked
@@ -479,13 +481,13 @@ void Board::undoMoveRing(int hexagon1, int position1, int hexagon2, int position
 		else
 		{
 			cerr << "Error! Given points (" <<  hexagon1 << "," << position1 << ") and (" <<  hexagon2 << "," << position2 << ") are not on same line" << endl;
-			cerr << "Above error printed in Board.cpp: moveRing." << endl;
+			cerr << "Above error printed in Board.cpp: undomoveRing." << endl;
 		}
 	}
 	else
 	{
 		cerr << "Error! Cannot move ring at Hexagon number: " <<  hexagon1 << " Point number: " << position1 << " to a point at Hexagon number: " <<  hexagon2 << " Point number: " << position2 << endl;
-		cerr << "Above error printed in Board.cpp: moveRing." << endl;
+		cerr << "Above error printed in Board.cpp: undomoveRing." << endl;
 	}
 }
 
@@ -593,8 +595,10 @@ void Board::removeRing (int hexagonNum, int position)
 	
 	int v, l, r = 0;
 	convertTo(hexagonNum, position, v, l, r);
-	if(board[v + boardSize][l + boardSize][r + boardSize] == 1 || board[v + boardSize][l + boardSize][r + boardSize] == -1) {
-		if(board[v + boardSize][l + boardSize][r + boardSize] == 1) {
+	if(board[v + boardSize][l + boardSize][r + boardSize] == 1 || board[v + boardSize][l + boardSize][r + boardSize] == -1) 
+	{
+		if(board[v + boardSize][l + boardSize][r + boardSize] == 1) 
+		{
 			numRings--;
 			ringsScored++;
 			for(int i=0;i<ringV.size();i++)
@@ -639,7 +643,8 @@ void Board::undoRemoveRing(int colour, int hexagonNum, int position)
 	int v, l, r = 0;
 	convertTo(hexagonNum, position, v, l, r);
 
-	if(board[v + boardSize][l + boardSize][r + boardSize] != 0) {
+	if(board[v + boardSize][l + boardSize][r + boardSize] != 0) 
+	{
 		cerr << "Error! Empty space not found for ring addition! Hexagon number: " <<  hexagonNum << " Point number: " << position << endl;
 		cerr << "Above error printed in Board.cpp: undoRemoveRing." << endl;
 	}
@@ -714,7 +719,7 @@ vector<string> Board::fullMoves(vector<string> moves, int perspective) {
 	{
 		string t = end_part(moves.at(i));
 		executeCommand(t,perspective);
-		cerr<<moves.at(i)<<endl;
+		// cerr<<moves.at(i)<<endl;
 		allMoves = append(allMoves, fullMove(moves.at(i), perspective));
 		undoCommand(t,perspective);
 		
@@ -730,7 +735,6 @@ vector<string> Board::fullMove(string s, int perspective)
 	row_detected_modified(start, end, perspective);
 	if(contains(s, 'M') && (lastLiteral(s) == 2 || lastLiteral(s) == 3)) 
 	{ // 
-		cerr<<"case 1"<<endl;
 		vector<string> additionalMoves;
 		if((perspective == 1 && ringsScored == ringsToWin) || (perspective == -1 && oppRingsScored == ringsToWin)) {
 			additionalMoves.push_back(s);
@@ -758,7 +762,6 @@ vector<string> Board::fullMove(string s, int perspective)
 	}
 	else if(contains(s, 'M') && lastLiteral(s) == 1) 
 	{
-		cerr<<"case 2"<<endl;
 		vector<string> deleteRingMove;
 		vector<string> additionalMoves;
 		int h, p;
@@ -782,7 +785,6 @@ vector<string> Board::fullMove(string s, int perspective)
 	}
 	else if(!(contains(s, 'M')) && (lastLiteral(s) == 2 || lastLiteral(s) == 4) ) 
 	{ 
-		cerr<<"case 3"<<endl;
 		vector<string> additionalMoves;
 		if((perspective == 1 && ringsScored == ringsToWin) || (perspective == -1 && oppRingsScored == ringsToWin)) {
 			additionalMoves.push_back(s);
@@ -820,7 +822,6 @@ vector<string> Board::fullMove(string s, int perspective)
 	}
 	else if(!(contains(s, 'M')) && lastLiteral(s) == 1)
 	{
-cerr<<"case 4"<<endl;
 		vector<string> deleteRingMove;
 		vector<string> additionalMoves;
 		int h, p;
@@ -846,7 +847,6 @@ cerr<<"case 4"<<endl;
 	}
 	else 
 	{
-		cerr<<"case 5"<<endl;
 		vector<string> additionalMoves;
 		additionalMoves.push_back(s);
 		return additionalMoves;
@@ -1062,7 +1062,6 @@ vector<string> Board::moveRingMoves (vector<string> moves, int perspective, vect
 				break;
 			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
 			{
-				cerr<<"yaha jana he"<<endl;
 				marker = true;
 				continue;
 			}
@@ -1074,11 +1073,7 @@ vector<string> Board::moveRingMoves (vector<string> moves, int perspective, vect
 				convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
 				s += " M " + to_string(hexagonNum2) + " " + to_string(position2);
 				moves.push_back(s);
-				if(hexagonNum1 == 4 && position1 == 14 && hexagonNum2 == 2 && position2 == 6)
-				{
-					cerr<<"found here"<<endl;
-					cerr<<board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize]<<endl;
-				}
+				
 			}
 			if (marker)
 				break;
@@ -1110,11 +1105,7 @@ vector<string> Board::moveRingMoves (vector<string> moves, int perspective, vect
 				convertBack(v_temp, l_temp, r_temp, hexagonNum2, position2);
 				s += " M " + to_string(hexagonNum2) + " " + to_string(position2);
 				moves.push_back(s);
-				if(hexagonNum1 == 4 && position1 == 14 && hexagonNum2 == 2 && position2 == 6)
-				{
-					cerr<<"found here"<<endl;
-					cerr<<board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize]<<endl;
-				}
+				
 			}
 			if (marker)
 				break;
@@ -1492,12 +1483,10 @@ void Board::nextDownLeft (int& v, int& l, int& r) {
 void Board::executeCommand (string command,int perspective) 
 {
 	int i=0;
-	// cerr<<"command received for execution: "<<command<<endl;
+	cerr<<"command received for execution: "<<command<<endl;
 	// cerr << command.size()<<endl;
 	while(i<command.size())
 	{
-		cerr<<i<<endl;
-		cerr<<command.at(i)<<endl;
 		
 		if(command.at(i) == 'P')
 		{
@@ -1693,208 +1682,330 @@ void Board::executeCommand (string command,int perspective)
 
 }
 
+
 void Board::undoCommand (string command,int perspective) 
 {
-	// cerr<<"command received for undo: "<<command<<endl;
-	int i=0;
-	while(i<command.size())
+	cerr<<"command received for undo: "<<command<<endl;
+	int i=command.size()-1;
+	int count=0;
+	int h1,p1,h2,p2,h3,p3;
+			
+	while(i>0)
 	{
-		if(command.at(i) == 'P')
+		int h,p;
+		count=0;
+
+		while(command.at(i) != ' ')
 		{
-			int h,p;
-			i++;
-			i++;
-			int j = i,count = 0;
-			while(i<command.size())
-			{
-				if (command.at(i) == ' ')
-					break;
-				i++;
-				count++;
-			}
-			h = stoi(command.substr(j,count));
-			i++;
-			j = i;
-			count = 0;
-			while(i<command.size())
-			{
-				if (command.at(i) == ' ')
-					break;
-				i++;
-				count++;
-			}
-			// cerr<<"here again"<<endl;
-			p = stoi(command.substr(j,count));
-			i++;
-			//call the func to add a ring
+			i--;
+			count++;
+			if (i==0)
+				return;
+		}
+		p = stoi(command.substr(i+1,count));
+		i--;
+
+		count=0;
+		while(command.at(i) != ' ')
+		{
+			i--;
+			count++;
+
+			if (i==0)
+				return;
+		}
+		h = stoi(command.substr(i+1,count));
+		i--;	
+
+		if (command.at(i) == 'P')
+		{
+			//undoMoveRing
+
 			undoAddRing(h,p);
-		}
-		else if (command.at(i) == 'S')
-		{
-			int h1,p1,h2,p2;
-			i++;
-			i++;
-			int j = i,count = 0;
-			while(i<command.size())
-			{
-				if (command.at(i) == ' ')
-					break;
-				i++;
-				count++;
-			}
-			h1 = stoi(command.substr(j,count));
-			i++;
-			j = i;
-			count = 0;
-			while(i<command.size())
-			{
-				if (command.at(i) == ' ')
-					break;
-				i++;
-				count++;
-			}
-			p1 = stoi(command.substr(j,count));
-			i++;
-			if (command.at(i) == 'M')
-			{
-				i++;
-				i++;
-				j = i;
-				count = 0;
-				while(i<command.size())
-				{
-					if (command.at(i) == ' ')
-						break;
-					i++;
-					count++;
-				}
-				h2 = stoi(command.substr(j,count));
-				i++;
-				j = i;
-				count = 0;
-				while(i<command.size())
-				{
-					if (command.at(i) == ' ')
-						break;
-					i++;
-					count++;
-				}
-				p2 = stoi(command.substr(j,count));
-				i++;
-				
-				//call the func for move the ring 	
-				// cerr<<"call undo move ring func"<<endl;
-				undoMoveRing(h1,p1,h2,p2);
-
-			}
-			else
-			{
-				cerr<<"ERROR!!! in parser"<<endl;
-			}
+			// cout<<"undoAddRing"<<endl;
 
 		}
-		else if (command.substr(i,2) == "RS")
+		else if (command.at(i) == 'M')
 		{
-			i=i+2;
-			int h1,p1,h2,p2;
-			i++;
-			int j = i,count = 0;
-			while(i<command.size())
+			i=i-2;
+			count=0;
+			while(command.at(i) != ' ')
 			{
-				if (command.at(i) == ' ')
-					break;
-				i++;
+				i--;
 				count++;
+
+				if (i==0)
+					return;
 			}
-			h1 = stoi(command.substr(j,count));
-			i++;
-			j = i;
-			count = 0;
-			while(i<command.size())
+			p2 = stoi(command.substr(i+1,count));
+			i--;
+
+			count=0;
+			while(command.at(i) != ' ')
 			{
-				if (command.at(i) == ' ')
-					break;
-				i++;
+				i--;
 				count++;
+
+				if (i==0)
+					return;
 			}
-			p1 = stoi(command.substr(j,count));
-			i++;
-
-			if (command.substr(i,2) == "RE")
-			{
-				i=i+2;
-				i++;
-				j = i;
-
-				count = 0;
-				while(i<command.size())
-				{
-					if (command.at(i) == ' ')
-						break;
-					i++;
-					count++;
-				}
-				h2 = stoi(command.substr(j,count));
-				i++;
-				j = i;
-				count = 0;
-				while(i<command.size())
-				{
-					if (command.at(i) == ' ')
-						break;
-					i++;
-					count++;
-				}
-				p2 = stoi(command.substr(j,count));
-				i++;
-				
-
-					//call the func to remove the row
-					undoRemoveRow(perspective,h1,p1,h2,p2);
-					
-			}
-
-			else
-			{
-				cerr<<"ERROR!!!! in parser"<<endl;
-			}
-
+			h2 = stoi(command.substr(i+1,count));
+			i--;
+			i=i-2;
+			h1 = h;
+			p1 = p;
+			//undoMoveRings
+			
+			undoMoveRing(h2,p2,h1,p1);
+			// cout<<"undoMoveRings"<<endl;
+			// cout<<h2<<p2<<h1<<p1<<endl;
 		}
 		else if (command.at(i) == 'X')
 		{
-			int h3,p3;
-			i++;
-			i++;
-			int j = i,count = 0;
-			while(i<command.size())
+			h1 = h;
+			p1 = p;
+			i-=2;
+			undoRemoveRing(perspective,h1,p1);
+			// cout<<command.at(i)<<endl;
+			// cout<<"undoRemoveRing";
+			// cout<<h1<<p1<<endl;
+			
+		}
+		else if (command.at(i) == 'E')
+		{	
+
+			h2 = h;
+			p2 = p;
+			i=i-3;
+
+			count=0;
+			while(command.at(i) != ' ')
 			{
-				if (command.at(i) == ' ')
-					break;
-				i++;
+				i--;
 				count++;
+				if (i==0)
+					return;
 			}
-			h3 = stoi(command.substr(j,count));
-			i++;
-			j = i;
-			count = 0;
-			while(i<command.size())
+			p3 = stoi(command.substr(i+1,count));
+			i--;
+
+			count=0;
+			while(command.at(i) != ' ')
 			{
-				if (command.at(i) == ' ')
-					break;
-				i++;
+				i--;
 				count++;
+				if (i==0)
+					break;
 			}
-			p3 = stoi(command.substr(j,count));
-			i++;
-			undoRemoveRing(perspective,h3,p3);
+			h3 = stoi(command.substr(i+1,count));
+			i-=4;
+			
+			
+			undoRemoveRow(perspective,h3,p3,h2,p2);
+			// cout<<"undoRemoveRow"<<endl;
+			// cout<<h3<<p3<<h2<<p2<<endl;
+		}
 		
-		}
-		else
-		{
-			i++;
-		}
 	}
-}
+}	
+	
+
+
+	// 	if(command.at(i) == 'P')
+	// 	{
+	// 		int h,p;
+	// 		i++;
+	// 		i++;
+	// 		int j = i,count = 0;
+	// 		while(i<command.size())
+	// 		{
+	// 			if (command.at(i) == ' ')
+	// 				break;
+	// 			i++;
+	// 			count++;
+	// 		}
+	// 		h = stoi(command.substr(j,count));
+	// 		i++;
+	// 		j = i;
+	// 		count = 0;
+	// 		while(i<command.size())
+	// 		{
+	// 			if (command.at(i) == ' ')
+	// 				break;
+	// 			i++;
+	// 			count++;
+	// 		}
+	// 		// cerr<<"here again"<<endl;
+	// 		p = stoi(command.substr(j,count));
+	// 		i++;
+	// 		//call the func to add a ring
+	// 		undoAddRing(h,p);
+	// 	}
+	// 	else if (command.at(i) == 'S')
+	// 	{
+	// 		int h1,p1,h2,p2;
+	// 		i++;
+	// 		i++;
+	// 		int j = i,count = 0;
+	// 		while(i<command.size())
+	// 		{
+	// 			if (command.at(i) == ' ')
+	// 				break;
+	// 			i++;
+	// 			count++;
+	// 		}
+	// 		h1 = stoi(command.substr(j,count));
+	// 		i++;
+	// 		j = i;
+	// 		count = 0;
+	// 		while(i<command.size())
+	// 		{
+	// 			if (command.at(i) == ' ')
+	// 				break;
+	// 			i++;
+	// 			count++;
+	// 		}
+	// 		p1 = stoi(command.substr(j,count));
+	// 		i++;
+	// 		if (command.at(i) == 'M')
+	// 		{
+	// 			i++;
+	// 			i++;
+	// 			j = i;
+	// 			count = 0;
+	// 			while(i<command.size())
+	// 			{
+	// 				if (command.at(i) == ' ')
+	// 					break;
+	// 				i++;
+	// 				count++;
+	// 			}
+	// 			h2 = stoi(command.substr(j,count));
+	// 			i++;
+	// 			j = i;
+	// 			count = 0;
+	// 			while(i<command.size())
+	// 			{
+	// 				if (command.at(i) == ' ')
+	// 					break;
+	// 				i++;
+	// 				count++;
+	// 			}
+	// 			p2 = stoi(command.substr(j,count));
+	// 			i++;
+				
+	// 			//call the func for move the ring 	
+	// 			// cerr<<"call undo move ring func"<<endl;
+	// 			undoMoveRing(h1,p1,h2,p2);
+
+	// 		}
+	// 		else
+	// 		{
+	// 			cerr<<"ERROR!!! in parser"<<endl;
+	// 		}
+
+	// 	}
+	// 	else if (command.substr(i,2) == "RS")
+	// 	{
+	// 		i=i+2;
+	// 		int h1,p1,h2,p2;
+	// 		i++;
+	// 		int j = i,count = 0;
+	// 		while(i<command.size())
+	// 		{
+	// 			if (command.at(i) == ' ')
+	// 				break;
+	// 			i++;
+	// 			count++;
+	// 		}
+	// 		h1 = stoi(command.substr(j,count));
+	// 		i++;
+	// 		j = i;
+	// 		count = 0;
+	// 		while(i<command.size())
+	// 		{
+	// 			if (command.at(i) == ' ')
+	// 				break;
+	// 			i++;
+	// 			count++;
+	// 		}
+	// 		p1 = stoi(command.substr(j,count));
+	// 		i++;
+
+	// 		if (command.substr(i,2) == "RE")
+	// 		{
+	// 			i=i+2;
+	// 			i++;
+	// 			j = i;
+
+	// 			count = 0;
+	// 			while(i<command.size())
+	// 			{
+	// 				if (command.at(i) == ' ')
+	// 					break;
+	// 				i++;
+	// 				count++;
+	// 			}
+	// 			h2 = stoi(command.substr(j,count));
+	// 			i++;
+	// 			j = i;
+	// 			count = 0;
+	// 			while(i<command.size())
+	// 			{
+	// 				if (command.at(i) == ' ')
+	// 					break;
+	// 				i++;
+	// 				count++;
+	// 			}
+	// 			p2 = stoi(command.substr(j,count));
+	// 			i++;
+				
+
+	// 				//call the func to remove the row
+	// 				undoRemoveRow(perspective,h1,p1,h2,p2);
+					
+	// 		}
+
+	// 		else
+	// 		{
+	// 			cerr<<"ERROR!!!! in parser"<<endl;
+	// 		}
+
+	// 	}
+	// 	else if (command.at(i) == 'X')
+	// 	{
+	// 		int h3,p3;
+	// 		i++;
+	// 		i++;
+	// 		int j = i,count = 0;
+	// 		while(i<command.size())
+	// 		{
+	// 			if (command.at(i) == ' ')
+	// 				break;
+	// 			i++;
+	// 			count++;
+	// 		}
+	// 		h3 = stoi(command.substr(j,count));
+	// 		i++;
+	// 		j = i;
+	// 		count = 0;
+	// 		while(i<command.size())
+	// 		{
+	// 			if (command.at(i) == ' ')
+	// 				break;
+	// 			i++;
+	// 			count++;
+	// 		}
+	// 		p3 = stoi(command.substr(j,count));
+	// 		i++;
+	// 		undoRemoveRing(perspective,h3,p3);
+		
+	// 	}
+	// 	else
+	// 	{
+	// 		i++;
+	// 	}
+	// }
 
 
 void Board::print_board()
