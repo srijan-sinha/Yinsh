@@ -59,20 +59,22 @@ double YinshBot::miniMax(int depth, int perspective, vector<string>& bestMoves) 
 	string tempMove = "";
 	string move = "";
 
-	if(depth == 0) {
+	if(depth == 0) 
+	{
 		// cerr<<"Eval: " << evalFunction()<<endl;
 		return evalFunction();
 	}
 	else {
 		vector<string> moves = moveList(perspective);
-		for(int i = 0; i < moves.size(); i++) {
-			cerr << "Move: " << moves.at(i) << endl;
-		}
+		
 		for(int i = 0; i < moves.size(); i++) {
 			// cerr << "Trying move: " << moves.at(i) << endl;
 			tempMove = moves.at(i);
+			
 			board->executeCommand(tempMove,perspective);
 			tempScore = miniMax(depth - 1, -1*perspective, bestMoves);
+
+			cerr<<"possible move: "<<tempMove<<"with score: "<<tempScore<<"no of scored rings: "<<board->getRingsScored()<<endl;
 			if(perspective == 1) {
 				if(abs(tempScore - score) < 0.0001 || (tempScore - score) > 0.0001) {
 					// cerr<<"*************************************8"<<endl;
@@ -92,6 +94,8 @@ double YinshBot::miniMax(int depth, int perspective, vector<string>& bestMoves) 
 			board->undoCommand(tempMove,perspective);
 		}
 		bestMoves.push_back(move);
+		cerr<<endl<<"selected move: "<<move<<"with score: "<<score<<" no of scored rings: "<<board->getRingsScored()<<endl;
+
 		return score;
 	}
 }
@@ -146,29 +150,29 @@ int YinshBot::ringAttacks() {
 }
 
 double YinshBot::evalFunction () {
-	double weight1 = 7;
-	double weight2 = -5;
+	double weight1 = 2;
+	double weight2 = -3;
 	double weight3 = 20;
 	double weight4 = -15;
-	double weight5 = 500;
-	double weight6 = -200;
+	double weight5 = 5000;
+	double weight6 = -3000;
 	double weight7 = 2;
 	double weight8 = -1;
-	double weight9 = 10;
+	double weight9 = 35;
 	double weight10 = 15;
 	double weight11 = -12;
 
 	double eval = 0;
 
-	if(board->getNumRings() <= maxRings) {
+	if(board->getNumRings() < maxRings && board->getRingsScored() == 0) {
 		int h, p = 1;
 		for(int i = 0; i < board->getNumRings(); i++) {
 			board->convertBack(getRingVLR(1, 1, i), getRingVLR(1, 2, i), getRingVLR(1, 3, i), h, p);
-			eval = eval + (weight7 * (360/(h+1)));
+			eval = eval + (weight7 * (24/(h+1)));
 		}
 		for(int i = 0; i < board->getNumOppRings(); i++) {
 			board->convertBack(getRingVLR(2, 1, i), getRingVLR(2, 2, i), getRingVLR(2, 3, i), h, p);
-			eval = eval + (weight8 * (360/(h+1)));
+			eval = eval + (weight8 * (24/(h+1)));
 		}
 		eval = eval + (weight9 * ringAttacks());
 	}
@@ -176,6 +180,8 @@ double YinshBot::evalFunction () {
 		eval = eval + (weight1 * board->getNumDiscs()) + (weight2 * board->getNumOppDiscs());
 		eval = eval + (weight3 * board->getNumRings()) + (weight4 * board->getNumOppRings());
 		eval = eval + (weight5 * board->getRingsScored()) + (weight6 * board->getOppRingsScored());
+		if (board->getRingsScored() == 3)
+			eval += numeric_limits<int>::max();
 		// eval = eval + (weight10 * discsOurControl()) + (weight11 * discsOppControl());
 	}
 	return eval;

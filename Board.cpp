@@ -822,7 +822,6 @@ vector<string> Board::fullMove(string s, int perspective)
 	}
 	else if(!(contains(s, 'M')) && lastLiteral(s) == 1)
 	{
-cerr<<"case 4"<<endl;
 		vector<string> deleteRingMove;
 		vector<string> additionalMoves;
 		int h, p;
@@ -1322,9 +1321,9 @@ bool Board::row_detected(int& v1, int& l1, int& r1, int& v2, int& l2, int& r2, i
 //checked
 void Board::row_detected_modified(vector< vector<int> > &start, vector< vector<int> > &end, int perspective)
 {
-	for(int v = -boardSize;v<boardSize;v++)
+	for(int v = -boardSize;v<=boardSize;v++)
 	{
-		for(int l = -boardSize;l<boardSize;l++)
+		for(int l = -boardSize;l<=boardSize;l++)
 		{
 			int r = -v-l;
 			int v_temp,l_temp,r_temp,count=0;
@@ -1484,8 +1483,6 @@ void Board::nextDownLeft (int& v, int& l, int& r) {
 void Board::executeCommand (string command,int perspective) 
 {
 	int i=0;
-	cerr<<"command received for execution: "<<command<<endl;
-	// cerr << command.size()<<endl;
 	while(i<command.size())
 	{
 		
@@ -1691,7 +1688,6 @@ bool Board::checkLine(int v1, int l1, int r1, int v2, int l2, int r2){
 
 void Board::undoCommand (string command,int perspective) 
 {
-	cerr<<"command received for undo: "<<command<<endl;
 	int i=command.size()-1;
 	int count=0;
 	int h1,p1,h2,p2,h3,p3;
@@ -1815,203 +1811,6 @@ void Board::undoCommand (string command,int perspective)
 	}
 }	
 	
-
-
-	// 	if(command.at(i) == 'P')
-	// 	{
-	// 		int h,p;
-	// 		i++;
-	// 		i++;
-	// 		int j = i,count = 0;
-	// 		while(i<command.size())
-	// 		{
-	// 			if (command.at(i) == ' ')
-	// 				break;
-	// 			i++;
-	// 			count++;
-	// 		}
-	// 		h = stoi(command.substr(j,count));
-	// 		i++;
-	// 		j = i;
-	// 		count = 0;
-	// 		while(i<command.size())
-	// 		{
-	// 			if (command.at(i) == ' ')
-	// 				break;
-	// 			i++;
-	// 			count++;
-	// 		}
-	// 		// cerr<<"here again"<<endl;
-	// 		p = stoi(command.substr(j,count));
-	// 		i++;
-	// 		//call the func to add a ring
-	// 		undoAddRing(h,p);
-	// 	}
-	// 	else if (command.at(i) == 'S')
-	// 	{
-	// 		int h1,p1,h2,p2;
-	// 		i++;
-	// 		i++;
-	// 		int j = i,count = 0;
-	// 		while(i<command.size())
-	// 		{
-	// 			if (command.at(i) == ' ')
-	// 				break;
-	// 			i++;
-	// 			count++;
-	// 		}
-	// 		h1 = stoi(command.substr(j,count));
-	// 		i++;
-	// 		j = i;
-	// 		count = 0;
-	// 		while(i<command.size())
-	// 		{
-	// 			if (command.at(i) == ' ')
-	// 				break;
-	// 			i++;
-	// 			count++;
-	// 		}
-	// 		p1 = stoi(command.substr(j,count));
-	// 		i++;
-	// 		if (command.at(i) == 'M')
-	// 		{
-	// 			i++;
-	// 			i++;
-	// 			j = i;
-	// 			count = 0;
-	// 			while(i<command.size())
-	// 			{
-	// 				if (command.at(i) == ' ')
-	// 					break;
-	// 				i++;
-	// 				count++;
-	// 			}
-	// 			h2 = stoi(command.substr(j,count));
-	// 			i++;
-	// 			j = i;
-	// 			count = 0;
-	// 			while(i<command.size())
-	// 			{
-	// 				if (command.at(i) == ' ')
-	// 					break;
-	// 				i++;
-	// 				count++;
-	// 			}
-	// 			p2 = stoi(command.substr(j,count));
-	// 			i++;
-				
-	// 			//call the func for move the ring 	
-	// 			// cerr<<"call undo move ring func"<<endl;
-	// 			undoMoveRing(h1,p1,h2,p2);
-
-	// 		}
-	// 		else
-	// 		{
-	// 			cerr<<"ERROR!!! in parser"<<endl;
-	// 		}
-
-	// 	}
-	// 	else if (command.substr(i,2) == "RS")
-	// 	{
-	// 		i=i+2;
-	// 		int h1,p1,h2,p2;
-	// 		i++;
-	// 		int j = i,count = 0;
-	// 		while(i<command.size())
-	// 		{
-	// 			if (command.at(i) == ' ')
-	// 				break;
-	// 			i++;
-	// 			count++;
-	// 		}
-	// 		h1 = stoi(command.substr(j,count));
-	// 		i++;
-	// 		j = i;
-	// 		count = 0;
-	// 		while(i<command.size())
-	// 		{
-	// 			if (command.at(i) == ' ')
-	// 				break;
-	// 			i++;
-	// 			count++;
-	// 		}
-	// 		p1 = stoi(command.substr(j,count));
-	// 		i++;
-
-	// 		if (command.substr(i,2) == "RE")
-	// 		{
-	// 			i=i+2;
-	// 			i++;
-	// 			j = i;
-
-	// 			count = 0;
-	// 			while(i<command.size())
-	// 			{
-	// 				if (command.at(i) == ' ')
-	// 					break;
-	// 				i++;
-	// 				count++;
-	// 			}
-	// 			h2 = stoi(command.substr(j,count));
-	// 			i++;
-	// 			j = i;
-	// 			count = 0;
-	// 			while(i<command.size())
-	// 			{
-	// 				if (command.at(i) == ' ')
-	// 					break;
-	// 				i++;
-	// 				count++;
-	// 			}
-	// 			p2 = stoi(command.substr(j,count));
-	// 			i++;
-				
-
-	// 				//call the func to remove the row
-	// 				undoRemoveRow(perspective,h1,p1,h2,p2);
-					
-	// 		}
-
-	// 		else
-	// 		{
-	// 			cerr<<"ERROR!!!! in parser"<<endl;
-	// 		}
-
-	// 	}
-	// 	else if (command.at(i) == 'X')
-	// 	{
-	// 		int h3,p3;
-	// 		i++;
-	// 		i++;
-	// 		int j = i,count = 0;
-	// 		while(i<command.size())
-	// 		{
-	// 			if (command.at(i) == ' ')
-	// 				break;
-	// 			i++;
-	// 			count++;
-	// 		}
-	// 		h3 = stoi(command.substr(j,count));
-	// 		i++;
-	// 		j = i;
-	// 		count = 0;
-	// 		while(i<command.size())
-	// 		{
-	// 			if (command.at(i) == ' ')
-	// 				break;
-	// 			i++;
-	// 			count++;
-	// 		}
-	// 		p3 = stoi(command.substr(j,count));
-	// 		i++;
-	// 		undoRemoveRing(perspective,h3,p3);
-		
-	// 	}
-	// 	else
-	// 	{
-	// 		i++;
-	// 	}
-	// }
 
 
 void Board::print_board()
