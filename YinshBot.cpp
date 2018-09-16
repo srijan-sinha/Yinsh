@@ -40,9 +40,9 @@ string YinshBot::findNextMove (int depth) {
 	string move = "";
 	vector<string> bestMoves;
 	miniMax(depth, turn, bestMoves);
-	// cout<<"Size: " << bestMoves.size() << endl;
+	// cerr<<"Size: " << bestMoves.size() << endl;
 	// for(int i = 0; i < bestMoves.size(); i++) {
-	// 	cout<<bestMoves.at(i)<<endl;
+	// 	cerr<<bestMoves.at(i)<<endl;
 	// }
 	return bestMoves.at(bestMoves.size() - 1);
 }
@@ -60,33 +60,33 @@ double YinshBot::miniMax(int depth, int perspective, vector<string>& bestMoves) 
 	string move = "";
 
 	if(depth == 0) {
-		cout<<"Eval: " << evalFunction()<<endl;
-		cout<<"Score: "<<score<<endl;
+		cerr<<"Eval: " << evalFunction()<<endl;
+		cerr<<"Score: "<<score<<endl;
 		return evalFunction();
 	}
 	else {
 		vector<string> moves = moveList(perspective);
 		for(int i = 0; i < moves.size(); i++) {
-			cout << "Move: " << moves.at(i) << endl;
+			cerr << "Move: " << moves.at(i) << endl;
 		}
 		for(int i = 0; i < moves.size(); i++) {
-			cout << "Trying move: " << moves.at(i) << endl;
+			cerr << "Trying move: " << moves.at(i) << endl;
 			tempMove = moves.at(i);
 			board->executeCommand(tempMove,perspective);
-			cout<<"^^^^^"<<endl;
+			cerr<<"^^^^^"<<endl;
 			tempScore = miniMax(depth - 1, -1*perspective, bestMoves);
 			if(perspective == 1) {
 				if(abs(tempScore - score) < 0.0001 || (tempScore - score) > 0.0001) {
-					cout<<"*************************************8"<<endl;
-					cout << "Max" << endl;
+					cerr<<"*************************************8"<<endl;
+					cerr << "Max" << endl;
 					score = tempScore;
 					move = tempMove;
 				}
 			}
 			else {
 				if(abs(tempScore - score) < 0.0001 || (score - tempScore) > 0.0001) {
-					cout<<"*************************************8"<<endl;
-					cout << "Min" << endl;
+					cerr<<"*************************************8"<<endl;
+					cerr << "Min" << endl;
 					score = tempScore;
 					move = tempMove;
 				}

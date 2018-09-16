@@ -6,38 +6,59 @@ using namespace std;
 
 int main ()
 {
-
+	int player_id, board_size, time_limit;
+    // Get input from server about game specifications
 	int turn = -1;
 	YinshBot *y = new YinshBot(5,5,5,3,turn);
-	while(true)
-	{
-		string in_command;
-		getline(cin, in_command);
+	cin >> player_id >> board_size >> time_limit;
+	cerr<<player_id << board_size << time_limit;
+	string s;
+	getline(cin, s);
+	cerr<<s<<endl;
+	    return 0;
+}
+	// if (player_id == 1)
+	// {
+	// 	string s = "P 0 0";
+	// 	y->executeCommand(s, turn);
+	// 	cout<<s;
+			
+	// }
+	// int count = 0;
+	// while(true)
+	// {
+	// 	string in_command;
+	// 	getline(cin, in_command);
 		
-		y->executeCommand(in_command, turn);
-		turn = -1 * turn;
-		y->print_board();
-		cout<<"opp turn done"<<endl;
-		for(int i=0;i<y->board->ringV_opp.size();i++)
-		{
-			cout<<y->board->ringV_opp.at(i)<<y->board->ringL_opp.at(i)<<y->board->ringR_opp.at(i)<<" ";
-		}
-		cout<<endl;
-		y->changeTurn();
-		string out_command = y->findNextMove(1);
-		cout<<"output command: "<<out_command<<endl;
-		y->executeCommand(out_command, turn);
-		y->print_board();
-		cout<<"turn done"<<endl;
-		y->changeTurn();
-		for(int i=0;i<y->board->ringV.size();i++)
-		{
-			cout<<y->board->ringV.at(i)<<y->board->ringL.at(i)<<y->board->ringR.at(i)<<" ";
-		}
-		turn = -1 * turn;
+	// 	y->executeCommand(in_command, turn);
+	// 	turn = -1 * turn;
+	// 	y->print_board();
+	// 	cerr<<"opp turn done"<<endl;
+	// 	for(int i=0;i<y->board->ringV_opp.size();i++)
+	// 	{
+	// 		cerr<<y->board->ringV_opp.at(i)<<y->board->ringL_opp.at(i)<<y->board->ringR_opp.at(i)<<" ";
+	// 	}
+	// 	cerr<<endl;
+	// 	y->changeTurn();
+	// 	string out_command;
+	// 	if (count<5)
+	// 		out_command = y->findNextMove(1);
+	// 	else
+	// 		out_command = y->findNextMove(3);
+	// 	//output command
+	// 	cout<<out_command;
+	// 	y->executeCommand(out_command, turn);
+	// 	y->print_board();
+	// 	cerr<<"turn done"<<endl;
+	// 	y->changeTurn();
+	// 	for(int i=0;i<y->board->ringV.size();i++)
+	// 	{
+	// 		cerr<<y->board->ringV.at(i)<<y->board->ringL.at(i)<<y->board->ringR.at(i)<<" ";
+	// 	}
+	// 	turn = -1 * turn;
+	// 	count++;
 		
-		
-	}
+	// }
 
 
 
@@ -45,9 +66,9 @@ int main ()
     // Parse the input.
     // if ( argc < 3 )
     // {   
-    //     cout<<"Missing arguments\n";
-    //     cout<<"Correct format : \n";
-    //     cout << "./main <input_filename> <output_filename>";
+    //     cerr<<"Missing arguments\n";
+    //     cerr<<"Correct format : \n";
+    //     cerr << "./main <input_filename> <output_filename>";
     //     exit ( 0 );
     // }
 // 	Board *b  = new Board(5,5,5,5);
@@ -55,79 +76,79 @@ int main ()
 // 	b->print_board();
 	
 // 	b->addDisc(1,2,5);
-// 	cout<<endl;
+// 	cerr<<endl;
 // 	b->print_board();
 
 // 	b->addDisc(1,2,4);
-// 	cout<<endl;
+// 	cerr<<endl;
 // 	b->print_board();
 	
 // 	b->addDisc(1,3,5);
-// 	cout<<endl;
+// 	cerr<<endl;
 // 	b->print_board();
 
 // 	b->addDisc(1,4,6);
-// 	cout<<endl;
+// 	cerr<<endl;
 // 	b->print_board();
 
 // 	b->addDisc(1,4,8);
-// 	cout<<endl;
+// 	cerr<<endl;
 // 	b->print_board();
 
 // 	b->addDisc(1,4,9);
-// 	cout<<endl;
+// 	cerr<<endl;
 // 	b->print_board();
 
 // 	b->addDisc(1,4,10);
-// 	cout<<endl;
+// 	cerr<<endl;
 // 	b->print_board();
 
 // 	b->addDisc(1,4,11);
-// 	cout<<endl;
+// 	cerr<<endl;
 // 	b->print_board();
 
 // 	b->addDisc(1,5,9);
-// 	cout<<endl;
+// 	cerr<<endl;
 // 	b->print_board();
 
 
 // 	b->addDisc(-1,2,6);
-// 	cout<<endl;
+// 	cerr<<endl;
 // 	b->print_board();
 
 // 	b->addRing(1,4,12);
-// 	cout<<endl;
+// 	cerr<<endl;
 // 	b->print_board();
 
 // 	b->addRing(1,5,17);
-// 	cout<<endl;
+// 	cerr<<endl;
 // 	b->print_board();
 	
 // 	b->addRing(1,5,18);
-// 	cout<<endl;
+// 	cerr<<endl;
 // 	b->print_board();
 
 
 // 	b->addRing(1,4,14);
-// 	cout<<endl;
+// 	cerr<<endl;
 // 	b->print_board();
 
 // 	b->addRing(1,4,17);
-// 	cout<<endl;
+// 	cerr<<endl;
 // 	b->print_board();
 
-// // cout<<"moves done"<<endl;
+// // cerr<<"moves done"<<endl;
 
 // 	// b->moveRing(4,12,1,3);
-// 	// cout<<endl;
+// 	// cerr<<endl;
 // 	// b->print_board();
 
 // 	// vector<string> v = b->moveRingMoves (v, 1, b->ringV, b->ringL, b->ringR) ;
 // 	// for(int i=0;i<v.size();i++)
 // 	// {
-// 	// 	cout<<v.at(i)<<endl;
+// 	// 	cerr<<v.at(i)<<endl;
 // 	// }
-// 	// cout<<v.size()<<endl;
+// 	// cerr<<v.size()<<endl;
 	
 // 	vector<string> o;
 // 	// o.push_back("");
@@ -135,9 +156,7 @@ int main ()
 // 	// o = b->fullMove("",1);
 // 	for(int i=0;i<o.size();i++)
 // 	{
-// 		cout<<o.at(i)<<endl;
+// 		cerr<<o.at(i)<<endl;
 // 	}
-// 	cout<<o.size()<<endl;
-// 	cout<<"end"<<endl;
-    return 0;
-}
+// 	cerr<<o.size()<<endl;
+// 	cerr<<"end"<<endl;

@@ -182,8 +182,8 @@ void Board::addRing (int colour, int hexagonNum, int position)
 	}
 	else
 	{
-		cout << "Error! Location already filled! Hexagon number: " <<  hexagonNum << " Point number: " << position << endl;
-		cout << "Above error printed in Board.cpp: addRing." << endl;
+		cerr << "Error! Location already filled! Hexagon number: " <<  hexagonNum << " Point number: " << position << endl;
+		cerr << "Above error printed in Board.cpp: addRing." << endl;
 	}
 }
 
@@ -200,8 +200,8 @@ void Board::addDisc (int colour, int hexagonNum, int position)
 	}
 	else
 	{
-		cout << "Error! Location already filled! Hexagon number: " <<  hexagonNum << " Point number: " << position << endl;
-		cout << "Above error printed in Board.cpp: addRing." << endl;
+		cerr << "Error! Location already filled! Hexagon number: " <<  hexagonNum << " Point number: " << position << endl;
+		cerr << "Above error printed in Board.cpp: addRing." << endl;
 	}
 }
 
@@ -210,10 +210,10 @@ void Board::undoAddRing(int hexagonNum, int position)
 {
 	int v, l, r = 0;
 	convertTo(hexagonNum, position, v, l, r);
-	cout<<board[v + boardSize][l + boardSize][r + boardSize]<<endl;
+	cerr<<board[v + boardSize][l + boardSize][r + boardSize]<<endl;
 	if(board[v + boardSize][l + boardSize][r + boardSize] != 1 && board[v + boardSize][l + boardSize][r + boardSize] != -1) {
-		cout << "Error! Ring not found for removal! Hexagon number: " <<  hexagonNum << " Point number: " << position << endl;
-		cout << "Above error printed in Board.cpp: undoAddRing." << endl;
+		cerr << "Error! Ring not found for removal! Hexagon number: " <<  hexagonNum << " Point number: " << position << endl;
+		cerr << "Above error printed in Board.cpp: undoAddRing." << endl;
 	}
 	else {
 		if(board[v + boardSize][l + boardSize][r + boardSize] == 1)
@@ -359,15 +359,15 @@ void Board::moveRing (int hexagon1, int position1, int hexagon2, int position2)
 		}
 		else
 		{
-			cout << "Error! Given points (" <<  hexagon1 << "," << position1 << ") and (" <<  hexagon2 << "," << position2 << ") are not on same line" << endl;
-			cout << "Above error printed in Board.cpp: moveRing." << endl;
+			cerr << "Error! Given points (" <<  hexagon1 << "," << position1 << ") and (" <<  hexagon2 << "," << position2 << ") are not on same line" << endl;
+			cerr << "Above error printed in Board.cpp: moveRing." << endl;
 		}
 	}
 	else
 	{
-		cout<<"at this point: "<<board[v2 + boardSize][l2 + boardSize][r2 + boardSize]<<endl;
-		cout << "Error! Cannot move ring at Hexagon number: " <<  hexagon1 << " Point number: " << position1 << " to a point at Hexagon number: " <<  hexagon2 << " Point number: " << position2 << endl;
-		cout << "Above error printed in Board.cpp: moveRing." << endl;
+		cerr<<"at this point: "<<board[v2 + boardSize][l2 + boardSize][r2 + boardSize]<<endl;
+		cerr << "Error! Cannot move ring at Hexagon number: " <<  hexagon1 << " Point number: " << position1 << " to a point at Hexagon number: " <<  hexagon2 << " Point number: " << position2 << endl;
+		cerr << "Above error printed in Board.cpp: moveRing." << endl;
 	}
 }
 
@@ -478,14 +478,14 @@ void Board::undoMoveRing(int hexagon1, int position1, int hexagon2, int position
 		}
 		else
 		{
-			cout << "Error! Given points (" <<  hexagon1 << "," << position1 << ") and (" <<  hexagon2 << "," << position2 << ") are not on same line" << endl;
-			cout << "Above error printed in Board.cpp: moveRing." << endl;
+			cerr << "Error! Given points (" <<  hexagon1 << "," << position1 << ") and (" <<  hexagon2 << "," << position2 << ") are not on same line" << endl;
+			cerr << "Above error printed in Board.cpp: moveRing." << endl;
 		}
 	}
 	else
 	{
-		cout << "Error! Cannot move ring at Hexagon number: " <<  hexagon1 << " Point number: " << position1 << " to a point at Hexagon number: " <<  hexagon2 << " Point number: " << position2 << endl;
-		cout << "Above error printed in Board.cpp: moveRing." << endl;
+		cerr << "Error! Cannot move ring at Hexagon number: " <<  hexagon1 << " Point number: " << position1 << " to a point at Hexagon number: " <<  hexagon2 << " Point number: " << position2 << endl;
+		cerr << "Above error printed in Board.cpp: moveRing." << endl;
 	}
 }
 
@@ -534,8 +534,8 @@ void Board::removeRow (int hexagon1, int position1, int hexagon2, int position2)
 	}
 	else
 	{
-		cout << "Error! Given points (" <<  hexagon1 << "," << position1 << ") and (" <<  hexagon2 << "," << position2 << ") are not on same line" << endl;
-		cout << "Above error printed in Board.cpp: removeRow." << endl;	
+		cerr << "Error! Given points (" <<  hexagon1 << "," << position1 << ") and (" <<  hexagon2 << "," << position2 << ") are not on same line" << endl;
+		cerr << "Above error printed in Board.cpp: removeRow." << endl;	
 	}
 }
 
@@ -582,8 +582,8 @@ void Board::undoRemoveRow(int colour, int hexagon1, int position1, int hexagon2,
 	}
 	else
 	{
-		cout << "Error! Given points (" <<  hexagon1 << "," << position1 << ") and (" <<  hexagon2 << "," << position2 << ") are not on same line" << endl;
-		cout << "Above error printed in Board.cpp: removeRow." << endl;	
+		cerr << "Error! Given points (" <<  hexagon1 << "," << position1 << ") and (" <<  hexagon2 << "," << position2 << ") are not on same line" << endl;
+		cerr << "Above error printed in Board.cpp: removeRow." << endl;	
 	}
 }
 
@@ -628,8 +628,8 @@ void Board::removeRing (int hexagonNum, int position)
 	}
 	else
 	{
-		cout << "Error! Ring not found for deletion! Hexagon number: " <<  hexagonNum << " Point number: " << position << endl;
-		cout << "Above error printed in Board.cpp: removeRing." << endl;
+		cerr << "Error! Ring not found for deletion! Hexagon number: " <<  hexagonNum << " Point number: " << position << endl;
+		cerr << "Above error printed in Board.cpp: removeRing." << endl;
 	}
 }
 
@@ -640,8 +640,8 @@ void Board::undoRemoveRing(int colour, int hexagonNum, int position)
 	convertTo(hexagonNum, position, v, l, r);
 
 	if(board[v + boardSize][l + boardSize][r + boardSize] != 0) {
-		cout << "Error! Empty space not found for ring addition! Hexagon number: " <<  hexagonNum << " Point number: " << position << endl;
-		cout << "Above error printed in Board.cpp: undoRemoveRing." << endl;
+		cerr << "Error! Empty space not found for ring addition! Hexagon number: " <<  hexagonNum << " Point number: " << position << endl;
+		cerr << "Above error printed in Board.cpp: undoRemoveRing." << endl;
 	}
 	else {
 		board[v + boardSize][l + boardSize][r + boardSize] = colour;
@@ -714,7 +714,7 @@ vector<string> Board::fullMoves(vector<string> moves, int perspective) {
 	{
 		string t = end_part(moves.at(i));
 		executeCommand(t,perspective);
-		cout<<moves.at(i)<<endl;
+		cerr<<moves.at(i)<<endl;
 		allMoves = append(allMoves, fullMove(moves.at(i), perspective));
 		undoCommand(t,perspective);
 		
@@ -730,7 +730,7 @@ vector<string> Board::fullMove(string s, int perspective)
 	row_detected_modified(start, end, perspective);
 	if(contains(s, 'M') && (lastLiteral(s) == 2 || lastLiteral(s) == 3)) 
 	{ // 
-		cout<<"case 1"<<endl;
+		cerr<<"case 1"<<endl;
 		vector<string> additionalMoves;
 		if((perspective == 1 && ringsScored == ringsToWin) || (perspective == -1 && oppRingsScored == ringsToWin)) {
 			additionalMoves.push_back(s);
@@ -758,7 +758,7 @@ vector<string> Board::fullMove(string s, int perspective)
 	}
 	else if(contains(s, 'M') && lastLiteral(s) == 1) 
 	{
-		cout<<"case 2"<<endl;
+		cerr<<"case 2"<<endl;
 		vector<string> deleteRingMove;
 		vector<string> additionalMoves;
 		int h, p;
@@ -782,7 +782,7 @@ vector<string> Board::fullMove(string s, int perspective)
 	}
 	else if(!(contains(s, 'M')) && (lastLiteral(s) == 2 || lastLiteral(s) == 4) ) 
 	{ 
-		cout<<"case 3"<<endl;
+		cerr<<"case 3"<<endl;
 		vector<string> additionalMoves;
 		if((perspective == 1 && ringsScored == ringsToWin) || (perspective == -1 && oppRingsScored == ringsToWin)) {
 			additionalMoves.push_back(s);
@@ -820,7 +820,7 @@ vector<string> Board::fullMove(string s, int perspective)
 	}
 	else if(!(contains(s, 'M')) && lastLiteral(s) == 1)
 	{
-cout<<"case 4"<<endl;
+cerr<<"case 4"<<endl;
 		vector<string> deleteRingMove;
 		vector<string> additionalMoves;
 		int h, p;
@@ -846,12 +846,12 @@ cout<<"case 4"<<endl;
 	}
 	else 
 	{
-		cout<<"case 5"<<endl;
+		cerr<<"case 5"<<endl;
 		vector<string> additionalMoves;
 		additionalMoves.push_back(s);
 		return additionalMoves;
-		cout << "Error! Code should not go into else!" << endl;
-		cout << "Error printed in fullMove" << endl;
+		cerr << "Error! Code should not go into else!" << endl;
+		cerr << "Error printed in fullMove" << endl;
 	}
 }
 
@@ -907,7 +907,7 @@ string Board::end_part(string s)
 //checked
 int Board::lastLiteral(string s) 
 {
-	// cout<<"fullMOve"<<endl;
+	// cerr<<"fullMOve"<<endl;
 	int i = s.size()-1;
 	int count = 0;
 	while(true)
@@ -1062,7 +1062,7 @@ vector<string> Board::moveRingMoves (vector<string> moves, int perspective, vect
 				break;
 			if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
 			{
-				cout<<"yaha jana he"<<endl;
+				cerr<<"yaha jana he"<<endl;
 				marker = true;
 				continue;
 			}
@@ -1076,8 +1076,8 @@ vector<string> Board::moveRingMoves (vector<string> moves, int perspective, vect
 				moves.push_back(s);
 				if(hexagonNum1 == 4 && position1 == 14 && hexagonNum2 == 2 && position2 == 6)
 				{
-					cout<<"found here"<<endl;
-					cout<<board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize]<<endl;
+					cerr<<"found here"<<endl;
+					cerr<<board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize]<<endl;
 				}
 			}
 			if (marker)
@@ -1112,8 +1112,8 @@ vector<string> Board::moveRingMoves (vector<string> moves, int perspective, vect
 				moves.push_back(s);
 				if(hexagonNum1 == 4 && position1 == 14 && hexagonNum2 == 2 && position2 == 6)
 				{
-					cout<<"found here"<<endl;
-					cout<<board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize]<<endl;
+					cerr<<"found here"<<endl;
+					cerr<<board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize]<<endl;
 				}
 			}
 			if (marker)
@@ -1492,12 +1492,12 @@ void Board::nextDownLeft (int& v, int& l, int& r) {
 void Board::executeCommand (string command,int perspective) 
 {
 	int i=0;
-	cout<<"command received for execution: "<<command<<endl;
-	cout << command.size()<<endl;
+	cerr<<"command received for execution: "<<command<<endl;
+	cerr << command.size()<<endl;
 	while(i<command.size())
 	{
-		cout<<i<<endl;
-		cout<<command.at(i)<<endl;
+		cerr<<i<<endl;
+		cerr<<command.at(i)<<endl;
 		
 		if(command.at(i) == 'P')
 		{
@@ -1523,7 +1523,7 @@ void Board::executeCommand (string command,int perspective)
 				i++;
 				count++;
 			}
-			// cout<<"here again"<<endl;
+			// cerr<<"here again"<<endl;
 			p = stoi(command.substr(j,count));
 			i++;
 			//call the func to add a ring
@@ -1587,7 +1587,7 @@ void Board::executeCommand (string command,int perspective)
 			}
 			else
 			{
-				cout<<"ERROR!!! in parser"<<endl;
+				cerr<<"ERROR!!! in parser"<<endl;
 			}
 
 		}
@@ -1646,14 +1646,14 @@ void Board::executeCommand (string command,int perspective)
 				i++;
 				
 				//call the func to remove the row
-				// cout<<"removing row"<<endl;
+				// cerr<<"removing row"<<endl;
 				removeRow(h1,p1,h2,p2);
 
 				
 			}
 			else
 			{
-				cout<<"ERROR!!!! in parser"<<endl;
+				cerr<<"ERROR!!!! in parser"<<endl;
 			}
 		}
 		else if (command.at(i) == 'X')
@@ -1695,7 +1695,7 @@ void Board::executeCommand (string command,int perspective)
 
 void Board::undoCommand (string command,int perspective) 
 {
-	cout<<"command received for undo: "<<command<<endl;
+	cerr<<"command received for undo: "<<command<<endl;
 	int i=0;
 	while(i<command.size())
 	{
@@ -1723,7 +1723,7 @@ void Board::undoCommand (string command,int perspective)
 				i++;
 				count++;
 			}
-			// cout<<"here again"<<endl;
+			// cerr<<"here again"<<endl;
 			p = stoi(command.substr(j,count));
 			i++;
 			//call the func to add a ring
@@ -1783,13 +1783,13 @@ void Board::undoCommand (string command,int perspective)
 				i++;
 				
 				//call the func for move the ring 	
-				// cout<<"call undo move ring func"<<endl;
+				// cerr<<"call undo move ring func"<<endl;
 				undoMoveRing(h1,p1,h2,p2);
 
 			}
 			else
 			{
-				cout<<"ERROR!!! in parser"<<endl;
+				cerr<<"ERROR!!! in parser"<<endl;
 			}
 
 		}
@@ -1856,7 +1856,7 @@ void Board::undoCommand (string command,int perspective)
 
 			else
 			{
-				cout<<"ERROR!!!! in parser"<<endl;
+				cerr<<"ERROR!!!! in parser"<<endl;
 			}
 
 		}
@@ -1903,7 +1903,7 @@ void Board::print_board()
 	for(int v = -boardSize; v<0; v++)
 	{
 		for(int i = 0; i<boardSize*2 - j; i++)
-			cout<<" ";
+			cerr<<" ";
 		j++;
 		for(int l = 0 - v - boardSize; l<=boardSize; l++)
 		{
@@ -1911,25 +1911,25 @@ void Board::print_board()
 			if (check(v,l,r))
 			{
 				if (board[v+boardSize][l+boardSize][r+boardSize] == -1)
-					cout<<"a ";
+					cerr<<"a ";
 				else if (board[v+boardSize][l+boardSize][r+boardSize] == -2)
-					cout<<"b ";
+					cerr<<"b ";
 				else if (board[v+boardSize][l+boardSize][r+boardSize] == 0)
-					cout<<"_ ";
+					cerr<<"_ ";
 				else
-					cout<<board[v+boardSize][l+boardSize][r+boardSize]<<" ";
+					cerr<<board[v+boardSize][l+boardSize][r+boardSize]<<" ";
 
 			}
 			else 
-				cout<<"  ";
+				cerr<<"  ";
 		}
-		cout<<endl;
+		cerr<<endl;
 	}
 	
 	for(int v = 0; v<=boardSize; v++)
 	{
 		for(int i = 0; i<boardSize*2 - j; i++)
-			cout<<" ";
+			cerr<<" ";
 		j--;
 		for(int l = -boardSize; l<=boardSize-v; l++)
 		{
@@ -1937,17 +1937,17 @@ void Board::print_board()
 			if (check(v,l,r))
 			{
 				if (board[v+boardSize][l+boardSize][r+boardSize] == -1)
-					cout<<"a ";
+					cerr<<"a ";
 				else if (board[v+boardSize][l+boardSize][r+boardSize] == -2)
-					cout<<"b ";
+					cerr<<"b ";
 				else if (board[v+boardSize][l+boardSize][r+boardSize] == 0)
-					cout<<"_ ";
+					cerr<<"_ ";
 				else
-					cout<<board[v+boardSize][l+boardSize][r+boardSize]<<" ";
+					cerr<<board[v+boardSize][l+boardSize][r+boardSize]<<" ";
 			}
 			else
-				cout<<"  ";
+				cerr<<"  ";
 		}
-		cout<<endl;
+		cerr<<endl;
 	}
 }
