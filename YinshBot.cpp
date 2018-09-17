@@ -66,62 +66,74 @@ double YinshBot::miniMax(int depth, int perspective, vector<string>& bestMoves, 
 	}
 	else 
 	{
-		// string bestMove;
-		// double bestVal;
-		// int indexBest;
-		// if(perspective == 1)
-		// 	bestVal = numeric_limits<int>::min();
-		// else
-		// 	bestVal = numeric_limits<int>::max();
+		string bestMove;
+		double bestVal;
+		int indexBest = 0;
+		if(perspective == 1)
+			bestVal = numeric_limits<int>::min();
+		else
+			bestVal = numeric_limits<int>::max();
 		vector<string> moves = moveList(perspective);
 		cerr<<"Size of the possible moves vector: "<<moves.size()<<endl;
-		// for(int i=0;i<moves.size();i++)
-		// {
-		// 	board->executeCommand(moves.at(i),perspective);
-		// 	if(perspective*bestVal < perspective*evalFunction()) {
-		// 		bestVal = evalFunction();
-		// 		bestMove = moves.at(i);
-		// 		indexBest = i;
-		// 	}
-		// 	// cerr<<"possible move: "<<moves.at(i)<<"with score: "<<evalFunction()<<" no of scored rings: "<<board->getRingsScored()<<endl;
-		// 	board->undoCommand(moves.at(i),perspective);
-		// }
-		// moves.at(indexBest) = moves.at(0);
-		// moves.at(0) = bestMove;
-		// if(perspective == 1)
-		// 	bestVal = numeric_limits<int>::min();
-		// else
-		// 	bestVal = numeric_limits<int>::max();
-		// for(int i=1;i<moves.size();i++)
-		// {
-		// 	board->executeCommand(moves.at(i),perspective);
-		// 	if(perspective*bestVal < perspective*evalFunction()) {
-		// 		bestVal = evalFunction();
-		// 		bestMove = moves.at(i);
-		// 		indexBest = i;
-		// 	}
-		// 	// cerr<<"possible move: "<<moves.at(i)<<"with score: "<<evalFunction()<<" no of scored rings: "<<board->getRingsScored()<<endl;
-		// 	board->undoCommand(moves.at(i),perspective);
-		// }
-		// moves.at(indexBest) = moves.at(1);
-		// moves.at(1) = bestMove;
-		// if(perspective == 1)
-		// 	bestVal = numeric_limits<int>::min();
-		// else
-		// 	bestVal = numeric_limits<int>::max();
-		// for(int i=2;i<moves.size();i++)
-		// {
-		// 	board->executeCommand(moves.at(i),perspective);
-		// 	if(perspective*bestVal < perspective*evalFunction()) {
-		// 		bestVal = evalFunction();
-		// 		bestMove = moves.at(i);
-		// 		indexBest = i;
-		// 	}
-		// 	// cerr<<"possible move: "<<moves.at(i)<<"with score: "<<evalFunction()<<" no of scored rings: "<<board->getRingsScored()<<endl;
-		// 	board->undoCommand(moves.at(i),perspective);
-		// }
-		// moves.at(indexBest) = moves.at(2);
-		// moves.at(2) = bestMove;
+		if (moves.size()>=1)
+		{
+			for(int i=0;i<moves.size();i++)
+			{
+				board->executeCommand(moves.at(i),perspective);
+				if(perspective*bestVal < perspective*evalFunction()) {
+					bestVal = evalFunction();
+					bestMove = moves.at(i);
+					indexBest = i;
+				}
+				// cerr<<"possible move: "<<moves.at(i)<<"with score: "<<evalFunction()<<" no of scored rings: "<<board->getRingsScored()<<endl;
+				board->undoCommand(moves.at(i),perspective);
+			}
+			moves.at(indexBest) = moves.at(0);
+			moves.at(0) = bestMove;
+
+			if(perspective == 1)
+				bestVal = numeric_limits<int>::min();
+			else
+				bestVal = numeric_limits<int>::max();
+			if (moves.size()>=2)
+			{
+				indexBest = 1;
+				for(int i=1;i<moves.size();i++)
+				{
+					board->executeCommand(moves.at(i),perspective);
+					if(perspective*bestVal < perspective*evalFunction()) {
+						bestVal = evalFunction();
+						bestMove = moves.at(i);
+						indexBest = i;
+					}
+					// cerr<<"possible move: "<<moves.at(i)<<"with score: "<<evalFunction()<<" no of scored rings: "<<board->getRingsScored()<<endl;
+					board->undoCommand(moves.at(i),perspective);
+				}
+				moves.at(indexBest) = moves.at(1);
+				moves.at(1) = bestMove;
+				if(perspective == 1)
+					bestVal = numeric_limits<int>::min();
+				else
+					bestVal = numeric_limits<int>::max();
+				if (moves.size() >= 2)
+				{	
+					indexBest = 2;
+					for(int i=2;i<moves.size();i++)
+					{
+						board->executeCommand(moves.at(i),perspective);
+						if(perspective*bestVal < perspective*evalFunction()) {
+							bestVal = evalFunction();
+							bestMove = moves.at(i);
+							indexBest = i;
+						}
+						// cerr<<"possible move: "<<moves.at(i)<<"with score: "<<evalFunction()<<" no of scored rings: "<<board->getRingsScored()<<endl;
+						board->undoCommand(moves.at(i),perspective);
+					}
+					moves.at(indexBest) = moves.at(2);
+					moves.at(2) = bestMove;
+				}			
+			}
+		}
 		for(int i = 0; i < moves.size(); i++) 
 		{
 			// cerr << "Trying move: " << moves.at(i) << endl;
