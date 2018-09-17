@@ -67,7 +67,7 @@ double YinshBot::miniMax(int depth, int perspective, vector<string>& bestMoves, 
 	else 
 	{
 		string bestMove;
-		double bestVal;
+		double bestVal,bestVal1,val;
 		int indexBest = 0;
 		if(perspective == 1)
 			bestVal = numeric_limits<int>::min();
@@ -90,7 +90,7 @@ double YinshBot::miniMax(int depth, int perspective, vector<string>& bestMoves, 
 			}
 			moves.at(indexBest) = moves.at(0);
 			moves.at(0) = bestMove;
-
+			bestVal1 = bestVal;
 			if(perspective == 1)
 				bestVal = numeric_limits<int>::min();
 			else
@@ -111,11 +111,12 @@ double YinshBot::miniMax(int depth, int perspective, vector<string>& bestMoves, 
 				}
 				moves.at(indexBest) = moves.at(1);
 				moves.at(1) = bestMove;
+
 				if(perspective == 1)
 					bestVal = numeric_limits<int>::min();
 				else
 					bestVal = numeric_limits<int>::max();
-				if (moves.size() >= 2)
+				if (moves.size() > 2)
 				{	
 					indexBest = 2;
 					for(int i=2;i<moves.size();i++)
@@ -131,9 +132,27 @@ double YinshBot::miniMax(int depth, int perspective, vector<string>& bestMoves, 
 					}
 					moves.at(indexBest) = moves.at(2);
 					moves.at(2) = bestMove;
-				}			
+
+					if (moves.size() > 3)
+					{
+						board->executeCommand(moves.at(3),perspective);
+						val = evalFunction();
+						board->undoCommand(moves.at(3),perspective);
+													
+						// cerr<<"factor: "<<bestVal1-val;
+						int factor = 100000;
+						if (perspective*(bestVal1-val) > perspective*factor)
+						{
+							bestMoves.push_back(moves.at(0));
+							return bestVal1;
+						}
+					}
+				
+				}
+
 			}
 		}
+		
 		for(int i = 0; i < moves.size(); i++) 
 		{
 			// cerr << "Trying move: " << moves.at(i) << endl;
@@ -256,10 +275,13 @@ double YinshBot::evalFunction () {
 
 	double weight1 = 500;
 	double weight2 = -450;
-	double weight3 = 10;
-	double weight4 = -9;
+	double weight3 = 100;
+	double weight4 = -90;
 	double weight5 = 1000000;
+	//for us as player 2
 	double weight6 = -1000000;
+	//for us as player 1
+	// double weight6 = -5000000;
 	double weight7 = 5;
 	double weight8 = -4;
 	double weight9 = 50;
