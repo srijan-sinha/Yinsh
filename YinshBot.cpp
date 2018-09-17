@@ -39,7 +39,7 @@ string YinshBot::findNextMove (int depth) {
 
 	string move = "";
 	vector<string> bestMoves;
-	miniMax(depth, turn, bestMoves);
+	miniMax(depth, turn, bestMoves, numeric_limits<int>::min(), numeric_limits<int>::max());
 	// cerr<<"Size: " << bestMoves.size() << endl;
 	// for(int i = 0; i < bestMoves.size(); i++) {
 	// 	cerr<<bestMoves.at(i)<<endl;
@@ -47,7 +47,7 @@ string YinshBot::findNextMove (int depth) {
 	return bestMoves.at(bestMoves.size() - 1);
 }
 
-double YinshBot::miniMax(int depth, int perspective, vector<string>& bestMoves) {
+double YinshBot::miniMax(int depth, int perspective, vector<string>& bestMoves, double a, double b) {
 	
 	// int a = std::numeric_limits<int>::max();
 	double score;
@@ -57,43 +57,119 @@ double YinshBot::miniMax(int depth, int perspective, vector<string>& bestMoves) 
 		score = numeric_limits<int>::max();
 	double tempScore = 0;
 	string tempMove = "";
-	string move = "";
+	string move_min = "",move_max = "",move = "";
 
 	if(depth == 0) 
 	{
 		// cerr<<"Eval: " << evalFunction()<<endl;
 		return evalFunction();
 	}
-	else {
+	else 
+	{
+		// string bestMove;
+		// double bestVal;
+		// int indexBest;
+		// if(perspective == 1)
+		// 	bestVal = numeric_limits<int>::min();
+		// else
+		// 	bestVal = numeric_limits<int>::max();
 		vector<string> moves = moveList(perspective);
-		
-		for(int i = 0; i < moves.size(); i++) {
+		cerr<<"Size of the possible moves vector: "<<moves.size()<<endl;
+		// for(int i=0;i<moves.size();i++)
+		// {
+		// 	board->executeCommand(moves.at(i),perspective);
+		// 	if(perspective*bestVal < perspective*evalFunction()) {
+		// 		bestVal = evalFunction();
+		// 		bestMove = moves.at(i);
+		// 		indexBest = i;
+		// 	}
+		// 	// cerr<<"possible move: "<<moves.at(i)<<"with score: "<<evalFunction()<<" no of scored rings: "<<board->getRingsScored()<<endl;
+		// 	board->undoCommand(moves.at(i),perspective);
+		// }
+		// moves.at(indexBest) = moves.at(0);
+		// moves.at(0) = bestMove;
+		// if(perspective == 1)
+		// 	bestVal = numeric_limits<int>::min();
+		// else
+		// 	bestVal = numeric_limits<int>::max();
+		// for(int i=1;i<moves.size();i++)
+		// {
+		// 	board->executeCommand(moves.at(i),perspective);
+		// 	if(perspective*bestVal < perspective*evalFunction()) {
+		// 		bestVal = evalFunction();
+		// 		bestMove = moves.at(i);
+		// 		indexBest = i;
+		// 	}
+		// 	// cerr<<"possible move: "<<moves.at(i)<<"with score: "<<evalFunction()<<" no of scored rings: "<<board->getRingsScored()<<endl;
+		// 	board->undoCommand(moves.at(i),perspective);
+		// }
+		// moves.at(indexBest) = moves.at(1);
+		// moves.at(1) = bestMove;
+		// if(perspective == 1)
+		// 	bestVal = numeric_limits<int>::min();
+		// else
+		// 	bestVal = numeric_limits<int>::max();
+		// for(int i=2;i<moves.size();i++)
+		// {
+		// 	board->executeCommand(moves.at(i),perspective);
+		// 	if(perspective*bestVal < perspective*evalFunction()) {
+		// 		bestVal = evalFunction();
+		// 		bestMove = moves.at(i);
+		// 		indexBest = i;
+		// 	}
+		// 	// cerr<<"possible move: "<<moves.at(i)<<"with score: "<<evalFunction()<<" no of scored rings: "<<board->getRingsScored()<<endl;
+		// 	board->undoCommand(moves.at(i),perspective);
+		// }
+		// moves.at(indexBest) = moves.at(2);
+		// moves.at(2) = bestMove;
+		for(int i = 0; i < moves.size(); i++) 
+		{
 			// cerr << "Trying move: " << moves.at(i) << endl;
 			tempMove = moves.at(i);
 			
 			board->executeCommand(tempMove,perspective);
-			tempScore = miniMax(depth - 1, -1*perspective, bestMoves);
+			tempScore = miniMax(depth - 1, -1*perspective, bestMoves, a, b);
 
-			cerr<<"possible move: "<<tempMove<<"with score: "<<tempScore<<"no of scored rings: "<<board->getRingsScored()<<endl;
-			if(perspective == 1) {
+			if(perspective == 1) 
+			{
+				b = min(tempScore,b);
+
 				if(abs(tempScore - score) < 0.0001 || (tempScore - score) > 0.0001) {
 					// cerr<<"*************************************8"<<endl;
 					// cerr << "Max" << endl;
+
 					score = tempScore;
-					move = tempMove;
+					move_min = tempMove;
 				}
 			}
-			else {
+			else 
+			{
+				a = max(tempScore,a);
+			
 				if(abs(tempScore - score) < 0.0001 || (score - tempScore) > 0.0001) {
 					// cerr<<"*************************************8"<<endl;
 					// cerr << "Min" << endl;
 					score = tempScore;
-					move = tempMove;
+					move_max = tempMove;
 				}
 			}
 			board->undoCommand(tempMove,perspective);
+			if (a>=b)
+			{
+				bestMoves.push_back(tempMove);
+				return tempScore;	
+			}
 		}
-		bestMoves.push_back(move);
+		if (perspective == 1)
+		{
+			bestMoves.push_back(move_min);
+			move = move_min;
+		}
+		else
+		{
+			bestMoves.push_back(move_max);
+			move = move_max;
+		}
 		cerr<<endl<<"selected move: "<<move<<"with score: "<<score<<" no of scored rings: "<<board->getRingsScored()<<endl;
 
 		return score;

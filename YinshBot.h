@@ -63,7 +63,7 @@ class YinshBot {
 
 		void undoCommand(string s, int perspective);
 
-		double miniMax(int depth, int perspective, vector<string>& bestMoves);
+		double miniMax(int depth, int perspective, vector<string>& bestMoves, double a, double b);
 
 		void changeTurn();
 		vector<string> moveList(int perspective);
