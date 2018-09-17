@@ -11,75 +11,104 @@ int main ()
 	b->initBoard(5);
 	b->print_board();
 		
-	b->addDisc(1,2,2);
+	b->addDisc(-1,4,8);
 	cerr<<endl;
 	b->print_board();
 
-	b->addDisc(1,2,3);
-	cerr<<endl;
-	b->print_board();
-
-
-	b->addDisc(1,3,7);
-	cerr<<endl;
-	b->print_board();
-
-	b->addDisc(1,3,13);
+	b->addDisc(-1,4,9);
 	cerr<<endl;
 	b->print_board();
 
 
-	b->addRing(1,4,2);
+	b->addDisc(-1,4,10);
 	cerr<<endl;
 	b->print_board();
 
-	b->addRing(1,1,5);
-	cerr<<endl;
-	b->print_board();
-
-	b->addRing(1,3,12);
-	cerr<<endl;
-	b->print_board();
-
-	b->addRing(-1,4,7);
-	cerr<<endl;
-	b->print_board();
-
-	b->addRing(-1,4,10);
-	cerr<<endl;
-	b->print_board();
-	
-	b->addRing(-1,4,18);
-	cerr<<endl;
-	b->print_board();
-	
-	b->addRing(-1,2,9);
+	b->addDisc(-1,4,11);
 	cerr<<endl;
 	b->print_board();
 
 
-	// b->moveRing(3,4,2,0);
+	b->addRing(-1,4,12);
+	cerr<<endl;
+	b->print_board();
+
+	b->addRing(1,3,9);
+	cerr<<endl;
+	b->print_board();
+
+	vector< vector<int> > s1,e1;
+	b->row_detected_modified(s1,e1,1,4);
+	cout<<s1.size()<<endl;
+
+	vector< vector<int> > s2,e2;
+	b->row_detected_modified(s2,e2,-1,4);
+	cout<<s2.size()<<endl;
+
+	int eval = 0;
+	eval += (8000 * s1.size() * s1.size()) + (-10000 * s2.size() * s2.size());
+	cout<<eval<<endl;
+
+	b->moveRing(3,9,5,13);
+	cout<<endl;
+	b->print_board();
+
+
+	vector< vector<int> > s1_d,e1_d;
+	b->row_detected_modified(s1_d,e1_d,1,4);
+	cout<<s1_d.size()<<endl;
+
+	vector< vector<int> > s2_d,e2_d;
+	b->row_detected_modified(s2_d,e2_d,-1,4);
+	cout<<s2_d.size()<<endl;
+
+	eval = 0;
+	eval += (8000 * s1_d.size() * s1_d.size()) + (-10000 * s2_d.size() * s2_d.size());
+	cout<<eval<<endl;
+
+	// b->addRing(1,3,12);
 	// cerr<<endl;
 	// b->print_board();
-	int c = 0,c_opp = 0;
-	cout<<"checking for marker: 2 -1 -1"<<endl;
-	int s = b->marker_check(2,-1,-1,c,c_opp);
-	cout<<s<<" "<<c<<" "<<c_opp<<endl;
-	cout<<"checking for marker: 2 0 -2"<<endl;
-	c = 0;
-	c_opp = 0;
-	s = b->marker_check(2,0,-2,c,c_opp);
-	cout<<s<<" "<<c<<" "<<c_opp<<endl;
-	cout<<"checking for marker: -3 1 2"<<endl;
-	c = 0;
-	c_opp = 0;
-	s = b->marker_check(-3,1,2,c,c_opp);
-	cout<<s<<" "<<c<<" "<<c_opp<<endl;
-	cout<<"checking for marker: 2 -3 1"<<endl;
-	c = 0;
-	c_opp = 0;
-	s = b->marker_check(2,-3,1,c,c_opp);
-	cout<<s<<" "<<c<<" "<<c_opp<<endl;	
+
+	// b->addRing(-1,4,7);
+	// cerr<<endl;
+	// b->print_board();
+
+	// b->addRing(-1,4,10);
+	// cerr<<endl;
+	// b->print_board();
+	
+	// b->addRing(-1,4,18);
+	// cerr<<endl;
+	// b->print_board();
+	
+	// b->addRing(-1,2,9);
+	// cerr<<endl;
+	// b->print_board();
+
+
+	// // b->moveRing(3,4,2,0);
+	// // cerr<<endl;
+	// // b->print_board();
+	// int c = 0,c_opp = 0;
+	// cout<<"checking for marker: 2 -1 -1"<<endl;
+	// int s = b->marker_check(2,-1,-1,c,c_opp);
+	// cout<<s<<" "<<c<<" "<<c_opp<<endl;
+	// cout<<"checking for marker: 2 0 -2"<<endl;
+	// c = 0;
+	// c_opp = 0;
+	// s = b->marker_check(2,0,-2,c,c_opp);
+	// cout<<s<<" "<<c<<" "<<c_opp<<endl;
+	// cout<<"checking for marker: -3 1 2"<<endl;
+	// c = 0;
+	// c_opp = 0;
+	// s = b->marker_check(-3,1,2,c,c_opp);
+	// cout<<s<<" "<<c<<" "<<c_opp<<endl;
+	// cout<<"checking for marker: 2 -3 1"<<endl;
+	// c = 0;
+	// c_opp = 0;
+	// s = b->marker_check(2,-3,1,c,c_opp);
+	// cout<<s<<" "<<c<<" "<<c_opp<<endl;	
 		return 0;
 }
 	

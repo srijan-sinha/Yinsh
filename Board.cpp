@@ -2023,6 +2023,7 @@ bool Board::checkLine(int v1, int l1, int r1, int v2, int l2, int r2){
 	return false;
 }
 
+
 void Board::undoCommand (string command,int perspective) 
 {
 	int i=command.size()-1;

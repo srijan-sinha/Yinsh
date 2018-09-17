@@ -182,7 +182,7 @@ double YinshBot::miniMax(int depth, int perspective, vector<string>& bestMoves, 
 			bestMoves.push_back(move_max);
 			move = move_max;
 		}
-		cerr<<endl<<"selected move: "<<move<<"with score: "<<score<<" no of scored rings: "<<board->getRingsScored()<<endl;
+		// cerr<<endl<<"selected move: "<<move<<"with score: "<<score<<" no of scored rings: "<<board->getRingsScored()<<endl;
 
 		return score;
 	}
@@ -238,21 +238,37 @@ int YinshBot::ringAttacks() {
 }
 
 double YinshBot::evalFunction () {
-	double weight1 = 10;
-	double weight2 = -9;
+	// double weight1 = 2;
+	// double weight2 = -3;
+	// double weight3 = 20;
+	// double weight4 = -15;
+	// double weight5 = 5000;
+	// double weight6 = -3000;
+	// double weight7 = 2;
+	// double weight8 = -1;
+	// double weight9 = 35;
+	// double weight10 = 15;
+	// double weight11 = -12;
+	// double weight12 = 0;
+	// double weight13 = 0;
+	// double weight14 = 0;
+	// double weight15 = 0;
+
+	double weight1 = 500;
+	double weight2 = -450;
 	double weight3 = 10;
 	double weight4 = -9;
-	double weight5 = 50000;
-	double weight6 = -9000;
+	double weight5 = 1000000;
+	double weight6 = -1000000;
 	double weight7 = 5;
 	double weight8 = -4;
 	double weight9 = 50;
-	double weight10 = 1000;
-	double weight11 = -900;
-	double weight12 = 10;
-	double weight13 = -9;
-	double weight14 = 10;
-	double weight15 = -9;
+	double weight10 = 50000;
+	double weight11 = -50000;
+	double weight12 = 500;
+	double weight13 = -500;
+	double weight14 = 1000;
+	double weight15 = -1000;
 
 	double eval = 0;
 
@@ -271,7 +287,7 @@ double YinshBot::evalFunction () {
 	else {
 		eval = eval + (weight1 * board->getNumDiscs()) + (weight2 * board->getNumOppDiscs());
 		eval = eval + (weight3 * board->getNumRings()) + (weight4 * board->getNumOppRings());
-		eval = eval + (weight5 * board->getRingsScored()) + (weight6 * board->getOppRingsScored());
+		eval = eval + (weight5 * board->getRingsScored()*board->getRingsScored()) + (weight6 * board->getOppRingsScored());
 		
 		if (board->getRingsScored() == 3)
 			eval += numeric_limits<int>::max();

@@ -71,16 +71,10 @@ int main ()
 			string in_command;
 			// cerr<<"give input command: "<<endl;
 			getline(cin, in_command);
-			cerr<<"input command: "<<in_command<<endl;
 			y->executeCommand(in_command, turn);
 			// y->print_board();
 			turn = -1 * turn;
 			cerr<<"opp turn done"<<endl;
-			for(int i=0;i<y->board->ringV_opp.size();i++)
-			{
-				cerr<<y->board->ringV_opp.at(i)<<y->board->ringL_opp.at(i)<<y->board->ringR_opp.at(i)<<" ";
-			}
-			cerr<<endl;
 			y->changeTurn();
 			string out_command;
 			if (count<5)
@@ -88,14 +82,12 @@ int main ()
 			else
 				out_command = y->findNextMove(3);
 			cout<<out_command<<endl;
+
 			y->executeCommand(out_command, turn);
+			cerr<<"selected move: "<<out_command<<" with score: "<<y->evalFunction()<<endl;
 			// y->print_board();
 			cerr<<"turn done"<<endl;
 			y->changeTurn();
-			for(int i=0;i<y->board->ringV.size();i++)
-			{
-				cerr<<y->board->ringV.at(i)<<y->board->ringL.at(i)<<y->board->ringR.at(i)<<" ";
-			}
 			turn = -1 * turn;
 			count++;
 			
