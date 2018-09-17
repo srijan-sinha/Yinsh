@@ -45,7 +45,7 @@ int main ()
 			if (count<5)
 				out_command = y->findNextMove(1);
 			else
-				out_command = y->findNextMove(3);
+				out_command = y->findNextMove(5);
 			cout<<out_command<<endl;
 			y->executeCommand(out_command, turn);
 			// y->print_board();
@@ -80,7 +80,7 @@ int main ()
 			if (count<5)
 				out_command = y->findNextMove(1);
 			else
-				out_command = y->findNextMove(3);
+				out_command = y->findNextMove(5);
 			cout<<out_command<<endl;
 
 			y->executeCommand(out_command, turn);
