@@ -74,7 +74,7 @@ double YinshBot::miniMax(int depth, int perspective, vector<string>& bestMoves, 
 		else
 			bestVal = numeric_limits<int>::max();
 		vector<string> moves = moveList(perspective);
-		cerr<<"Size of the possible moves vector: "<<moves.size()<<endl;
+		// cerr<<"Size of the possible moves vector: "<<moves.size()<<endl;
 		if (moves.size()>=1)
 		{
 			for(int i=0;i<moves.size();i++)
@@ -238,21 +238,25 @@ int YinshBot::ringAttacks() {
 }
 
 double YinshBot::evalFunction () {
-	double weight1 = 2;
-	double weight2 = -3;
-	double weight3 = 20;
-	double weight4 = -15;
-	double weight5 = 5000;
-	double weight6 = -3000;
-	double weight7 = 2;
-	double weight8 = -1;
-	double weight9 = 35;
-	double weight10 = 15;
-	double weight11 = -12;
+	double weight1 = 10;
+	double weight2 = -9;
+	double weight3 = 10;
+	double weight4 = -9;
+	double weight5 = 50000;
+	double weight6 = -9000;
+	double weight7 = 5;
+	double weight8 = -4;
+	double weight9 = 50;
+	double weight10 = 1000;
+	double weight11 = -900;
+	double weight12 = 10;
+	double weight13 = -9;
+	double weight14 = 10;
+	double weight15 = -9;
 
 	double eval = 0;
 
-	if(board->getNumRings() < maxRings && board->getRingsScored() == 0) {
+	if(board->getNumRings() <= maxRings && board->getRingsScored() == 0 && board->getNumDiscs()==0) {
 		int h, p = 1;
 		for(int i = 0; i < board->getNumRings(); i++) {
 			board->convertBack(getRingVLR(1, 1, i), getRingVLR(1, 2, i), getRingVLR(1, 3, i), h, p);
@@ -268,8 +272,32 @@ double YinshBot::evalFunction () {
 		eval = eval + (weight1 * board->getNumDiscs()) + (weight2 * board->getNumOppDiscs());
 		eval = eval + (weight3 * board->getNumRings()) + (weight4 * board->getNumOppRings());
 		eval = eval + (weight5 * board->getRingsScored()) + (weight6 * board->getOppRingsScored());
+		
 		if (board->getRingsScored() == 3)
 			eval += numeric_limits<int>::max();
+		
+		vector< vector<int> > s1,e1;
+		board->row_detected_modified(s1,e1,1,SequenceLength - 1);
+
+		vector< vector<int> > s2,e2;
+		board->row_detected_modified(s2,e2,-1,SequenceLength - 1);
+
+		eval += (weight10 * s1.size() * s1.size()) + (weight11 * s2.size() * s2.size());
+
+		for (int i=0; i<s1.size(); i++)
+		{
+			int controlled = board->row_marker_check(s1.at(i), e1.at(i),SequenceLength-1);
+			eval += (weight12 * controlled * controlled);
+		}
+
+		for (int i=0; i<s2.size(); i++)
+		{
+			int oppControlled = SequenceLength - 1 - board->row_marker_check(s2.at(i), e2.at(i),SequenceLength-1);
+			eval += (weight13 * oppControlled * oppControlled);
+		}
+		int s,c=0,c_opp=0;
+		s = board->all_marker_check(c,c_opp);
+		eval += weight14*c + weight15*c_opp;
 		// eval = eval + (weight10 * discsOurControl()) + (weight11 * discsOppControl());
 	}
 	return eval;

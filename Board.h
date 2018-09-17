@@ -233,12 +233,13 @@ class Board {
 		 */
 		
 		bool row_detected(int& v1, int& l1, int& r1, int& v2, int& l2, int& r2, int perspective);
-		void row_detected_modified(vector< vector<int> > &start, vector< vector<int> > &end, int perspective);
+		void row_detected_modified(vector< vector<int> > &start, vector< vector<int> > &end, int perspective, int limit);
 
 
 		bool check(int v, int l, int r);
-
-
+		int marker_check(int v,int l,int r,int& count, int& count_opp);
+		bool row_marker_check(vector<int> s, vector<int> e, int limit);
+		int all_marker_check(int& sum_own,int& sum_opp);
 		/**
 		 * @param v is the vertical line number on which the location is located.
 		 * @param l is the diagonal line (bottom left to top right) number on which the location is located.

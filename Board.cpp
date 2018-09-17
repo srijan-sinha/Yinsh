@@ -676,7 +676,7 @@ vector<string> Board::generateMoveList(int perspective)
 	int l = 0;
 	int r = 0;
 	int v1,l1,r1,v2,l2,r2;
-	bool check_row = row_detected(v1,l1,r1,v2,l2,r2,perspective);
+	// bool check_row = row_detected(v1,l1,r1,v2,l2,r2,perspective);
 	if (perspective == 1)
 	{
 		if (ringsScored == 0 && numRings < maxRings)
@@ -732,7 +732,7 @@ vector<string> Board::fullMove(string s, int perspective)
 
 	vector < vector<int> > start;
 	vector < vector<int> > end;
-	row_detected_modified(start, end, perspective);
+	row_detected_modified(start, end, perspective,sequenceLength);
 	if(contains(s, 'M') && (lastLiteral(s) == 2 || lastLiteral(s) == 3)) 
 	{ // 
 		vector<string> additionalMoves;
@@ -1185,9 +1185,9 @@ vector<string> Board::moveRingMoves (vector<string> moves, int perspective, vect
 //checked
 bool Board::row_detected(int& v1, int& l1, int& r1, int& v2, int& l2, int& r2, int perspective)
 {
-	for(int v = -boardSize;v<boardSize;v++)
+	for(int v = -boardSize;v<=boardSize;v++)
 	{
-		for(int l = -boardSize;l<boardSize;l++)
+		for(int l = -boardSize;l<=boardSize;l++)
 		{
 			int r = -v-l;
 			int v_temp,l_temp,r_temp,count=0;
@@ -1319,7 +1319,7 @@ bool Board::row_detected(int& v1, int& l1, int& r1, int& v2, int& l2, int& r2, i
 
 
 //checked
-void Board::row_detected_modified(vector< vector<int> > &start, vector< vector<int> > &end, int perspective)
+void Board::row_detected_modified(vector< vector<int> > &start, vector< vector<int> > &end, int perspective, int limit)
 {
 	for(int v = -boardSize;v<=boardSize;v++)
 	{
@@ -1343,11 +1343,11 @@ void Board::row_detected_modified(vector< vector<int> > &start, vector< vector<i
 						nextUp(v_temp,l_temp,r_temp);
 						if(!check(v_temp,l_temp,r_temp))
 							break;
-						if (count==sequenceLength)
+						if (count==limit)
 							break;
 					}
 				}
-				if (count >= sequenceLength)
+				if (count >= limit)
 				{
 					nextDown(v_temp,l_temp,r_temp);
 					vector<int> v1;
@@ -1376,12 +1376,12 @@ void Board::row_detected_modified(vector< vector<int> > &start, vector< vector<i
 						nextUpLeft(v_temp,l_temp,r_temp);
 						if(!check(v_temp,l_temp,r_temp))
 							break;
-						if (count==sequenceLength)
+						if (count==limit)
 							break;
 					}
 				}
 						
-				if (count >= sequenceLength)
+				if (count >= limit)
 				{
 					nextDownRight(v_temp,l_temp,r_temp);
 					
@@ -1411,11 +1411,11 @@ void Board::row_detected_modified(vector< vector<int> > &start, vector< vector<i
 						nextUpRight(v_temp,l_temp,r_temp);
 						if(!check(v_temp,l_temp,r_temp))
 							break;
-						if (count==sequenceLength)
+						if (count==limit)
 							break;
 					}
 				}
-				if (count >= sequenceLength)
+				if (count >= limit)
 				{
 
 					nextDownLeft(v_temp,l_temp,r_temp);
@@ -1438,6 +1438,343 @@ void Board::row_detected_modified(vector< vector<int> > &start, vector< vector<i
 	// return false;
 }
 
+bool Board::row_marker_check(vector<int> s, vector<int> e, int limit)
+{
+	int v_start = s.at(0);
+	int l_start = s.at(1);
+	int r_start = s.at(2);
+	int v_end = e.at(0);
+	int l_end = e.at(1);
+	int r_end = e.at(2);
+	int v_temp = v_start;
+	int l_temp = l_start;
+	int r_temp = r_start;
+	
+	if (v_start == v_end)
+	{
+		int count=0;
+		for(int j=0; j<=limit; j++)
+		{
+			int s,c=0,c_opp=0;
+			s = marker_check(v_temp,l_temp,r_temp,c,c_opp);
+			if (c_opp > 0)
+				count++;
+			// if (s<0)
+			// 	count++;
+			nextUp(v_temp,l_temp,r_temp);
+		}
+		return limit-count;
+	}
+	else if (l_start == l_end)
+	{
+		int count=0;
+		for(int j=0; j<=limit; j++)
+		{
+			int s,c=0,c_opp=0;
+			s = marker_check(v_temp,l_temp,r_temp,c,c_opp);
+			if (c_opp > 0)
+				count++;
+			// if (s<0)
+			// 	count++;
+			nextUpRight(v_temp,l_temp,r_temp);
+		}
+		return limit-count;
+	}
+	else if (r_start == r_end)
+	{
+		int count=0;
+		for(int j=0; j<=limit; j++)
+		{
+			int s,c=0,c_opp=0;
+			s = marker_check(v_temp,l_temp,r_temp,c,c_opp);
+			if (c_opp > 0)
+				count++;
+			// if (s<0)
+			// 	count++;
+			nextUpLeft(v_temp,l_temp,r_temp);
+		}
+		return limit-count;
+	}
+}
+
+int Board::all_marker_check(int& sum_own,int& sum_opp)
+{
+	for(int v=-boardSize; v<=boardSize; v++)
+	{
+		for(int l=-boardSize; l<=boardSize; l++)
+		{
+			int r = -v-l;
+			if (check(v,l,r))
+			{
+				if (board[v+boardSize][l+boardSize][r+boardSize] == 2 || board[v+boardSize][l+boardSize][r+boardSize] == -2)
+				{
+					int c=0,c_opp=0,s;
+					s = marker_check(v,l,r,c,c_opp);
+					// if (s>0)
+					// 	sum_own++;
+					// else
+					// 	sum_opp++;	
+					if (c>0)
+						sum_own++;
+					if (c_opp>0)
+						sum_opp++;	
+					
+				}
+			}
+		}
+	}
+	return sum_own - sum_opp;
+}
+
+int Board::marker_check(int v,int l,int r,int& count,int& count_opp)
+{
+	int v_temp,l_temp,r_temp;
+	for(int i=0;i<numRings;i++)
+	{
+		if (ringV.at(i) == v || ringL.at(i) == l || ringR.at(i) == r)
+		{
+			bool marker = false, marker_found = false;
+			if(ringV.at(i) == v)
+			{
+				v_temp = v;
+				l_temp = ringL.at(i);
+				r_temp = -v_temp-l_temp;
+				
+				while(true)
+				{
+					if (ringL.at(i) < l)
+						nextUp(v_temp,l_temp,r_temp);
+					else
+						nextDown(v_temp,l_temp,r_temp);
+
+					if (!check(v_temp,l_temp,r_temp))
+						break;
+					if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
+						break;
+					if (v_temp == v && l_temp == l && r_temp == r)
+					{
+						marker_found = true;
+					}
+					if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
+					{
+						marker = true;
+
+						continue;
+					}
+					if (marker && marker_found)
+					{
+						count++;
+						break;
+					}
+					else if (marker)
+					{
+						break;
+					}
+				}
+			}
+			else if (ringL.at(i) == l)
+			{
+				v_temp = ringV.at(i);
+				l_temp = l;
+				r_temp = -v_temp-l_temp;
+				
+				while(true)
+				{
+					if (ringV.at(i) < v)
+						nextUpRight(v_temp,l_temp,r_temp);
+					else
+						nextDownLeft(v_temp,l_temp,r_temp);
+
+					if (!check(v_temp,l_temp,r_temp))
+						break;
+					if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
+						break;
+					if (v_temp == v && l_temp == l && r_temp == r)
+					{
+						marker_found = true;
+					}
+					if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
+					{
+						marker = true;
+						continue;
+					}
+					if (marker && marker_found)
+					{
+						count++;
+						break;
+					}
+					else if (marker)
+					{
+						break;
+					}
+				}
+			}
+			else if (ringR.at(i) == r)
+			{
+				v_temp = ringV.at(i);
+				r_temp = r;
+				l_temp = -v_temp-r_temp;
+				
+				
+				while(true)
+				{
+					if (ringV.at(i) < v)
+						nextDownRight(v_temp,l_temp,r_temp);
+					else
+						nextUpLeft(v_temp,l_temp,r_temp);
+
+					if (!check(v_temp,l_temp,r_temp))
+						break;
+					if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
+						break;
+					if (v_temp == v && l_temp == l && r_temp == r)
+					{
+						marker_found = true;
+					}
+					if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
+					{
+						marker = true;
+						continue;
+					}
+					if (marker && marker_found)
+					{
+						count++;
+						break;
+					}
+					else if (marker)
+					{
+						break;
+					}
+				}
+			}
+		}
+	}
+	
+	for(int i=0;i<numOppRings;i++)
+	{
+			
+		if (ringV_opp.at(i) == v || ringL_opp.at(i) == l || ringR_opp.at(i) == r)
+		{
+			bool marker = false, marker_found = false;
+			if(ringV_opp.at(i) == v)
+			{
+				v_temp = v;
+				l_temp = ringL_opp.at(i);
+				r_temp = -v_temp-l_temp;
+				
+				while(true)
+				{
+					if (ringL_opp.at(i) < l)
+						nextUp(v_temp,l_temp,r_temp);
+					else
+						nextDown(v_temp,l_temp,r_temp);
+
+					if (!check(v_temp,l_temp,r_temp))
+						break;
+					if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
+						break;
+					if (v_temp == v && l_temp == l && r_temp == r)
+					{	
+						marker_found = true;
+					}
+					if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
+					{
+						marker = true;
+						continue;
+					}
+					if (marker && marker_found)
+					{
+						count_opp++;
+						break;
+					}
+					else if (marker)
+					{
+						break;
+					}
+				}
+			}
+			else if (ringL_opp.at(i) == l)
+			{
+				v_temp = ringV_opp.at(i);
+				l_temp = l;
+				r_temp = -v_temp-l_temp;
+				
+				while(true)
+				{
+					if (ringV_opp.at(i) < v)
+						nextUpRight(v_temp,l_temp,r_temp);
+					else
+						nextDownLeft(v_temp,l_temp,r_temp);
+
+					if (!check(v_temp,l_temp,r_temp))
+						break;
+					if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
+						break;
+					if (v_temp == v && l_temp == l && r_temp == r)
+					{
+						marker_found = true;
+					}
+					if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
+					{
+						marker = true;
+						continue;
+					}
+					if (marker && marker_found)
+					{
+						count_opp++;
+						break;
+					}
+					else if (marker)
+					{
+						break;
+					}
+				}
+			}
+			else if (ringR_opp.at(i) == r)
+			{
+				v_temp = ringV_opp.at(i);
+				r_temp = r;
+				l_temp = -v_temp-r_temp;
+				
+				
+				while(true)
+				{
+					if (ringV_opp.at(i) < v)
+						nextDownRight(v_temp,l_temp,r_temp);
+					else
+						nextUpLeft(v_temp,l_temp,r_temp);
+
+					if (!check(v_temp,l_temp,r_temp))
+						break;
+					if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 1 || board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == -1)
+						break;
+					if (v_temp == v && l_temp == l && r_temp == r)
+					{
+						marker_found = true;
+					}
+					if (board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == 2 || board[v_temp + boardSize][l_temp + boardSize][r_temp + boardSize] == -2)
+					{
+						marker = true;
+						continue;
+					}
+					if (marker && marker_found)
+					{
+						count_opp++;
+						break;
+					}
+					else if (marker)
+					{
+						break;
+					}
+				}
+			}
+		}
+	}
+	if (count == 0 && count_opp == 0)
+		return -1;
+	else
+		return count - count_opp;
+}
 
 //all checked from here
 bool Board::check (int v, int l, int r) 

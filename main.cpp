@@ -45,7 +45,7 @@ int main ()
 			if (count<5)
 				out_command = y->findNextMove(1);
 			else
-				out_command = y->findNextMove(4);
+				out_command = y->findNextMove(3);
 			cout<<out_command<<endl;
 			y->executeCommand(out_command, turn);
 			// y->print_board();
@@ -86,7 +86,7 @@ int main ()
 			if (count<5)
 				out_command = y->findNextMove(1);
 			else
-				out_command = y->findNextMove(4);
+				out_command = y->findNextMove(3);
 			cout<<out_command<<endl;
 			y->executeCommand(out_command, turn);
 			// y->print_board();
@@ -137,7 +137,7 @@ int main ()
 	// 	b->print_board();
 	    
 	// 	vector< vector<int> > s,e;
-	// 	b->row_detected_modified(s,e,1);
+	// 	b->row_detected_modified(s,e,1,5);
 	// 	cout<<s.size()<<endl;
 	// 	for(int i=0;i<s.size();i++)
 	// 	{
