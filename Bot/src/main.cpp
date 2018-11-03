@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include <fstream>
 
 #include "YinshBot.h"
 // #include "Board.h"
@@ -15,41 +14,10 @@ int main ()
     // cerr<<player_id << board_size << time_limit;
 	cin >> player_id >> board_size >> time_limit;
 	cin.ignore();
-
-	vector<double> w;
-	ifstream file ("input2.txt");
-	if (file.is_open())
-	{
-		for(int i=0;i<15;i++)
-		{
-			double weight;
-			file>>weight;
-			cerr<<weight<<endl;
-			w.push_back(weight);
-		}
-	}
-	else 
-		cerr << "Unable to open file"; 
-	cerr<<w.size()<<endl;
-	// double w1 = 500;
-	// double w2 = 450;
-	// double w3 = 100;
-	// double w4 = 90;
-	// double w5 = 1000000;
-	// double w6 = -1000000;
-	// double w7 = 5;
-	// double w8 = 4;
-	// double w9 = 50;
-	// double w10 = 50000;
-	// double w11 = 50000;
-	// double w12 = 500;
-	// double w13 = 500;
-	// double w14 = 1000;
-	// double w15 = 1000;
 	if (player_id == 1)
 	{
 		int turn = 1;
-		YinshBot *y = new YinshBot(5,5,5,3,turn,w.at(0),w.at(1),w.at(2),w.at(3),w.at(4),w.at(5),w.at(6),w.at(7),w.at(8),w.at(9),w.at(10),w.at(11),w.at(12),w.at(13),w.at(14));
+		YinshBot *y = new YinshBot(5,5,5,3,turn);
 		
 		string s = "P 0 0";
 		y->executeCommand(s, turn);
@@ -103,7 +71,7 @@ int main ()
 	{
 		int count = 0;
 		int turn = -1;
-		YinshBot *y = new YinshBot(5,5,5,3,turn,w.at(0),w.at(1),w.at(2),w.at(3),w.at(4),w.at(5),w.at(6),w.at(7),w.at(8),w.at(9),w.at(10),w.at(11),w.at(12),w.at(13),w.at(14));
+		YinshBot *y = new YinshBot(5,5,5,3,turn);
 		while(true)
 		{
 			string in_command;
