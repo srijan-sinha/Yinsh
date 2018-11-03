@@ -27,7 +27,7 @@ class YinshBot {
 		int ringsToWin;
 		int turn;	//	1 for our, -1 for opponent's
 		int numPlays;
-
+		double weight1,weight2,weight3,weight4,weight5,weight6,weight7,weight8,weight9,weight10,weight11,weight12,weight13,weight14,weight15;
 
 	
 		/**
@@ -43,7 +43,7 @@ class YinshBot {
 		 * @param k is the number of markers in a line required to remove a ring.
 		 * @param l is the number of rings to be removed to win.
 		 */
-		YinshBot(int n, int m, int k, int l, int startTurn);
+		YinshBot (int n, int m, int k, int l, int startTurn, int w1, int w2, int w3, int w4, int w5, int w6, int w7, int w8, int w9, int w10, int w11, int w12, int w13, int w14, int w15);
 
 
 		/**
