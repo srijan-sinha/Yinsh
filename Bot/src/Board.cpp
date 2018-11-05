@@ -1438,7 +1438,7 @@ void Board::row_detected_modified(vector< vector<int> > &start, vector< vector<i
 	// return false;
 }
 
-bool Board::row_marker_check(vector<int> s, vector<int> e, int limit)
+int Board::row_marker_check(vector<int> s, vector<int> e, int limit)
 {
 	int v_start = s.at(0);
 	int l_start = s.at(1);

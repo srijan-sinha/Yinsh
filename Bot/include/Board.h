@@ -238,7 +238,7 @@ class Board {
 
 		bool check(int v, int l, int r);
 		int marker_check(int v,int l,int r,int& count, int& count_opp);
-		bool row_marker_check(vector<int> s, vector<int> e, int limit);
+		int row_marker_check(vector<int> s, vector<int> e, int limit);
 		int all_marker_check(int& sum_own,int& sum_opp);
 		/**
 		 * @param v is the vertical line number on which the location is located.

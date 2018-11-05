@@ -6,6 +6,7 @@
 #include <fstream>
 #include <vector>
 #include <limits>
+#include <math.h>
 /**
  * Uncomment for the following libraries
 #include <ctime>
@@ -27,8 +28,8 @@ class YinshBot {
 		int ringsToWin;
 		int turn;	//	1 for our, -1 for opponent's
 		int numPlays;
-
-
+		vector<double> w;
+		double weightsSum;
 	
 		/**
 		 * Empty Constructor.
@@ -43,7 +44,7 @@ class YinshBot {
 		 * @param k is the number of markers in a line required to remove a ring.
 		 * @param l is the number of rings to be removed to win.
 		 */
-		YinshBot(int n, int m, int k, int l, int startTurn);
+		YinshBot(int n, int m, int k, int l, int startTurn, vector<double> wt);
 
 
 		/**
@@ -83,5 +84,13 @@ class YinshBot {
 		 * @return a double which has the likability of the current board configuration.
 		 */
 		double evalFunction();
+		double sigmoid(double eval);
+
+		vector<double> getWeights ();
+		vector<double> getFeatures (double &min, double &max);
+		vector<double> Derivative(vector<double> features);
+		vector<double> selfPlay(int p,vector<double> wt,double epsilon);
+
+
 };
 #endif
