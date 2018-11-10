@@ -38,7 +38,7 @@ class Client(Communicator):
 			return False
 		Extension = Extension[-1]
 		if(os.path.isfile(Executable_File)):
-			if(Execution_Command == './' or Execution_Command == 'sh' or Execution_Command == 'gdb ./'):
+			if(Execution_Command == './' or Execution_Command == 'sh'):
 				if(Extension == 'sh' or Extension == 'o'):
 					return True
 				else:
