@@ -88,6 +88,7 @@ double YinshBot::miniMax(int depth, int perspective, vector<string>& bestMoves, 
 	// cerr<<endl;
 	if(depth <= 0 || checkGameEnd()) 
 	{
+		
 		return evalFunction();
 	}
 	else 
@@ -226,7 +227,7 @@ vector<string> YinshBot::moveList(int perspective)
 
 bool YinshBot::checkGameEnd() 
 {
-	if (board->getRingsScored() == 3 || board->getOppRingsScored() == 3)
+	if (board->getRingsScored() == ringsToWin || board->getOppRingsScored() == ringsToWin)
 		return true;
 	return false;
 }
