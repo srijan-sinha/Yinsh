@@ -1,1 +1,1 @@
-gdb ./bot
+./bot

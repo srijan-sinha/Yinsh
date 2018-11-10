@@ -88,7 +88,6 @@ double YinshBot::miniMax(int depth, int perspective, vector<string>& bestMoves, 
 	// cerr<<endl;
 	if(depth <= 0 || checkGameEnd()) 
 	{
-		
 		return evalFunction();
 	}
 	else 

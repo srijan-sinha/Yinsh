@@ -13,10 +13,10 @@ _OBJ = Board.o YinshBot.o main.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: $(SDIR)/%.cpp $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) -g
+	$(CC) -c -o $@ $< $(CFLAGS)
 
 $(EDIR)/bot: $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS) -g
+	$(CC) -o $@ $^ $(CFLAGS)
 
 .PHONY: clean
 
