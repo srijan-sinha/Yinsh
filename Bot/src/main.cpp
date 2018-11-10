@@ -34,7 +34,7 @@ int main ()
 			getline(cin, in_command);
 			// cerr<<"input command: "<<in_command<<endl;
 			y->executeCommand(in_command, turn);
-			y->print_board();
+			// y->print_board();
 			turn = -1 * turn;
 			// cerr<<"opp turn done"<<endl;
 			// for(int i=0;i<y->board->ringV_opp.size();i++)
@@ -49,7 +49,7 @@ int main ()
 			else if(count > 15 && count < 40)
 				out_command = y->findNextMove(3);
 			else
-				out_command = y->findNextMove(3);
+				out_command = y->findNextMove(2);
 			cout<<out_command<<endl;
 			y->executeCommand(out_command, turn);
 			cerr << endl;
@@ -65,7 +65,8 @@ int main ()
 			count++;
 			
 		}
-
+		cerr<<"count of prune: "<<y->eff<<endl;
+		
 	}
 	else
 	{
@@ -88,7 +89,7 @@ int main ()
 			else if(count > 15 && count < 40)
 				out_command = y->findNextMove(3);
 			else 
-				out_command = y->findNextMove(3);
+				out_command = y->findNextMove(2);
 			cout<<out_command<<endl;
 
 			y->executeCommand(out_command, turn);
@@ -100,7 +101,7 @@ int main ()
 			count++;
 			
 		}
-
+		cerr<<"count of prune: "<<y->eff<<endl;
 	}
 
 	    return 0;

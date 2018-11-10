@@ -27,7 +27,10 @@ class YinshBot {
 		int ringsToWin;
 		int turn;	//	1 for our, -1 for opponent's
 		int numPlays;
-
+		int init_depth = 0;
+		vector<double> w;
+		double weightsSum = 0;
+		int eff = 0;
 
 	
 		/**
@@ -63,6 +66,7 @@ class YinshBot {
 
 		void undoCommand(string s, int perspective);
 
+	
 		double miniMax(int depth, int perspective, vector<string>& bestMoves, double a, double b);
 
 		void changeTurn();
@@ -83,5 +87,10 @@ class YinshBot {
 		 * @return a double which has the likability of the current board configuration.
 		 */
 		double evalFunction();
+		double sigmoid(double eval);
+		vector<double> getWeights ();
+		vector<double> getFeatures (double &min, double &max);	
+
+
 };
 #endif
