@@ -28,7 +28,7 @@ YinshBot::YinshBot (int n, int m, int k, int l, int startTurn) {
 	board = new Board(n, m, k, l);
 
 	w.push_back(500); // 1
-	w.push_back(450); //2
+	w.push_back(450); // 2
 	w.push_back(100);//3
 	w.push_back(90);//4
 	w.push_back(1000000);//5
