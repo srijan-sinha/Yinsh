@@ -63,6 +63,9 @@ void Board::initBoard (int size) {
 	}
 
 	board = tempBoard;
+	cerr<<"init complete: "<<endl;
+	cerr<<"boardsize: "<<boardSize<<endl;
+	print_board();
 }
 
 int Board::getBoardSize () {
