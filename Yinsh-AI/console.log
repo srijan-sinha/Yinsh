@@ -1,5 +1,5 @@
-INITIAL MOVE: rhombus
-Init move: 6 4
+INITIAL MOVE: centre
+Init move: 5 5
 Moved self move
 Opponent move done
 INITIAL MOVE: rhombus
@@ -7,55 +7,19 @@ Init move: 3 5
 Moved self move
 Opponent move done
 INITIAL MOVE: rhombus
-Init move: 7 4
+Init move: 5 4
+Moved self move
+Opponent move done
+INITIAL MOVE: block
+Init move: 6 4
 Moved self move
 Opponent move done
 INITIAL MOVE: block
 Init move: 2 3
 Moved self move
 Opponent move done
-INITIAL MOVE: block
-Init move: 3 3
-Moved self move
-Opponent move done
 Starting ID
-Best Move at: 1
-Moved self move
-Opponent move done
-Starting ID
-Best Move at: 0
-Moved self move
-Opponent move done
-Starting ID
-Best Move at: 0
-Moved self move
-Opponent move done
-Starting ID
-Best Move at: 0
-Moved self move
-Opponent move done
-Starting ID
-Best Move at: 42
-Moved self move
-Opponent move done
-Starting ID
-Best Move at: 27
-Moved self move
-Opponent move done
-Starting ID
-Best Move at: 32
-Moved self move
-Opponent move done
-Starting ID
-Best Move at: 29
-Moved self move
-Opponent move done
-Starting ID
-Best Move at: 0
-Moved self move
-Opponent move done
-Starting ID
-Best Move at: 31
+Best Move at: 6
 Moved self move
 Opponent move done
 Starting ID
@@ -75,11 +39,7 @@ Best Move at: 0
 Moved self move
 Opponent move done
 Starting ID
-Best Move at: 17
-Moved self move
-Opponent move done
-Starting ID
-Best Move at: 27
+Best Move at: 0
 Moved self move
 Opponent move done
 Starting ID
@@ -87,15 +47,19 @@ Best Move at: 0
 Moved self move
 Opponent move done
 Starting ID
-Best Move at: 8
+Best Move at: 0
 Moved self move
 Opponent move done
 Starting ID
-Best Move at: 8
+Best Move at: 18
 Moved self move
 Opponent move done
 Starting ID
-Best Move at: 14
+Best Move at: 0
+Moved self move
+Opponent move done
+Starting ID
+Best Move at: 15
 Moved self move
 Opponent move done
 Starting ID
@@ -103,11 +67,26 @@ Best Move at: 16
 Moved self move
 Opponent move done
 Starting ID
-Best Move at: 4
+Best Move at: 2
 Moved self move
 Opponent move done
 Starting ID
-removing markers case, subproblem 1 
+Best Move at: 0
+Moved self move
+Opponent move done
+Starting ID
+Best Move at: 0
+Moved self move
+Opponent move done
+Starting ID
+Best Move at: 6
+Moved self move
+Opponent move done
+Starting ID
+Best Move at: 0
+Moved self move
+Opponent move done
+Starting ID
 Best Move at: 6
 Moved self move
 Opponent move done
@@ -115,17 +94,37 @@ Starting ID
 removing markers case, subproblem 1 
 removing markers case, subproblem 1 
 removing markers case, subproblem 1 
-removing markers case, subproblem 1 
-removing markers case, subproblem 1 
-removing markers case, subproblem 1 
-removing markers case, subproblem 1 
-removing markers case, subproblem 1 
-removing markers case, subproblem 1 
-removing markers case, subproblem 1 
-removing markers case, subproblem 1 
-removing markers case, subproblem 1 
-removing markers case, subproblem 1 
-removing markers case, subproblem 1 
-removing markers case, subproblem 1 
-Best Move at: 1
+Best Move at: 23
+Moved self move
+Opponent move done
+Starting ID
+Best Move at: 17
+Moved self move
+Opponent move done
+Starting ID
+Best Move at: 18
+Moved self move
+Opponent move done
+Starting ID
+Best Move at: 0
+Moved self move
+Opponent move done
+Starting ID
+Best Move at: 2
+Moved self move
+Opponent move done
+Starting ID
+Best Move at: 0
+Moved self move
+Opponent move done
+Starting ID
+Best Move at: 0
+Moved self move
+Opponent move done
+Starting ID
+Best Move at: 0
+Moved self move
+Opponent move done
+Starting ID
+Best Move at: 0
 Moved self move

@@ -24,6 +24,7 @@ YinshBot::YinshBot (int n, int m, int k, int l, int startTurn) {
 	SequenceLength = k;
 	ringsToWin = l;
 	turn = startTurn;
+
 	board = new Board(n, m, k, l);
 
 	w.push_back(500); //1
@@ -72,8 +73,8 @@ string YinshBot::findNextMove (int depth) {
 	// cerr<<"bestMoves size: "<<bestMoves.size()<<endl;
 
 	//imp
-	cerr<<"*********************************************************************************"<<endl;
-	cerr<<"final move selected: "<<bestMoves.at(bestMoves.size() - 1)<<" with score: "<<score<<endl;
+	// cerr<<"*********************************************************************************"<<endl;
+	// cerr<<"final move selected: "<<bestMoves.at(bestMoves.size() - 1)<<" with score: "<<score<<endl;
 		cerr<<"count of prune: "<<eff<<endl;
 	
 	return bestMoves.at(bestMoves.size() - 1);
@@ -93,72 +94,72 @@ double YinshBot::miniMax(int depth, int perspective, vector<string>& bestMoves, 
 	else 
 	{
 		vector<string> moves = moveList(perspective);
-		// if (moves.size() >= 6)
-		// {
-		// 	for(int j=0;j<6;j++)
-		// 	{
-		// 		string bestMove = " ";
-		// 		double bestVal;
-		// 		int indexBest = 0;
+		int s = moves.size();
+		int x = min(6,s);
+		for(int j=0;j<x;j++)
+		{
+			string bestMove = " ";
+			double bestVal;
+			int indexBest = 0;
 
-		// 		if(perspective == 1)
-		// 			bestVal = numeric_limits<int>::min();
-		// 		else
-		// 			bestVal = numeric_limits<int>::max();
-							
-		// 		for(int i=j;i<moves.size();i++)
-		// 		{
+			if(perspective == 1)
+				bestVal = numeric_limits<int>::min();
+			else
+				bestVal = numeric_limits<int>::max();
+						
+			for(int i=j;i<moves.size();i++)
+			{
 
-		// 			board->executeCommand(moves.at(i),perspective);
-		// 			if (perspective == 1)
-		// 			{
-		// 				double t = evalFunction();
-		// 				if(bestVal - t < 0.0000001) 
-		// 				{
-		// 					bestVal = t;
-		// 					bestMove = moves.at(i);
-		// 					indexBest = i;
-		// 				}	
-		// 			}
-		// 			else
-		// 			{
-		// 				double t = evalFunction();
-		// 				if(bestVal - t > 0.0000001) 
-		// 				{
-		// 					bestVal = t;
-		// 					bestMove = moves.at(i);
-		// 					indexBest = i;
-		// 				}	
-		// 			}
-					
-		// 			board->undoCommand(moves.at(i),perspective);
-		// 		}
-		// 		moves.at(indexBest) = moves.at(j);
-		// 		moves.at(j) = bestMove;
-		// 		cerr<<"ordering of move: "<<moves.at(j)<<" with score: "<<bestVal<<endl;
-		// 	}
-		// }		
+				board->executeCommand(moves.at(i),perspective);
+				if (perspective == 1)
+				{
+					double t = evalFunction();
+					if(bestVal - t < 0.0000001) 
+					{
+						bestVal = t;
+						bestMove = moves.at(i);
+						indexBest = i;
+					}	
+				}
+				else
+				{
+					double t = evalFunction();
+					if(bestVal - t > 0.0000001) 
+					{
+						bestVal = t;
+						bestMove = moves.at(i);
+						indexBest = i;
+					}	
+				}
+				
+				board->undoCommand(moves.at(i),perspective);
+			}
+			moves.at(indexBest) = moves.at(j);
+			moves.at(j) = bestMove;
+			cerr<<"ordering of move: "<<moves.at(j)<<" with score: "<<bestVal<<endl;
+		}
+			
 
 		double score;
 		if (perspective == 1)
 		{
 			score = numeric_limits<int>::min();
-			cerr<<"in max: depth: "<<depth<<endl;
+			// cerr<<"in max: depth: "<<depth<<endl;
 		}
 		else
 		{
 			score = numeric_limits<int>::max();
-			cerr<<"in min: depth: "<<depth<<endl;
+			// cerr<<"in min: depth: "<<depth<<endl;
 		}
 
 		double tempScore = 0;
 		string tempMove = "";
 		string move_min = "",move_max = "",move = "";
-		cerr<<"possible moves no. :"<<moves.size()<<endl;
+		// cerr<<"possible moves no. :"<<moves.size()<<endl;
 		
 
-		if (moves.size() > 70)
-			depth--;
+		// if (moves.size() > 70)
+		// 	depth--;
 
 
 		for(int i = 0; i < moves.size(); i++) 
@@ -171,8 +172,8 @@ double YinshBot::miniMax(int depth, int perspective, vector<string>& bestMoves, 
 			// cerr<<" with score: "<<score<<endl;
 			if(perspective == 1) 
 			{
-				cerr << "Trying move: " << moves.at(i);
-				cerr<<" with score: "<<score<<endl;
+				// cerr << "Trying move: " << moves.at(i);
+				// cerr<<" with score: "<<score<<endl;
 			
 				a = max(a,tempScore);
 				if(tempScore - score > 0.0000001) 
@@ -192,9 +193,9 @@ double YinshBot::miniMax(int depth, int perspective, vector<string>& bestMoves, 
 			}
 			board->undoCommand(tempMove,perspective);
 
-			if (a>=b)
+			if (a - b > 0.0000001 || abs(a-b) <= 0.0000001)
 			{
-				cerr<<"###########################################prune"<<endl;
+				// cerr<<"###########################################prune"<<endl;
 				eff++;
 				break;
 			}
@@ -204,13 +205,13 @@ double YinshBot::miniMax(int depth, int perspective, vector<string>& bestMoves, 
 		{
 			bestMoves.push_back(move_max);
 			move = move_max;
-			cerr<<"Selected move in maxValue: "<<move_max<<" with score: "<<score<<" rings scored: "<<board->getRingsScored()<<" depth: "<<depth<<endl;
+			// cerr<<"Selected move in maxValue: "<<move_max<<" with score: "<<score<<" rings scored: "<<board->getRingsScored()<<" depth: "<<depth<<endl;
 		}
 		else
 		{
 			bestMoves.push_back(move_min);
 			move = move_min;
-			cerr<<"Selected move in minValue: "<<move_min<<" with score: "<<score<<" rings scored: "<<board->getRingsScored()<<" depth: "<<depth<<endl;
+			// cerr<<"Selected move in minValue: "<<move_min<<" with score: "<<score<<" rings scored: "<<board->getRingsScored()<<" depth: "<<depth<<endl;
 
 		}
 
@@ -375,7 +376,7 @@ double YinshBot::evalFunction () {
 	if (board->getOppRingsScored() == 3)
 	{
 		// cerr<<"*******************************winning state"<<endl;
-		eval = weightsSum*4*-1;
+		eval = weightsSum*4*(-1);
 	}
 		
 	eval = sigmoid(eval/weightsSum);
