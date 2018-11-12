@@ -1,5 +1,5 @@
 cd Yinsh-AI/
-gnome-terminal -x sh -c "python client.py 0.0.0.0 10000 ./run_mybot.sh > ab2.txt; bash" | gnome-terminal -x sh -c "sleep 1;python client.py 0.0.0.0 10000 ./neema.sh -mode GUI; bash"| python server.py 10000 -n 5 -s 5 -NC 2 -TL 150 -LOG server.log
+gnome-terminal -x sh -c "sleep 1;python client.py 0.0.0.0 10000 ./run_mybot.sh > ab2.txt;sleep 5s; exit" | gnome-terminal -x sh -c "python client.py 0.0.0.0 10000 ./maggu.sh -mode GUI;sleep 5s; exit"| python server.py 10000 -n 5 -s 5 -NC 2 -TL 150 -LOG server.log
 # gnome-terminal -x sh -c "python client.py 0.0.0.0 1 3 90000 ./run_mybot.sh > game1.txt; exit; bash" | gnome-terminal -x sh -c "python client.py 0.0.0.0 10000 aggressive.py -mode GUI; exit; bash"| python server.py 10000 -n 5 -s 5 -NC 2 -TL 150 -LOG server.log
 # gnome-terminal -x sh -c "python client.py 0.0.0.0 10000 ./run_mybot.sh > game2.txt; exit; bash" | gnome-terminal -x sh -c "python client.py 0.0.0.0 10000 aggressive.py -mode GUI; exit; bash"| python server.py 10000 -n 6 -s 5 -NC 2 -TL 150 -LOG server.log
 # gnome-terminal -x sh -c "python client.py 0.0.0.0 10000 ./run_mybot.sh > game3.txt; exit; bash" | gnome-terminal -x sh -c "python client.py 0.0.0.0 10000 aggressive.py -mode GUI; exit; bash"| python server.py 10000 -n 6 -s 6 -NC 2 -TL 150 -LOG server.log

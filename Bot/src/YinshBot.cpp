@@ -94,6 +94,7 @@ double YinshBot::miniMax(int depth, int perspective, vector<string>& bestMoves, 
 	else 
 	{
 		vector<string> moves = moveList(perspective);
+		/**
 		int s = moves.size();
 		int x = min(6,s);
 		for(int j=0;j<x;j++)
@@ -136,9 +137,10 @@ double YinshBot::miniMax(int depth, int perspective, vector<string>& bestMoves, 
 			}
 			moves.at(indexBest) = moves.at(j);
 			moves.at(j) = bestMove;
-			cerr<<"ordering of move: "<<moves.at(j)<<" with score: "<<bestVal<<endl;
+
+			// cerr<<"ordering of move: "<<moves.at(j)<<" with score: "<<bestVal<<endl;
 		}
-			
+		*/
 
 		double score;
 		if (perspective == 1)
@@ -365,7 +367,7 @@ double YinshBot::evalFunction () {
 	// 		w.at(12)*(f.at(12) - min)/(max-min) + w.at(13)*(f.at(13) - min)/(max-min) - w.at(14)*(f.at(14) - min)/(max-min);
 	// eval += w.at(6)*(f.at(6) - min)/(max-min) - w.at(7)*(f.at(7) - min)/(max-min) + w.at(8)*(f.at(8) - min)/(max-min);
 	
-	eval += -w.at(0)*f.at(0) + w.at(1)*f.at(1) + w.at(2)*f.at(2) - w.at(3)*f.at(3) + w.at(4)*f.at(4) - w.at(5)*f.at(5) + 
+	eval += w.at(0)*f.at(0) - w.at(1)*f.at(1) + w.at(2)*f.at(2) - w.at(3)*f.at(3) + w.at(4)*f.at(4) - w.at(5)*f.at(5) + 
 			w.at(9)*f.at(9) - w.at(10)*f.at(10) + w.at(11)*f.at(11) - w.at(12)*f.at(12) + w.at(13)*f.at(13) - w.at(14)*f.at(14);
 	eval += w.at(6)*f.at(6) - w.at(7)*f.at(7) + w.at(8)*f.at(8);
 	if (board->getRingsScored() == 3)

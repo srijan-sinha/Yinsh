@@ -49,7 +49,7 @@ int main ()
 			else if(count > 15 && count < 40)
 				out_command = y->findNextMove(3);
 			else
-				out_command = y->findNextMove(2);
+				out_command = y->findNextMove(3);
 			cout<<out_command<<endl;
 			y->executeCommand(out_command, turn);
 			cerr << endl;
@@ -89,7 +89,7 @@ int main ()
 			else if(count > 15 && count < 40)
 				out_command = y->findNextMove(3);
 			else 
-				out_command = y->findNextMove(2);
+				out_command = y->findNextMove(3);
 			cout<<out_command<<endl;
 
 			y->executeCommand(out_command, turn);
